@@ -5,24 +5,25 @@
         <title>Historique des groupements</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700" rel="stylesheet" type="text/css">
-        <link href="/assets/styles/style_reversion.css" rel="stylesheet">
-        <link href="/assets/styles/sidenav.css" rel="stylesheet">
+        
+        <% include partials/bundleCSS.ejs %>
 
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"><!-- pour datepickers -->
-        <link href="/assets/styles/jquery/jquery-ui.datepicker.theme.css" rel="stylesheet"><!-- pour datepickers -->
-
+        <!--
         <script src="https://use.fontawesome.com/68984c879a.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script><!-- pour datepickers --> 
-        <script src="/assets/scripts/datepicker-fr.js"></script>
-        <script src="/assets/scripts/sidenav.js"></script>
-        <script src="/assets/scripts/highlight.js"></script>
-        <script src="/assets/scripts/ListeHistoriqueGroupe.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script><!-- pour datepickers -->   <!--
+        <script src="/scripts/datepicker-fr.js"></script>
+        <script src="/scripts/sidenav.js"></script>
+        <script src="/scripts/highlight.js"></script>
+        <script src="/scripts/ListeHistoriqueGroupe.js"></script>
+        -->
+        <% include partials/bundleJS_ListeHistoriqueGroupements.ejs %>
     </head>
     <body>
 
-        <%include partials/menu.ejs %>
+        <% include partials/menu.ejs %>
+
+        <% include partials/userInfo.ejs %>
 
         <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
         <div id="main" class="HistoriqueGrps"> 

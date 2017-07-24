@@ -1,0 +1,29 @@
+{
+    "dbConfig": {
+        //"driver": "tedious",
+        "user": "bcl",
+        "password": "fwadmin",
+        "database": "GestionCahpp"
+    },
+    "dbConfig_CRM": {
+        //"driver": "tedious",
+        "user": "bcl",
+        "password": "fwadmin",
+        "database": "CRM"
+    },
+
+    /// Afficher ici tous les rôles possibles pour cette appli
+    "listeApplicationRole": ["ReversionsCreationAccord", "ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture", "ReversionsAdministrateur"],
+    //"listeApplicationRole": ["ReversionsCreationAccord", "ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture", "ReversionsAdministrateur", "BackOfficeCatalogueNutrition"], /// Afficher ici tous les rôles possibles pour cette appli
+
+    /// Config des pages pour le menu
+    /// Dans 'role' on met le(s) role(s) qui permet(tent) d'accéder à la page.
+    /// NOTE : Pas besoin de mettre le rôle 'ReversionsAdministrateur' qui permet l'accès à ttes les pages
+    /// NOTE : Si page ouverte à tt le monde : Pas besoin de rôle (mettre un tableau vide : [])
+    "pages": [
+        { "nom": "HistoGrp", "role": [], "intitule": "Historique des groupements" },
+        { "nom": "CreationAccord", "role": ["ReversionsCreationAccord"], "intitule": "Créer un accord" }, 
+        { "nom": "RechercheAccords", "role": ["ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture"], "intitule": "Rechercher un accord" }
+    ]
+
+}

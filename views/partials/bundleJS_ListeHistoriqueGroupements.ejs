@@ -1,0 +1,14 @@
+    <% include ./bundleJS_CDN.ejs %>
+
+<% if(ENV === 'development') { %>
+
+    <script src="/scripts/datepicker-fr.js"></script>
+    <script src="/scripts/sidenav.js"></script>
+    <script src="/scripts/highlight.js"></script>
+    <script src="/scripts/ListeHistoriqueGroupe.js"></script>
+
+<% } else { %>
+
+    <script src="/scripts/global_ListeHistoriqueGroupements.js"></script>
+
+<% } %>

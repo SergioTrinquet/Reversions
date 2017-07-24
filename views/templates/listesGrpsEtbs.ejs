@@ -1,0 +1,25 @@
+<div class="Cln" data-type="Grps">
+    <!--<div id="MasqueListeGrps"></div>-->
+    <ul>
+        <% ListeGrpmts.forEach(function(grp, i) { %>
+        <li>
+            <span>
+                <input id="Grp_<%= grp.IDGroupement %>" name="Grp[]" value="<%= grp.IDGroupement %>" type="checkbox" <%= (grp.EstDansUnAccord == 1 ? disabled="disabled" : ""); %> ><label for="Grp_<%= grp.IDGroupement %>"><%= grp.NomGroupement %></label>
+            </span>
+        </li>
+        <% }); %>
+    </ul>
+</div>
+
+<div class="Cln" data-type="Etbs">
+    <!--<div id="MasqueListeEtbs"></div>-->
+    <ul>
+        <% ListeEtbs.forEach(function(etb, i) { %>
+        <li>
+            <span>
+                <input id="Etb_<%= etb.EtablissementId %>" name="Etb[]" value="<%= etb.EtablissementId %>" type="checkbox" <%= (etb.EstDansUnAccord == 1 ? disabled="disabled" : ""); %> ><label for="Etb_<%= etb.EtablissementId %>"><%= etb.NomEtablissement %> <span>(<%= etb.Ville %>)</span></label>
+            </span>
+        </li>
+        <% }); %>
+    </ul>
+</div>

@@ -1,13 +1,41 @@
+<% if(typeof propositionsRech_Accord !== 'undefined') { %>
+
+    <% propositionsRech_Accord.forEach(function(item) { %>
+    <!-- pour les accords -->
+    <div class="Lgn AC">
+        <div><i class="fa fa-chevron-circle-right"></i></div>
+        <div class="AC_NomAccord">
+            <!--<div class="AC_txt" data-tohighlight="true"><a href="/RechercheAccords?AccRevID=<%= item.AccordReversionId %>"><%= item.NomAccordReversion %></a></div>--><!-- version avec 'req.body' du coté serveur -->
+            <div class="AC_txt" data-tohighlight="true"><a href="/RechercheAccords/<%= item.AccordReversionId %>"><%= item.NomAccordReversion %></a></div><!-- version avec 'req.params' du coté serveur -->
+            <div class="AC_txtSmaller"><%= item.DestinataireRaisonSociale %></div>
+        </div>
+        <div><i class="fa fa-chevron-circle-right Disabled"></i></div>
+        <div class="AC_NomGrp Disabled">-</div>
+        <div><i class="fa fa-chevron-circle-right Disabled"></i></div>
+        <div class="AC_NomEtbl Disabled">-</div>
+        <div class="AC_dates">Du <%= dateFormat(item.PeriodeDebut, 'dd/mm/yyyy') %><br />au <%= dateFormat(item.PeriodeFin, 'dd/mm/yyyy') %></div>
+    </div>
+    <% }); %>
+
+<% } %>
+
+
 <% if(typeof propositionsRech_Grp !== 'undefined') { %>
 
     <% propositionsRech_Grp.forEach(function(item) { %>
     <!-- pour les groupes -->
     <div class="Lgn AC">
+        <div><i class="fa fa-chevron-circle-right Disabled"></i></div>
+        <div class="AC_NomAccord Disabled">
+            <div class="AC_txt"><%= item.NomAccordReversion %></div>
+            <div class="AC_txtSmaller"><%= item.DestinataireRaisonSociale %></div>
+        </div>
         <div><i class="fa fa-chevron-circle-right"></i></div>
-        <div class="AC_NomGrp" data-tohighlight="true"><a href="/RechercheAccords?AccRevID=<%= item.AccordReversionId %>"><%= item.LibelleGroupement %></a></div>
+        <!--<div class="AC_NomGrp" data-tohighlight="true"><a href="/RechercheAccords?AccRevID=<%= item.AccordReversionId %>"><%= item.LibelleGroupement %></a></div>--><!-- version avec 'req.body' du coté serveur -->
+        <div class="AC_NomGrp" data-tohighlight="true"><a href="/RechercheAccords/<%= item.AccordReversionId %>"><%= item.LibelleGroupement %></a></div>
         <div><i class="fa fa-chevron-circle-right Disabled"></i></div>
         <div class="AC_NomEtbl Disabled">-</div>
-        <div class="AC_dates">Du <%= dateFormat(item.PeriodeDebut, 'dd/mm/yyyy') %> au <%= dateFormat(item.PeriodeFin, 'dd/mm/yyyy') %></div>
+        <div class="AC_dates">Du <%= dateFormat(item.PeriodeDebut, 'dd/mm/yyyy') %><br />au <%= dateFormat(item.PeriodeFin, 'dd/mm/yyyy') %></div>
     </div>
     <% }); %>
 
@@ -20,18 +48,24 @@
     <!-- pour les établissements -->
     <div class="Lgn AC">
         <div><i class="fa fa-chevron-circle-right Disabled"></i></div>
+        <div class="AC_NomAccord Disabled">
+            <div class="AC_txt"><%= item.NomAccordReversion %></div>
+            <div class="AC_txtSmaller"><%= item.DestinataireRaisonSociale %></div>
+        </div>
+        <div><i class="fa fa-chevron-circle-right Disabled"></i></div>
         <div class="AC_NomGrp Disabled"><span><%= item.LibelleGroupement %></span></div>
         <div><i class="fa fa-chevron-circle-right"></i></div>
         <div class="AC_NomEtbl" data-tohighlight="true">
-            <div class="AC_RS"><a href="/RechercheAccords?AccRevID=<%= item.AccordReversionId %><%= (item.GroupementId != 96 ? "&EtbId=" + item.EtablissementId : "")%>"><%= item.RaisonSociale %></a> (<%= item.CC %>)</div>
-            <div class="AC_AdresseEtb">
+            <!--<div class="AC_txt"><a href="/RechercheAccords?AccRevID=<%= item.AccordReversionId %><%= (item.GroupementId != 96 ? "&EtbId=" + item.EtablissementId : "")%>"><%= item.RaisonSociale %></a> (<%= item.CC %>)</div>--><!-- version avec 'req.body' du coté serveur -->
+            <div class="AC_txt"><a href="/RechercheAccords/<%= item.AccordReversionId %><%= "/" + item.EtablissementId %>"><%= item.RaisonSociale %></a> (<%= item.CC %>)</div>
+            <div class="AC_txtSmaller">
                 <div><%= item.Ad1 %></div>
                 <div><%= item.Ad2 %></div>
                 <div><%= item.Ad3 %></div>
                 <div><span><%= item.CP %></span> <span><%= item.Ville %></span></div>
             </div>
         </div>
-        <div class="AC_dates">Du <%= dateFormat(item.PeriodeDebut, 'dd/mm/yyyy') %> au <%= dateFormat(item.PeriodeFin, 'dd/mm/yyyy') %></div>
+        <div class="AC_dates">Du <%= dateFormat(item.PeriodeDebut, 'dd/mm/yyyy') %><br />au <%= dateFormat(item.PeriodeFin, 'dd/mm/yyyy') %></div>
     </div>
     <% }); %>
 

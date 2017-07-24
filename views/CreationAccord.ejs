@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Création des accords de réversion</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <% include partials/bundleCSS.ejs %>
+
+        <% include partials/bundleJS_CreationAccord.ejs %>
+    </head>
+    <body>
+        <div class="Masque Hidden"></div>
+
+        <div id="EncartEtape2TypeAccord" class="Hidden">
+            Voulez-vous créer un accord de groupement, ou bien autant d'accords que d'établissements dans le(s) groupement(s) sélectionné(s) ?
+            <div class="Bts"><span id="Bt_CreaAccGrp" class="Bt">1 accord de groupement</span><span id="Bt_CreaAccEtbs" class="Bt"><span class="NbEtbselected"></span> accords d'établissements</span></div>
+        </div><!--  -->
+
+
+        <% include partials/menu.ejs %>
+
+        <% include partials/userInfo.ejs %>
+
+        <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+        <div id="main" class="creationAccordReversion"> 
+
+            <div class="bandeauHaut">
+                <div>Création d'un accord de réversion</div>
+                <div></div>
+            </div>
+
+            <button id="BtCreationAccord">Créer un accord</button>
+
+            
+            <div class="MaskPopin Hidden">
+                <div><div><i class="fa fa-circle-o-notch fa-spin fa-3x"></i></div></div>
+            </div>
+
+
+            <!-- Popin étape 1 création d'accord -->
+            <div class="Popin" id="PopinCreationAccord_Etp1" data-numetape="1" >
+                <i class="fa fa-times ClosePopin"></i>
+                <div class="TopPart">
+                    <div class="TitrePopin">Etape 1 - Saisie des infos</div>
+                </div>
+                <div class="CentralPart">
+                    <div>
+                        <div id="LgnError" class="Hidden"><div></div></div>
+                        <form id="PopinCreationAccord_FormEtp1" autocomplete="off"><!-- autocomplete juste pour FF car sinon garde les data saisies dans les champs après reload -->
+                        
+                            <div class="LgnPopin">
+                                <span class="LeftPartLgn">
+                                    <span class="legend">Nom de l'accord :</span>
+                                    <input class="SearchFieldBandeau" id="SaisieNomAccord" name="SaisieNomAccord" data-requis="true" maxlength="200" type="text" />
+                                </span>
+                                <span class="RightPartLgn">
+                                    <span>
+                                        <span class="legend">Année :</span>
+                                        <input class="SearchFieldBandeau" id="SaisieAnneeAccord" name="SaisieAnneeAccord" data-requis="true" maxlength="4" type="text" />    
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="LgnPopin">
+                                <span class="legend">Période :</span>
+                                <input type="text" class="SearchFieldBandeau" id="SaisieDateDebutAccord" name="SaisieDateDebutAccord" placeholder="Date de début" data-requis="true" readonly="readonly"><span>-</span><input type="text" class="SearchFieldBandeau" id="SaisieDateFinAccord" name="SaisieDateFinAccord" placeholder="Date de fin" data-requis="true" readonly="readonly">
+                            </div>
+                            <div class="LgnPopin">
+                                <span class="LeftPartLgn">
+                                    <span class="legend">Taux de réversion :</span>
+                                    <select class="SearchFieldBandeau" id="SaisieTypeTauxRev" name="SaisieTypeTauxRev" data-requis="true">
+                                        <option value="">Type de taux</option>
+                                        <option value="1">Fixe</option>
+                                        <option value="2">Variable</option>
+                                    </select>
+                                    <input class="SearchFieldBandeau" id="SaisieTauxRev" name="SaisieTauxRev" maxlength="3" placeholder="Valeur taux" type="text" disabled="disabled" />
+                                </span>
+                                <span class="RightPartLgn">
+                                    <span>
+                                        <span class="legend">Taux EDI :</span>
+                                        <!--<input class="SearchFieldBandeau" id="SaisieTauxEDI" name="SaisieTauxEDI" maxlength="3" type="text" />-->
+                                        <input class="SearchFieldBandeau" id="SaisieTauxEDI" name="SaisieTauxEDI" maxlength="3" type="text" disabled="disabled" />
+                                    </span>
+                                </span>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+                <div class="BottomPart">
+                    <button class="Validation_EtapeCreateAccord"><i class="fa fa-check"></i>Suivant</button>
+                </div>
+            </div>
+            <span id="AnneeEnCours"><%= AnneeEnCours %></span>
+
+
+
+
+            <!-- Popin étape 2 création d'accord -->
+            <div class="Popin" id="PopinCreationAccord_Etp2" data-numetape="2" >
+                <i class="fa fa-times ClosePopin"></i>
+                <div class="TopPart">
+                    <div class="TitrePopin">Etape 2 - Ajout des établissements / groupements</div>
+                    <div class="DataSaisiesEtp1">
+                        <div>
+                            <span class="legend">Accord :</span>
+                            <span class="PopinCreaNomAccord"></span>
+                            <span class="legend">Année :</span>
+                            <span class="PopinCreaAnneeAccord"></span>
+                        </div>
+                        <div>
+                            <span class="legend">Période :</span>
+                            <span><span class="PopinCreaDateDebut"></span> au <span class="PopinCreaDateFin"></span></span>
+                        </div>
+                        <div>
+                            <span class="legend">Taux de rév. :</span>
+                            <span class="PopinCreaTypeTauxRev"></span>
+                            <span class="PopinCreaTauxRev"></span>
+                            <span class="legend">Taux EDI :</span>
+                            <span class="PopinCreaTauxEDI"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="CentralPart">
+                    <!--
+                    <div class="Reinitialisation"><button class="BtReinitialisation">Tout désélectionner</button></div>
+                    -->
+
+                    <span class="MsgGrpPasDispo Hidden">Ce groupement ou les établ. de ce groupement font déjà l'objet d'un accord pour cette année !</span>
+                    <div class="EnteteCln">Groupements <span><span id="NbGrpselected">0</span> sélectionné(s)</span></div>    
+                    <span class="MsgEtbPasDispo Hidden">Cet établissement fait déjà l'objet d'un accord pour cette année !</span>
+                    <div class="EnteteCln last">Etablissements <span><span class="NbEtbselected">0</span> sélectionné(s)</span></div>
+                    
+                    <form id="PopinCreationAccord_FormEtp2" autocomplete="off"></form><!-- autocomplete juste pour FF car sinon garde les data saisies dans les champs après reload -->
+                    
+                </div>
+                <div class="BottomPart">
+                    <button class="Annulation_EtapeCreateAccord"><i class="fa fa-undo"></i>Précédent</button>
+                    <button class="Validation_EtapeCreateAccord" disabled="disabled"><i class="fa fa-check"></i>Suivant</button>    
+                </div>
+            </div>
+
+
+
+
+            <!-- Popin étape 3 création d'accord -->
+            <div class="Popin" id="PopinCreationAccord_Etp3" data-numetape="3" >
+                <i class="fa fa-times ClosePopin"></i>
+                <div class="TopPart">
+                    <div class="TitrePopin">Etape 3 - Sélection des destinataires</div>
+                </div>
+                <div class="CentralPart">
+                    <div class="Txtinfo">
+                        <i class="fa fa-info-circle"></i>
+                        La liste ci-dessous correspond à la sélection des établissements que vous avez faite à l'étape précédente. Le directeurde l'établissement que vous allé coché sera désigné par défaut comme destinataire de la réversion.
+                    </div>
+                    <div id="ListeEtbsChoixDestinataires"><ul></ul></div>
+                </div>
+                <div class="BottomPart">
+                    <button class="Annulation_EtapeCreateAccord"><i class="fa fa-undo"></i>Précédent</button>
+                    <button class="Validation_EtapeCreateAccord"  disabled="disabled"><i class="fa fa-check"></i>Valider</button>    
+                </div>
+            </div>
+
+
+            
+
+        </div>
+
+    </body>
+</html>
