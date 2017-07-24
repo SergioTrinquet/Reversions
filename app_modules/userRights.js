@@ -1,7 +1,7 @@
 const _ = require('underscore');
 var configPages = JSON.parse(JSON.stringify(require('config').get('pages')));
 
-const colors = require('colors'); // juste pour le développement
+const colors = require('colors'); // juste pour le dév.
 
 module.exports = function (req, res, next) {
     console.log(colors.bgYellow.black('Middleware \'userRightsAccess\' => UserName : ' + req.app.get('userName') + ' | Rights : ' + req.Rights + ' | req.originalUrl : ' + req.originalUrl)); //TEST

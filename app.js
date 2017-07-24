@@ -2,9 +2,6 @@ const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
-
-/* */const CheckAuthentificationController = require('./controllers/AccesRefuseController'); // Custom module 
-
 const listHistoGrpController = require('./controllers/ListeHistoriqueGroupementsController'); // Custom module
 const CreateAccordController = require('./controllers/CreationAccordController'); // Custom module
 const RechAccordsController = require('./controllers/RechercheAccordsController'); // Custom module
@@ -46,19 +43,10 @@ app.set('userName', userName || 'Non identifié');
 
 
 /// Placer la partie authentification après l'appel des static files car sinon ne trouve pas le chemin du .css pour 'AccesRefuse.ejs'
-//CheckAuthentificationController(app);
 var session = require('./app_modules/session.js');
 /// Middleware pour authentification
 app.use(session.setSession);
 app.use(session.authentification);
-
-/* //TEST
-app.use(function(req, res, next) {
-    app.set('userName_2', { US: userName, Rights: req.Rights });
-    console.log(app.get('userName_2')); //TEST
-    next();
-});*/
-/// FIN partie authentification
 
 
 

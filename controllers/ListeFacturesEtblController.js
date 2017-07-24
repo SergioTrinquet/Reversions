@@ -8,7 +8,7 @@ const _ = require('underscore');
 const promise = require('promise');
 const dateFormat = require('dateformat');
 const numeral = require('numeral');
-const numeralFormat = require('../numeralFormat').numeralFormat;
+const numeralFormat = require('../app_modules/numeralFormat').numeralFormat;
 
 var recordset_Etbl = null;
 
