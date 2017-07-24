@@ -3,13 +3,13 @@ const sql = require('mssql');
 const _ = require('underscore');
 var dbConfig = JSON.parse(JSON.stringify(require('config').get('dbConfig_CRM')));
 var listeApplicationRole = JSON.parse(JSON.stringify(require('config').get('listeApplicationRole')));
-var logger = require('../log/logConfig.js').logger; // Pour les logs
+var logger = require('../log/logConfig.js').logger;
 
-const colors = require('colors'); // juste pour le développement
+const colors = require('colors'); // juste pour le dév.
 
 
 exports.setSession = sessions({
-    cookieName: 'mySession8', // cookie name dictates the key name added to the request object 
+    cookieName: 'maSession', // cookie name dictates the key name added to the request object 
     secret: 'blargadeeblargblarg', // should be a large unguessable string 
     duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms 
     activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds 
@@ -24,11 +24,11 @@ exports.authentification = function(req, res, next) {
 
     /// TEST
     console.log('Ici, MiddleWare pour authentification !! | req.app.get(\'userName\') : ' + nomUtilisateur);  
-    req.mySession8.userName ? console.log('Il y a un session.rights : ' + req.mySession8.rights) : console.log('Pas de session : ' + req.mySession8.rights);
+    req.maSession.userName ? console.log('Il y a un session.rights : ' + req.maSession.rights) : console.log('Pas de session : ' + req.maSession.rights);
     /// Fin TEST
 
     /// Si pas de session, on en créé une où l'on y stocke le role
-    if(!req.mySession8.rights) { /**/  
+    if(!req.maSession.rights) { /**/  
 
         /// On va voir pour cet utilisateur s'il a des droits
         getRole(function(recordset) {
@@ -46,15 +46,13 @@ exports.authentification = function(req, res, next) {
                 //req.Rights = ['ReversionsRechercheAccordLecture', 'ReversionsCreationAccord'];  //Pour faires des TESTs 
                 //console.log(req.Rights); //TEST
                 
-                //req.UserName = nomUtilisateur;
-
                 /// Pour rendre ces infos accessibles au niveau de la vue 'userInfo.ejs'
                 req.app.locals.Rights = req.Rights;
                 req.app.locals.UserName = nomUtilisateur;
 
                 /**/
-                req.mySession8.rights = req.Rights; 
-                req.mySession8.userName = nomUtilisateur;
+                req.maSession.rights = req.Rights; 
+                req.maSession.userName = nomUtilisateur;
                 /**/
                 
                 next();
@@ -66,14 +64,13 @@ exports.authentification = function(req, res, next) {
 
     /**/
     } else {
-        req.Rights = req.mySession8.rights;
+        req.Rights = req.maSession.rights;
         /// Pour rendre ces infos accessibles au niveau de la vue 'userInfo.ejs'
         req.app.locals.Rights = req.Rights;
         req.app.locals.UserName = nomUtilisateur;
         next();
     }
     /**/
-
 
 
 
