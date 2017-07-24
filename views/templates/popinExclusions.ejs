@@ -1,0 +1,50 @@
+<div>
+    <div>
+
+        <% for(var i in exclusion) { %>
+        
+        <div class="Lgn_DetailExclusionReversion">
+            <!--<div><input type="checkbox" id="<%= i %>" checked="checked"></div>--> <!-- Temporairement en commentaire -->
+            <label for="1">
+                <span class="left">
+                    <span class="legend">Motif :</span><%= exclusion[i].TypeExclusionLibelle %>
+                </span>
+                <span class="right">
+                    <span class="legend">Période d'exclusion :</span><%= exclusion[i].ExclusReversionPeriodeDebut %> - <%= exclusion[i].ExclusReversionPeriodeFin %>
+                </span>
+            </label>
+        </div>
+
+        <% } %>
+
+        
+        <!--Type exclusion custom -->
+        <!--
+        <div class="Lgn_DetailExclusionReversion">
+            <div></div>
+            <label>
+                <span class="left">
+                    <span class="legend">Motif :</span><input class="SearchFieldBandeau" maxlength="200" type="text" placeholder="Exclusion utilisateur" >
+                </span>
+                <span class="right">
+                    <span class="legend">Période d'exclusion :</span><input type="text" class="SearchFieldBandeau" id="ExclRev_DatepickerStart" readonly="readonly"> - <input type="text" class="SearchFieldBandeau" id="ExclRev_DatepickerEnd" readonly="readonly">
+                </span>
+            </label>
+        </div>
+        -->
+
+        <div class="Resume">
+            <span class="legend">Prorata exclu :</span> 
+            <span><%= exclusion[0].ProrataExclusion %>%</span> de la période, 
+            soit <%= exclusion[0].ProrataExclusionTexte %>
+            <br />
+            <span class="legend">Réversion exclue :</span>
+            <span><%= exclusion[0].ExclusReversionCA %>€</span>
+        </div>
+
+
+    </div>
+</div>
+
+
+

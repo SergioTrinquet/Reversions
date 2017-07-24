@@ -1,0 +1,13 @@
+{
+    "env": "production",
+    "dbConfig": {
+        //"server": "SERVSQL\\CAHPPSQL"    /* Version de prod. */
+        "server": "SERVDEVSQL\\SERVSQL2012"    /* Version de dev. par sécurité pdt dev., mais il faut mettre la version de prod.  */
+        
+        //"database": "GestionCahpp" /* Pas obligatoire car va d'abord lire dans 'default.json' */
+    },
+    "dbConfig_CRM": {
+        //"server": "SERVSQL\\CAHPPSQL"    /* Version de prod. */
+        "server": "SERVDEVSQL\\SERVSQL2012"    /* Version de dev. par sécurité pdt dev., mais il faut mettre la version de prod.  */
+    }
+}

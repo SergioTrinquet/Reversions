@@ -1,10 +1,11 @@
-var colors = require('colors'); // juste pour le développement
+const colors = require('colors'); // juste pour le développement
+var userRightsAccess = require('../app_modules/userRights.js'); /// Middleware pour gérer les accès en fonction des droits de l'utilisateur
 
 var NbLgnPerPg = 100;
 
 module.exports = function(app) {
 
-      app.get('/HistoGrp', function(req, res) {
+      app.get('/HistoGrp', userRightsAccess, function(req, res) {
 
         //if(req.xhr) {  console.log('Ajax'); } else { console.log('Pas ajax'); } //TEST
 
@@ -35,7 +36,7 @@ module.exports = function(app) {
 
 function getData(callback, query) {
     var sql = require('mssql');
-    var config = require('../config_mssql').config;
+    var config = JSON.parse(JSON.stringify(require('config').get('dbConfig'))); // Nvelle version avec module 'config'
 
     /// Récupération des variables passées dans le req.query pour construire la requete
     var queryEtbl = (typeof query.Etablissement === 'undefined' ? '' : query.Etablissement.replace("'", "''"));

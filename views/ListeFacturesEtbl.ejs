@@ -4,47 +4,64 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title>Calcul de la réversion</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700" rel="stylesheet" type="text/css">
-        <link href="/assets/styles/style_reversion.css" rel="stylesheet">
-        <link href="/assets/styles/sidenav.css" rel="stylesheet">
-
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"><!-- pour datepickers -->
-        <link href="/assets/styles/jquery/jquery-ui.datepicker.theme.css" rel="stylesheet"><!-- pour datepickers -->
+        
+        <% include partials/bundleCSS.ejs %>
 
         <script src="https://use.fontawesome.com/68984c879a.js"></script>
         <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script><!-- pour datepickers -->       
-        <script src="/assets/scripts/datepicker-fr.js"></script>
-        <script src="/assets/scripts/sidenav.js"></script>
-        <script src="/assets/scripts/numeral/numeral.js"></script><!-- Pour formatage des chiffres à l'affichage -->
-        <script src="/assets/scripts/EtablissementFactures.js"></script>
-
+        <script src="/scripts/datepicker-fr.js"></script>
+        <script src="/scripts/sidenav.js"></script>
+        <script src="/scripts/numeral/numeral.js"></script><!-- Pour formatage des chiffres à l'affichage -->
+        <script src="/scripts/EtablissementFactures.js"></script>
     </head>
     <body>
+        <!-- Popin 'Détails exclusion réversion' -->
         <div class="Masque Hidden"></div>
-        
+        <div class="Popin PopinDetailsExclusionReversion">
+            <i class="fa fa-times ClosePopin"></i>
+            <div class="TopPart">
+                <div class="TitrePopin">Montant(s) exclu(s) de la réversion</div>
+                <div>
+                    <span class="legend">N° facture :</span><span class="PopinNumfacture"></span> - <span class="legend">Date facture :</span><span class="PopinDatefacture"></span>
+                </div>
+                <div>
+                    <span class="legend">Période de facture :</span><span class="PopinPeriodeFacture"></span>
+                </div>
+            </div>
+            <div class="CentralPart"></div>
+            <div class="BottomPart">
+                <!-- Mis en commentaire temporairement --><!--
+                <button id="Annulation_ModifExclusionReversion"><i class="fa fa-undo"></i>Annuler</button>
+                <button id="Validation_ModifExclusionReversion"><i class="fa fa-check"></i>Valider</button>
+                -->               
+            </div>
+        </div>
+        <!-- FIN Popin 'Détails exclusion réversion' -->
+
         <% include partials/menu.ejs %>
 
-        <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+        
         <div id="main" class="DetailsReversion"> 
 
             <div id="IDaccord">2233445566</div>
 
 
-            <!--<button class="EditionReversion"><i class="fa fa-file-pdf-o"></i> Export en pdf</button>-->
             <button class="EditionReversion"><i class="fa fa-file-excel-o"></i> Export en .xls</button>
 
             <div class="bandeauHaut">
                 <div>Calcul de réversion</div>
                 <div>
                     <div>
-                        <div class="NomEntite"><span class="legend">Etablissement : </span>JEAN SARRAILH - <span>40800 AIRE SUR LADOUR</span></div>
+                        <div class="NomEntite"><span class="legend">Etablissement : </span><%= dataEtbl.RaisonSociale %> (<%= dataEtbl.CC %>) - <span><%= dataEtbl.CP %> <%= dataEtbl.Ville %></span></div>
                         <div style="margin-top: -2px;">
-                            <div class="Periode"><span class="legend">Période : </span>Du 01/01/2016 au 31/12/2016</div>
+                            <div class="Periode"><span class="legend">Période : </span>Du <%= dataEtbl.PeriodeDebut %> au <%= dataEtbl.PeriodeFin %></div>
                             <div class="Tx" data-typetaux="Variable">
-                                <span class="legend">Taux de réversion : </span>Variable (<span id="ValeurTauxRev">25</span>)
-                                + <span class="legend">Taux complémentaire : </span>EDI (<span id="TauxSupplementaire">2</span>)
-                                <i class="fa fa-arrow-right"></i><input id="SaisieTauxReversion" class="SearchFieldBandeau" type="text" maxlength="3" >%
+                                <span class="legend">Taux de réversion : </span><%= dataEtbl.TypeTauxReversion %> (<span id="ValeurTauxRev"><%= dataEtbl.Taux %></span>)
+                                <% if(dataEtbl.TauxAvecEDI > 0){ %>
+                                + <span class="legend">Taux complémentaire : </span>EDI (<span id="TauxSupplementaire"><%= dataEtbl.TauxAvecEDI %></span>)
+                                <% } %>
+                                <!--<i class="fa fa-arrow-right"></i><input id="SaisieTauxReversion" class="SearchFieldBandeau" type="text" maxlength="3" >%-->
                             </div>
                         </div>
                     </div>
@@ -52,194 +69,41 @@
             </div>
 
 
-            <div class="MoreOptions">
+            <div class="MoreOptions Hidden">
                 <span id="DisplayNonvalidatedLgns"><i class="fa fa-eye-slash"></i> Cacher les lignes validées</span>
             </div>
 
 
             <div class="blocContenu">
-                
-                <!-- Bloc Catalogue -->
-                <div class="FdListe  blocCat">
+
+            <%# console.log(dataFactures); /*TEST*/ %>
+
+            <% /* Début boucle sur catalogues */ 
+                for(var catalogue in dataFactures) { 
+                    var dataCatalogue = dataFactures[catalogue]; %>
+
+                <div class="FdListe blocCat <%= (catalogue == 'HORS CONTRAT' ? 'HorsContrat' : '') %>" id="<%= catalogue.replace(' ', '') %>">
                     <div class="Enteteliste LgnCat">
-                        <div class="Pourcentage"><div class="Pourcent" style="width: 70%;">&nbsp;</div></div>70%
-                        <span>-</span>
-                        <span class="NomCat">PHARMACIE</span>
-                    </div>
+                        <!--<div class="Pourcentage"><div class="Pourcent" style="width: 70%;">&nbsp;</div></div>70%<span>-</span>-->
+                        <i class="fa fa-minus-square togglefacturesCat"></i><span class="NomCat"><%= catalogue %></span>
+                        <span class="NbFactures">(<%= dataCatalogue.nbFactures %> factures)</span>
+                     </div>
+
+                <%# for(var fnr in dataCatalogue) { /*Début boucle sur Fournisseurs d un catalogue : VERSION sans nb factures par cat. 31/03/17*/ %>
+                <% for(var fnr in dataCatalogue.lgnsFact) { /*Début boucle sur Fournisseurs d un catalogue : VERSION avec nb factures par cat 31/03/17*/ %>
+                    
+                    <%# (catalogue == 'HORS CONTRAT' ? '<div>' + catalogue + '</div>' : ''){ %>
+
                     
                     <div class="blocCatFnr">
                         <div>
                             <div class="NomFnr">
                                 <div>
-                                    G.S.K.
-                                    <div>
-                                        <div class="Pourcentage small"><div class="Pourcent" style="width: 80%;">&nbsp;</div></div>80%
-                                    </div>
+                                    <%= fnr %>
+                                    <!--<div><div class="Pourcentage small"><div class="Pourcent" style="width: 80%;">&nbsp;</div></div>80%</div>-->
                                 </div>
                             </div>
-                            <div class="ChampsRev">
-                                
-                                <table>
-                                    <tr>
-                                        <th>N° facture</th>
-                                        <th>Date facture</th>
-                                        <th>Période facture</th>
-                                        <!--<th>VA déclaré</th>-->
-                                        <th>VA facturé</th>
-                                        <th>CA facturé</th>
-                                        <th>CA encaissé</th>
-                                        <th>Proraté</th>
-                                        <th>Réversion</th>
-                                        <th>Pris en compte</th>
-                                        <th>Ignoré</th>
-                                        <th>Validation</th>
-                                    </th>
-                                    <!-- modèle de l'id' ==> n° facture -->
-                                    <tr id="FA16002201">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002201</a></td>
-                                        <td class="DateFacture">02/05/2016</td>
-                                        <td class="PeriodeFacture">01/11/2015 au 30/04/2016</td>
-                                        <td>458 000,00</td>
-                                        <td>6 000,00</td>
-                                        <td>
-                                            <div class="Validated">4 000,00</div>
-                                            <div>2 000,00</div>
-                                        </td>
-                                        <td>
-                                            <div class="Validated">4/6</div>
-                                            <div>4/6</div>
-                                        </td>
-                                        <td><!-- Ici chiffre important après class 'MontantReversion'. Doit être dynamique -->
-                                            <div class="MontantReversion 1 Validated">80,00</div>
-                                            <div class="MontantReversion 2">40,00</div>
-                                        </td>
-                                        <td>
-                                            <!-- Ici 'data-encaissement' important -->
-                                            <!--<div><input type="checkbox" class="ChbxPrisEnCpte" data-encaissement="1" checked="checked" disabled="disabled" /></div>
-                                            <div><input type="checkbox" class="ChbxPrisEnCpte" data-encaissement="2" /></div>-->
-                                            <div class="Validated"><input type="radio" name="radio_FA16002201_1" data-encaissement="1" data-cln="PrisEnCompte" disabled="disabled" checked="checked" /></div>
-                                            <div><input type="radio" name="radio_FA16002201_2" data-encaissement="2" data-cln="PrisEnCompte" /></div>
-                                        </td>
-                                        <td>
-                                            <div class="Validated"><input type="radio" name="radio_FA16002201_1" data-encaissement="1" data-cln="Ignore" disabled="disabled" /></div>
-                                            <div><input type="radio" name="radio_FA16002201_2" data-encaissement="2" data-cln="Ignore" /></div>
-                                        </td>
-                                        <td>
-                                            <div class="Validated"><span>30/03/2017</span></div>
-                                            <div>-</div>
-                                        </td>
-                                    </tr>
-                                    <tr id="FA16002212">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002212</a></td>
-                                        <td class="DateFacture">02/04/2016</td>
-                                        <td class="PeriodeFacture">01/01/2016 au 30/03/2016</td>
-                                        <!--<td>250 000,00</td>-->
-                                        <td>250 000,00</td>
-                                        <td>3 000,00</td>
-                                        <td><div>3 000,00</div></td>
-                                        <td><div>/</div></td>
-                                        <td><div class="MontantReversion 1">90,00</div></td>
-                                        <td><div><input type="radio" name="radio_FA16002212_1" data-encaissement="1" data-cln="PrisEnCompte" /></div></td>
-                                        <td><div><input type="radio" name="radio_FA16002212_1" data-encaissement="1" data-cln="Ignore" /></div></td>
-                                        <td><div>-</div></td>
-                                    </tr>
-                                </table>
-                            
-                            </div>
-                        </div>
-                    </div>
 
-
-                    <div class="blocCatFnr last">
-                        <div>
-                            <div class="NomFnr">
-                                <div>
-                                    DAIICHI SANKYO
-                                    <div>
-                                        <div class="Pourcentage small"><div class="Pourcent" style="width: 65%;">&nbsp;</div></div>65%
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ChampsRev">
-                                <table>
-                                    <tr>
-                                        <th>N° facture</th>
-                                        <th>Date facture</th>
-                                        <th>Période facture</th>
-                                        <th>VA facturé</th>
-                                        <th>CA facturé</th>
-                                        <th>CA encaissé</th>
-                                        <th>Proraté</th>
-                                        <th>Réversion</th>
-                                        <th>Pris en compte</th>
-                                        <th>Ignoré</th>
-                                        <th>Validation</th>
-                                    </th>
-                                    <tr id="FA16002416">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002416</a></td>
-                                        <td class="DateFacture">14/04/2016</td>
-                                        <td class="PeriodeFacture">01/11/2015 au 30/01/2016</td>
-                                        <td>58 000,00</td>
-                                        <td>4 000,00</td>
-                                        <td><div>4 000,00</div></td>
-                                        <td><div>1/3</div></td>
-                                        <td><div class="MontantReversion 1">40,00</div></td>
-                                        <td><div><input type="radio" name="radio_FA16002416_1" data-encaissement="1" data-cln="PrisEnCompte" /></div></td>
-                                        <td><div><input type="radio" name="radio_FA16002416_1" data-encaissement="1" data-cln="Ignore" /></div></td>
-                                        <td><div>-</div></td>
-                                    </tr>
-                                    <tr id="FA16002108" class="Validated">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002108</a></td>
-                                        <td class="DateFacture">08/07/2016</td>
-                                        <td class="PeriodeFacture">01/11/2015 au 30/01/2016</td>
-                                        <td>50 000,00</td>
-                                        <td>3 600,00</td>
-                                        <td><div class="Validated">3 600,00</div></td>
-                                        <td><div class="Validated">1/3</div></td>
-                                        <td><div class="MontantReversion 1 Validated">38,00</div></td>
-                                        <td><div class="Validated"><input type="radio" name="radio_FA16002108_1" data-encaissement="1" data-cln="PrisEnCompte" checked="checked" disabled="disabled" /></div></td>
-                                        <td><div class="Validated"><input type="radio" name="radio_FA16002108_1" data-encaissement="1" data-cln="Ignore" disabled="disabled" /></div></td>
-                                        <td><div><span>30/03/2017</span></div></td>
-                                    </tr>
-                                    <tr id="FA16002204" class="Validated">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002204</a></td>
-                                        <td class="DateFacture">05/02/2016</td>
-                                        <td class="PeriodeFacture">01/11/2015 au 30/01/2016</td>
-                                        <td>58 000,00</td>
-                                        <td>4 000,00</td>
-                                        <td><div class="Validated">4 000,00</div></td>
-                                        <td><div class="Validated">1/3</div></td>
-                                        <td><div class="MontantReversion 1 Validated">40,00</div></td>
-                                        <td><div class="Validated"><input type="radio" name="radio_FA16002204_1" data-encaissement="1" data-cln="PrisEnCompte" checked="checked" disabled="disabled" /></div></td>
-                                        <td><div class="Validated"><input type="radio" name="radio_FA16002204_1" data-encaissement="1" data-cln="Ignore" disabled="disabled" /></div></td>
-                                        <td><div><span>05/04/2017</span></div></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <!-- Bloc Catalogue -->
-                <div class="FdListe blocCat">
-                    <div class="Enteteliste LgnCat">
-                        <div class="Pourcentage"><div class="Pourcent" style="width: 90%;">&nbsp;</div></div>90%
-                        <span>-</span>
-                        <span class="NomCat">DISPOSITIFS MEDICAUX</span>
-                    </div>
-
-                    <div class="blocCatFnr">
-                        <div>
-                            <div class="NomFnr">
-                                <div>
-                                    G.S.K.
-                                    <div>
-                                        <div class="Pourcentage small"><div class="Pourcent" style="width: 90%;">&nbsp;</div></div>90%
-                                    </div>
-                                </div>
-                            </div>
                             <div class="ChampsRev">
                                 
                                 <table>
@@ -250,93 +114,78 @@
                                         <th>VA facturé</th>
                                         <th>CA facturé</th>
                                         <th>CA encaissé</th>
-                                        <th>Proraté</th>
-                                        <th>Réversion</th>
+                                        <th>Somme réversion exclue</th>
+                                        <th>Réversion après exclusions</th>
                                         <th>Pris en compte</th>
                                         <th>Ignoré</th>
                                         <th>Validation</th>
                                     </th>
-                                    <tr id="FA16002206">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002206</a></td>
-                                        <td class="DateFacture">16/05/2016</td>
-                                        <td class="PeriodeFacture">01/01/2016 au 30/04/2016</td>
-                                        <td>58 000,00</td>
-                                        <td>600,00</td>
-                                        <td><div>600,00</div></td>
-                                        <td><div>/</div></td>
-                                        <td><div class="MontantReversion 1">400,00</div></td>
-                                        <td><div><input type="radio" name="radio_FA16002416_1" data-encaissement="1" data-cln="PrisEnCompte" /></div></td>
-                                        <td><div><input type="radio" name="radio_FA16002416_1" data-encaissement="1" data-cln="Ignore" /></div></td>
-                                        <td><div>-</div></td>
-                                    </tr>
-                                </table>
-                            
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-
-                <!-- Bloc "Hors contrat" -->
-                <div class="FdListe blocCat HorsContrat">
-                    <div class="Enteteliste LgnCat">
-                        <span class="NomCat">HORS CONTRAT</span>
-                    </div>
-
-                    <div class="blocCatFnr">
-                        <div>
-                            <div class="NomFnr">
-                                <div>
-                                    DAIICHI SANKYO
-                                </div>
-                            </div>
-                            <div class="ChampsRev">
+                                <%# for(var i=0; i < dataFactures[catalogue][fnr].length; i++) {  console.log(fnr + " | " + dataFactures[catalogue][fnr][i].NumeroFacture); } /*Fonctionne !*/ %>
                                 
-                                <table>
-                                    <tr>
-                                        <th>N° facture</th>
-                                        <th>Date facture</th>
-                                        <th>Période facture</th>
-                                        <th>VA facturé</th>
-                                        <th>CA facturé</th>
-                                        <th>CA encaissé</th>
-                                        <th>Proraté</th>
-                                        <th>Réversion</th>
-                                        <th>Pris en compte</th>
-                                        <th>Ignoré</th>
-                                        <th>Validation</th>
-                                    </th>
-                                    <tr id="HC_FA16002206">
-                                        <td><a href="#" class="LienFacture" target="facture">FA16002206</a></td>
-                                        <td class="DateFacture">16/05/2016</td>
-                                        <td class="PeriodeFacture">01/01/2016 au 30/04/2016</td>
-                                        <td>58 000,00</td>
-                                        <td>600,00</td>
-                                        <td><div>600,00</div></td>
-                                        <td><div>/</div></td>
-                                        <td><div class="MontantReversion 1">400,00</div></td>
-                                        <td><div><input type="radio" name="radio_HC_FA16002206_1" data-encaissement="1" data-cln="PrisEnCompte" /></div></td>
-                                        <td><div><input type="radio" name="radio_HC_FA16002206_1" data-encaissement="1" data-cln="Ignore" /></div></td>
-                                        <td><div>-</div></td>
+                                <%# dataFactures[catalogue][fnr].forEach(function(facture) { /*VERSION sans nb factures par cat. 31/03/17*/ %>
+                                <% dataCatalogue.lgnsFact[fnr].forEach(function(facture) { /*VERSION avec nb factures par cat. 31/03/17*/ %>
+
+                                    <!-- Class 'Validated' dynamique : En commentaire car propriété 'LgnFactureValidated' reste à créer -->
+                                    <tr id="<%= (catalogue == 'HORS CONTRAT' ? 'HC_' : '') + facture.NumeroFacture %>" <%#= (facture.LgnFactureValidated == true ? "class='Validated'" : "" ) %> title="catalogue : <%= facture.Catalogue %>" >
+                                        <td><a href="<%= facture.UrlFacture %>" class="LienFacture" target="facture"><%= facture.NumeroFacture %></a></td>
+                                        <td class="DateFacture"><%= facture.DateFacture %></td>
+                                        <td class="PeriodeFacture"><%= facture.PeriodeDebut %> au <%= facture.PeriodeFin %></td>
+                                        <td><%= facture.VAFactureAvoir %></td>
+                                        <td><%= facture.CAFactureAvoir %></td>
+                                        <td>
+                                            <div <%#= (facture.LgnFactureValidated == true ? "class='Validated'" : "" ) %> ><%= facture.EtsFactureCAAvoirEncaisseHT %></div>
+                                        </td>
+                                        <td>
+                                            <div <%#= (facture.LgnFactureValidated == true ? "class='Validated'" : "" ) %> >
+                                                <span class="SumExclReversion"><%= facture.ExclusReversionCA %></span>
+                                                <button class="Bt_AppelPopinDetailsExclusion" <%= (facture.PresenceBoutonDetails ? ' data-idlgnreversionetb=' + facture.ReversionEtablissementLigneId : ' disabled=disabled') %> >Détails</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="MontantReversion <%#= (facture.LgnFactureValidated == true ? ' Validated' : '' ) %>"><%= facture.MontantReversionCA %></div>
+                                        </td>
+                                        <td>
+                                            <!-- Ici 'data-encaissement' n'a d'interet que quand plusieurs encaissements sur une même facture -->
+                                            <div <%#= (facture.LgnFactureValidated == true ? "class='Validated'" : "" ) %> >
+                                                <input type="radio" name="radio_<%= facture.NumeroFacture %>" data-encaissement="1" data-cln="PrisEnCompte" <%#= (facture.LgnFactureValidated == true ? "disabled=disabled" : "" ) %> />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div <%#= (facture.LgnFactureValidated == true ? "class='Validated'" : "" ) %> >
+                                                <input type="radio" name="radio_<%= facture.NumeroFacture %>" data-encaissement="1" data-cln="Ignore" <%#= (facture.LgnFactureValidated == true ? "disabled=disabled" : "" ) %> />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>- <!--<span>30/03/2017</span>--></div>
+                                        </td>
                                     </tr>
+
+                                <% }); %>
+
+
                                 </table>
                             
                             </div>
                         </div>
                     </div>
+                <% } /*Fin boucle sur Fournisseurs d'un catalogue*/ %>
+
+
                 </div>
-
-
+            <% } /*Fin boucle sur catalogues*/ %>
 
 
             </div>
 
 
-            
+
+
+            <!-- Pied de page -->
             <div class="bandeauBas V2">
 
                 <div class="LgnBandeauBas">
-<!--
+                    <!--
                     div class="IndicateurBandeauBas">
                         <div class="Pourcentage"><div class="Pourcent" style="width: 86%;">&nbsp;</div></div>86%
                     </div>
@@ -344,17 +193,17 @@
                     <div style="width: 150px;"></div>
                             
                     <div class="Montant">
-                        <span>Montant total<br />du VA</span><span><span id="TotalVA">1 047 018,00</span></span>
+                        <span>Montant total<br />du VA</span><span><span id="TotalVA"><%= dataEtbl.VAPeriode %></span></span>
                     </div>
                     <div class="Montant">
-                        <span title="Somme des réversions calculées sur le CA facturé">Somme prév. réversion</span><span id="SumPrevReversion" title="Somme des réversions calculées sur le CA facturé">48 106,00</span>
+                        <span title="Somme des réversions calculées sur le CA facturé">Somme prév. réversion</span><span id="SumPrevReversion" title="Somme des réversions calculées sur le CA facturé"><%= dataEtbl.MontantReversionCA %></span>
                     </div>
                     <div class="Montant">
-                        <span title="Somme des réversions calculées sur le CA encaissé">Somme totale réversion</span><span id="SumTotaleReversion" title="Somme des réversions calculées sur le CA encaissé">45 123,00</span>
+                        <span title="Somme des réversions calculées sur le CA encaissé">Somme totale réversion</span><span id="SumTotaleReversion" title="Somme des réversions calculées sur le CA encaissé"><%= dataEtbl.MontantReversionCAEncaisse %></span>
                     </div>
 
                     <div class="Bts">
-                        <button class="BtCalculPrevisionnel" id="CalculPrevisionnel">Calcul prévisionnel</button>                       
+                        <!--<button class="BtCalculPrevisionnel" id="CalculPrevisionnel">Calcul prévisionnel</button>-->                       
                         <button class="BtValidation" id="ValidReversion">Valider la réversion</button>                            
                     </div>
                     

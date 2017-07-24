@@ -1,0 +1,16 @@
+        <% include ./bundleJS_CDN.ejs %>
+
+        <script src="/scripts/underscore-min.js"></script>
+
+    <% if(ENV === 'development') { %>
+
+        <script src="/scripts/datepicker-fr.js"></script>
+        <script src="/scripts/sidenav.js"></script>
+        <script src="/scripts/ParamsDatePickers.js"></script>
+        <script src="/scripts/CreationAccord.js"></script>
+
+    <% } else { %>
+
+        <script src="/scripts/global_CreationAccord.js"></script>
+
+    <% } %>

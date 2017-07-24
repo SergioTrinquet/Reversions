@@ -1,0 +1,9 @@
+{
+    "env": "development",
+    "dbConfig": {
+        "server": "SERVDEVSQL\\SERVSQL2012"    /* Version de dev. */
+    },
+    "dbConfig_CRM": {
+        "server": "SERVDEVSQL\\SERVSQL2012"    /* Version de dev. */
+    }
+}

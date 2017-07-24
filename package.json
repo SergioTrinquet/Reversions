@@ -1,7 +1,7 @@
 {
   "name": "projetreversion",
   "version": "1.0.0",
-  "description": "Creation en Node JS de la page de l'historique des groupements",
+  "description": "Projet des réversions",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,10 +9,29 @@
   "author": "Serge Trinquet",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.4.1",
     "body-parser": "^1.16.1",
+    "client-sessions": "^0.8.0",
+    "config": "^1.26.1",
     "dateformat": "^2.0.0",
     "ejs": "^2.5.6",
     "express": "^4.14.1",
-    "underscore": "^1.8.3"
+    "helmet": "^3.6.1",
+    "jsonschema": "^1.1.1",
+    "mssql": "^3.3.0",
+    "numeral": "^2.0.4",
+    "underscore": "^1.8.3",
+    "winston": "^2.3.1",
+    "winston-request-logger": "^1.0.7"
+  },
+  "devDependencies": {
+    "colors": "^1.1.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-csso": "^3.0.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^3.0.0"
   }
 }

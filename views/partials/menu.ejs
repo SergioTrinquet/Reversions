@@ -1,9 +1,15 @@
 <div id="mySidenav" class="sidenav">
     <span class="closebtn"><i class="fa fa-times"></i></span>
-    <a href="#">Tableau<br/>de bord</a>
-    <a href="/HistoGrp">Historique des<br/>groupements</a>
-    <a href="/CreationAccords">Créer<br/>un accord</a>
-    <a href="/RechercheAccords">Rechercher<br/>un accord</a>
+
+    <!--<a href="#">Tableau<br/>de bord</a>-->
+    <% if(typeof menu !== 'undefined' && menu.length > 0) {
+        menu.forEach(function(m) { 
+            if(m.acces == true) {%><a href="/<%= m.pg %>"><%= m.intitule %></a><% } else { %><div><%= m.intitule %></div><% } 
+         });
+    } else { %>
+        <div class="NoMenu">Pas de menu!<br />Vérifier les droits</div>
+    <% } %>
+
 </div>
 
 <!-- Use any element to open the sidenav -->

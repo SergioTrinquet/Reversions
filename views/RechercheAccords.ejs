@@ -2,86 +2,69 @@
 <html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <title>Création des accords de réversion</title>
+        <title>Recherche des accords de réversion</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700" rel="stylesheet" type="text/css">
-        <link href="/assets/styles/style_reversion.css" rel="stylesheet">
-        <link href="/assets/styles/sidenav.css" rel="stylesheet">
-
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"><!-- pour datepickers -->
-        <link href="/assets/styles/jquery/jquery-ui.datepicker.theme.css" rel="stylesheet"><!-- pour datepickers -->
-
-        <script src="https://use.fontawesome.com/68984c879a.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script><!-- pour datepickers -->       
-        <script src="/assets/scripts/datepicker-fr.js"></script>
-        <script src="/assets/scripts/sidenav.js"></script>
-        <script src="/assets/scripts/RechercheAccords.js"></script>
-        <script src="/assets/scripts/Popin_ExclusionFnrs.js"></script>
-        <script src="/assets/scripts/highlight.js"></script>
         
+        <% include partials/bundleCSS.ejs %>
+        <link href="/styles/erreur.css" rel="stylesheet"><!--Ajouté pour page 'Acces refusé' suite à gestion des droits-->
+
+        <% include partials/bundleJS_RechercheAccords.ejs %>
     </head>
     <body>
-
-        <!-- Popin 'Exclusion fournisseurs' -->
         <div class="Masque Hidden"></div>
 
         <!-- Popin 'Exclusion fournisseurs' -->
-        <div class="Masque Hidden"></div>
+        <% if(typeof listeCatalogues !== 'undefined') { /*Affichage par défaut*/ %>
+
         <div class="Popin Popin_ExclusionFnrs">
             <i class="fa fa-times ClosePopin"></i>
-            <div class="NomCat"></div>
-            <div class="ListeFnrs">
-                <!--<div>Cochez les fournisseurs à exclure.</div> -->
+            <div class="TopPart"></div>
+            <div class="CentralPart">
                 <div class="TxtGuide">
                     <i class="fa fa-info-circle"></i>
-                    <span>Sélectionnez des fournisseurs à exclure en cochant un/des catalogue(s), ou bien en cochant leur nom. Les 2 procédés peuvent être utilisés conjointement.</span>
+                    <span>Sélectionnez les fournisseurs à exclure en cochant leur nom, ou bien en cochant un/des catalogue(s). Les 2 procédés peuvent être utilisés conjointement.</span>
                 </div>
-                <div class="Fltrs">
-                    <div class="Fltrs_Col1">
-                        <div class="FiltreCatalogues">
-                            <div class="SsTitre Cat">Catalogues</div>
-                            <ul>
-                                <li><span><input type="checkbox" value="" id="Bio"><label for="Bio">Biomédical</label></span></li>
-                                <li><span><input type="checkbox" value="" id="DM"><label for="DM">Dispositifs médicaux</label></span></li>
-                                <li><span><input type="checkbox" value="" id="DMI"><label for="DMI">D.M.I.</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Eco"><label for="Eco">Economat</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Hygi"><label for="Hygi">Hygiène</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Liga"><label for="Liga">Ligatures</label></span></li>
-                                <li><span><input type="checkbox" value="" id="PH"><label for="PH">Pharmacie</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Nutri"><label for="Nutri">Nutrition</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Resto"><label for="Resto">Restauration</label></span></li>
-                                <li><span><input type="checkbox" value="" id="SN"><label for="SN">Soins et nursing</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Solu"><label for="Solu">Solutés massifs</label></span></li>
-                            </ul>
-                        </div>
+
+                <div class="EnteteCln">Catalogues</div>
+                <div class="EnteteCln last">Fournisseurs <span><span id="NbFnrSelected">0</span> exclu(s)</span></div>
+            
+                <div class="Listes">
+                    <div class="Cln" id="LstCats"><!-- autocomplete="off" sur checkbox pour empecher cache avec FireFox ! -->
+                        <ul>
+                        <% listeCatalogues.forEach(function(cat) { %>
+                            <li><span><input type="checkbox" value="" id="<%= cat.CatalogueId %>" disabled="disabled" autocomplete="off"><label for="<%= cat.CatalogueId %>"><%= cat.CatalogueDesignation %></label></span></li>
+                        <% }); %>
+                        </ul>
                     </div>
-                    <div class="Fltrs_Col2">
-                        <div class="FiltreFournisseurs">
-                            <div class="SsTitre Fnr">Fournisseurs</div>
-                            <ul>
-                                <li><span><input type="checkbox" value="" id="Fnr1"><label for="Fnr1">Fournisseur 1</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Fnr2"><label for="Fnr2">Fournisseur 2</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Fnr3"><label for="Fnr3">Fournisseur 3</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Fnr4"><label for="Fnr4">Fournisseur 4</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Fnr5"><label for="Fnr5">Fournisseur 5</label></span></li>
-                                <li><span><input type="checkbox" value="" id="Fnr6"><label for="Fnr6">Fournisseur 6</label></span></li>
-                            </ul>
-                        </div>
+                    <div class="Cln" id="LstFnrs">
+                        <ul>
+                        <% listeFournisseurs.forEach(function(fnr) { %>
+                            <li><span><input type="checkbox" value="" id="<%= fnr.CFR %>" data-fnridcat="<%= fnr.CatalogueId %>"  disabled="disabled" autocomplete="off"><label for="<%= fnr.CFR %>"><%= fnr.DesignationFrCatalogue %> (<%= fnr.DesignationCourte %>)</label></span></li>
+                        <% }); %>
+                        </ul>
                     </div>
                 </div>
+            
 
             </div>
             <div class="BottomPart"> 
+                <% if(limitationAcces == false) { %>
                 <button id="AnnulationSelectionFnrs"><i class="fa fa-undo"></i>Annuler</button>
                 <button id="ValidationSelectionFnrs"><i class="fa fa-check"></i>Valider</button>
+                <% } %>
             </div>
         </div>
+        
+        <% } %>
         <!-- FIN Popin 'Exclusion fournisseurs' -->
 
 
-        <%include partials/menu.ejs %>
+
+        <% include partials/menu.ejs %>
+
+        <% include partials/userInfo.ejs %>
+
 
         <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
         <div id="main" class="listeAccordsReversions"> 
@@ -92,12 +75,15 @@
                     <div>
 
                         <i class="fa fa-search IconSearch"></i>
-                        <input type="text" class="SearchFieldBandeau" id="SearchEtabl" name="" value="" placeholder="Saisissez un nom d'établissement ou de groupement, CC, code postal, ville, directeur" />
-                        
+                        <input type="text" class="SearchFieldBandeau" id="SearchEtabl" name="" value="" placeholder="Saisissez un nom d'accord, d'établissement ou de groupement, CC, code postal, ville" />
+                        <!--<button type="button" class="ValidSearch"><i class="fa fa-search"></i></button>-->
                         
                         <div id="Autocomplete" class="Hidden" data-typeautocomplete="rechercheAccords" >
                             <!-- Légende -->
                             <div class="Lgn AC Legende">
+                                <div></div>
+                                <div class="AC_NomAccord"><span>Accord</span></div>
+
                                 <div></div>
                                 <div class="AC_NomGrp"><span>Groupe</span></div>
                                 <div></div>
@@ -118,13 +104,13 @@
                 <div class="MskTopListe"></div>
 
                 <div class="FdListe ListeEtbl">
-                    <div class="Enteteliste Lgn Lgn_Etb">
-                        <div><a href="#">Etablissement (CC) / Groupe<i class="fa fa-chevron-circle-down"></i></a></div>
-                        <div>Destinataire réversion</div>
+                    <div class="Enteteliste Lgn">
+                        <div>Accord <div style="margin-left:15px;">Etablissement (CC)</div> </div>
+                        <div>Dest. réversion / Dest. justificatif</div>
                         <div>Période</div>
                         <div>Taux de réversion</div>
-                        <div>Taux<br/>complém.</div>
-                        <div>Réversion<br />validée</div>
+                        <div><!--Taux<br/>complém. (EDI)-->Taux de rév. avec EDI</div>
+                        <div><!--Réversion(s)<br />validée(s)--></div>
                         <div></div>
                         <div></div>
                         <div></div>
@@ -133,25 +119,19 @@
                     </div>
                 <div>
 
-            <% dataAccords.forEach(function(item) { %>  
-               
-                <!-- Lgn Etablissement ou Groupe -->
-                <% if(item.IsGroupe == false) {%>
-                <div class="Lgn Lgn_Etb" id="LgnAccord_<%= item.AccordReversionId %>"  data-numaccord="<%= item.AccordReversionId %>" data-idetablissement="<%= item.EtablissementId %>" ><!-- Modèle de l'id : 'LgnAccord_' + N°accord -->            
-                <% } else { %>
-                <div class="Lgn Lgn_Group" id="LgnAccord_<%= item.AccordReversionId %>" data-numaccord="<%= item.AccordReversionId %>" >
-                    <div class="Lgn LgnGroupSection" id="LgnGroupSection_<%= item.AccordReversionId %>_74"  data-idgroupe="74" ><!-- Modèle de l'id : 'LgnGroupSection_' + N°accord + '_' + N°groupe -->  
-                <% } %>
 
+        <% if(typeof dataAccords !== 'undefined') { /*Affichage par défaut*/ %>
+
+
+            <% dataAccords.forEach(function(item, index) { %>  
+               
+                <!-- Lgn Accord -->
+                <div class="Lgn Lgn_Accord" id="LgnAccord_<%= item.AccordReversionId %>" data-numaccord="<%= item.AccordReversionId %>" ><!-- Modèle de l'id : 'LgnAccord_' + N°accord --> 
+                    
+                    <div class="Lgn LgnAccordSection" id="LgnAccordSection_<%= item.AccordReversionId %>" ><!-- Modèle de l'id : 'LgnAccordSection_' + N°accord --> 
                         <div>
                             <div class="DataEtbl">
-                            <% if(item.IsGroupe == true) { %>
-                                <div><span class="NomEtblGrp"><%= item.LibelleGroupement %></span></div>
-                            <% } else { %>
-                                <div><span class="NomEtblGrp"><%= item.RaisonSociale %></span> (<span><%= item.CC %></span>)</div>
-                                <div><%= item.Ad %></div>
-                                <div><%= item.CP %> <%= item.Ville %></div>
-                            <% } %>
+                                <div><span class="NomEtblGrp"><%= item.NomAccordReversion %></span> <div id="NbTotalEtbs">(<span><%= item.ListeEtbInAccord.length %></span> étbl.)</div></div>
                             </div>
                         </div>
                         <div>
@@ -159,9 +139,9 @@
                                 <div class="Chps">
                                     <div class="NomDest"><%= item.DestinataireContact %></div>
                                     <div class="AdresseDest">
-                                        <div><%= item.DestinataireAd1 %></div>
-                                        <div><%= item.DestinataireAd2 %></div>
-                                        <div><%= item.DestinataireAd3 %></div>
+                                        <div class="<%= (item.DestinataireAd1 == "" ? 'Empty' : '') %>"><%= item.DestinataireAd1 %></div>
+                                        <div class="<%= (item.DestinataireAd2 == "" ? 'Empty' : '') %>"><%= item.DestinataireAd2 %></div>
+                                        <div class="<%= (item.DestinataireAd3 == "" ? 'Empty' : '') %>"><%= item.DestinataireAd3 %></div>
                                     </div>
                                     <div><span class="CPDest"><%= item.DestinataireCP %></span> <span class="VilleDest"><%= item.DestinataireVille %></span></div>
                                 </div>
@@ -183,11 +163,11 @@
                         </div>
                         <div>
                             <div class="LstAdh_TypeTx" data-TypeTx="<%= item.TypeTauxReversionId %>"><%= item.Libelle %></div>
-                            <div class="LstAdh_Tx"><span><%= item.Taux %></span></div>
+                            <div class="LstAdh_Tx"><span id="TauxReversionFixe" class="<%= (item.TypeTauxReversionId == '2' ? 'NoPercent' : '') %>"><%= item.Taux %></span></div>
                             <select class="LstAdh_saisieTypeTx Hidden">
                                 <% listeTypeTaux.forEach(function(i) { %> 
                                 <option value="<%= i.TypeTauxReversionId %>"><%= i.Libelle %></option>
-                                <% })  %>
+                                <% }) %>
                             </select>
                             <div class="LstAdh_SaisieTx Hidden"><input type="text" maxlength="3" />%</div>
                         </div>
@@ -196,54 +176,76 @@
                             <div class="LstAdh_SaisieTxAdd Hidden"><input type="text" maxlength="3" placeholder="-" />%</div>
                         </div>
                         <div>
-                            <!--<a href="#">12/05/2016</a>--><!-- Pas encore ds la requete !! A FAIRE -->
+                            <!-- Pas encore ds la requete !! A FAIRE -->
                         </div>
                         <div>
-                            <span class="Bt_gestionFnrs Hidden">Exclure des fournisseurs</span>
+                            <!--<span class="Bt_gestionFnrs Hidden">Définir les marchés</span>-->
                         </div>
                         <div>
                             <div class="Bt_Undo Hidden"><i class="fa fa-undo"></i></div>
                         </div>
                         <div>
                             <div class="Bt_Valid Hidden"><i class="fa fa-check"></i></div>
-                            <div class="Bt_Modif"><i class="fa fa-pencil"></i></div>
+                            <div class="Bt_Modif <%= (limitationAcces == true ? 'Disabled' : '') %>"><i class="fa fa-pencil"></i></div>
                         </div>
                         <div>
-                            <div class="Bt_Suppr"><i class="fa fa-times"></i></div>
+                            <div class="Bt_Suppr <%= limitationAcces == true ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
                         </div>
                         <div>
-                            <div class="Bt_Details"><i class="fa fa-file-text"></i></div>
+                            <!--<a href="<%= (item.IsAccord == false ? '/ListeFacturesEtbl' : '/ListeFacturesGrp') + '?accordId=' + item.AccordReversionId + '&revId=' + 7 %>"><div class="Bt_Details"><i class="fa fa-file-text"></i></div></a>--> <!-- version antérieure au 01/06/17 : Mis en comm. car partie Liste des factures à developper plus tard -->
+                            <div class="Bt_Details Disabled"><i class="fa fa-file-text"></i></div>    <!-- Nouvelle version au 01/06/17 -->
                         </div>
-
                     </div>    
 
-                    <!-- Dans le cas d'un groupe : Affichage de la liste des établissements de ce groupe -->
-                    <% if(item.IsGroupe) { %>
-                        <% item.ListeEtbInGroup.forEach(function(etb) { %> 
+                    <!-- Affichage de la liste des établissements de cet accord -->
+                    <% if(item.ListeEtbInAccord.length > 0) { %>
+                        <% item.ListeEtbInAccord.forEach(function(etb) { %> 
 
                         <!--Ligne Fnr-->
-                        <div class="Lgn LgnEtbSection <%= (etb.EtablissementId == etbId ? 'Selected' : '') %>" id="LgnEtbSection_<%= etb.AccordReversionId %>_74_<%= etb.EtablissementId %>"  data-idgroupe="74" data-idgroupeetablismt="<%= etb.EtablissementId %>" ><!-- Modèle de l'id : 'LgnGroupSection_' + N°accord + '_' + N°groupe + '_' + N°Etabl. -->
+                        <div class="Lgn LgnEtbSection <%= (etb.EtablissementId == etbId ? 'Selected' : '') %>" id="LgnEtbSection_<%= etb.AccordReversionId %>_<%= etb.EtablissementId %>" data-idetablismt="<%= etb.EtablissementId %>" ><!-- Modèle de l'id : 'LgnAccordSection_' + N°accord + '_' + N°Etabl. -->
                             <div>
-                                <i class="fa fa-reply"></i>
+                                <!--<i class="fa fa-reply"></i>-->
+                                <div class="IndexEtbl"><span><%= ++index %></span></div>
                                 <div class="DataEtbl">
                                     <div><span class="NomEtblGrp"><%= etb.RaisonSociale %></span> (<span><%= etb.CC %></span>)</div>
-                                    <div>
-                                        <div><%= etb.Ad1 %></div>
-                                        <div><%= etb.Ad2 %></div>
-                                        <div><%= etb.Ad3 %></div>
+                                    <div>Groupe : <%= etb.LibelleGroupement %></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="DataDest">    
+                                    <div class="Chps">
+                                        <div class="NomDest"><%= etb.Contact %></div>
+                                        <div class="AdresseDest">
+                                            <div class="<%= (etb.Ad1 == "" ? 'Empty' : '') %>"><%= etb.Ad1 %></div>
+                                            <div class="<%= (etb.Ad2 == "" ? 'Empty' : '') %>"><%= etb.Ad2 %></div>
+                                            <div class="<%= (etb.Ad3 == "" ? 'Empty' : '') %>"><%= etb.Ad3 %></div>
+                                        </div>
+                                        <div><span class="CPDest"><%= etb.CP %></span> <span class="VilleDest"><%= etb.Ville %></span></div>
                                     </div>
-                                    <div><%= etb.CP %> <%= etb.Ville %></div>
+                                    <div class="ChpsSaisie Hidden">
+                                        <div><input type="text" value="" class="ChpNomDest" /></div>
+                                        <div><input type="text" value="" class="ChpAdresseDest1" /></div>
+                                        <div><input type="text" value="" class="ChpAdresseDest2" /></div>
+                                        <div><input type="text" value="" class="ChpAdresseDest3" /></div>
+                                        <div><input type="text" value="" class="ChpCPDest" maxlength="5" /><input type="text" value="" class="ChpVilleDest" /></div>
+                                    </div>
                                 </div>
                             </div>
                             <div></div>
                             <div></div>
-                            <div></div>
                             <div>
-                                <div class="LstAdh_TxAdd"><span class="Empty"></span></div>
+                            <% if(etb.AvecEDI == true) { %>
+                                <div class="LstAdh_TxAdd">
+                                    <span class="RappelTxEDIAccord <%= (item.TypeTauxReversionId == '2' ? 'Hidden' : '') %> <%= ((item.TypeTauxReversionId == '1' && item.TauxAvecEDI == '') ? 'Empty' : '') %> <%= (etb.TauxAvecEDI != '' && (etb.TauxAvecEDI != item.TauxAvecEDI)  ? 'Barre' : '') %>"><%= item.TauxAvecEDI %></span>
+                                    <span class="SurchargeTxEDI <%= (item.TypeTauxReversionId == '2' ? 'Hidden' : '') %> <%= (etb.TauxAvecEDI == '' || (etb.TauxAvecEDI == item.TauxAvecEDI) ? 'NoPercent' : '') %>"><%= ((etb.TauxAvecEDI != item.TauxAvecEDI) ? etb.TauxAvecEDI : "") %></span>
+                                </div>
                                 <div class="LstAdh_SaisieTxAdd Hidden"><input type="text" maxlength="3" />%</div>
+                            <% } else { %> 
+                                <div class="NoEDI <%= (item.TypeTauxReversionId == '2' ? 'Hidden' : '') %>">Pas d'EDI</div> 
+                            <% } %>
                             </div>
                             <div></div>
-                            <div><span class="Bt_gestionFnrs Hidden">Exclure des fournisseurs</span></div>
+                            <div><span class="Bt_gestionFnrs Hidden">Définir les marchés</span></div>
                             <div>
                                 <div class="Bt_Undo Hidden"><i class="fa fa-undo"></i></div>
                             </div>
@@ -251,7 +253,10 @@
                                 <div class="Bt_Valid Hidden"><i class="fa fa-check"></i></div>
                                 <div class="Bt_Modif"><i class="fa fa-pencil"></i></div>
                             </div>
-                            <div></div>
+                            <div>
+                                <!-- Pour interdire suppr. d'un etb ds un accord avec 1 seul etb -->
+                                <div class="Bt_Suppr <%= (item.ListeEtbInAccord.length == 1 || limitationAcces == true) ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
+                            </div>
                             <div></div>
                         </div>
 
@@ -259,15 +264,12 @@
                     <% } %>    
                 
 
-            <% if(item.IsGroupe == true) {%>
                 </div>
-            <% } %>
-
 
         <% }); %>
 
       
-
+<% } /**/%>
 
 
             </div>
