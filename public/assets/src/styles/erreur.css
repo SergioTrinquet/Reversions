@@ -71,3 +71,11 @@ body {
 .msgDetailAccesRefuse p {
     margin: 6px 0;
 }
+.environnement {
+    position: fixed; 
+    top:10px; 
+    right: 15px; 
+    font-size:12px; 
+    color:#989a9c; 
+    font-weight: bold;
+}

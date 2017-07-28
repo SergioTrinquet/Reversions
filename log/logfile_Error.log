@@ -1,1 +1,147 @@
 
+2017-07-27 18:18:53 231ms - error: Middleware d'authentification : Pas de rôle pour undefined.
+2017-07-27 18:18:53 289ms - error: ReferenceError: D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\views\AccesRefuse.ejs:16
+    14|                 <div id="Encart">
+    15|                     <div id="Titre">
+ >> 16|                         <i class="fa fa-thumbs-down"></i> Accès refusé pour '<%= UserName %>'  
+    17|                     </div>
+    18|                     <div class="msgDetailAccesRefuse">
+    19|                         <p><%= msgAccesRefuse %></p>
+
+UserName is not defined
+    at eval (eval at <anonymous> (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:524:12), <anonymous>:11:26)
+    at returnedFn (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:555:17)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:203:34)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\session.js:43:21
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\session.js:106:13
+2017-07-27 18:26:15 636ms - error: ReferenceError: ENV is not defined
+    at exports.authentification (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\session.js:26:8)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:312:13)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:271:10)
+    at clientSession (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\client-sessions\lib\client-sessions.js:630:5)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:312:13)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:280:7
+2017-07-27 18:27:28 742ms - error: Middleware d'authentification : Pas de rôle pour undefined.
+2017-07-27 18:27:28 757ms - error: ReferenceError: D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\views\AccesRefuse.ejs:16
+    14|                 <div id="Encart">
+    15|                     <div id="Titre">
+ >> 16|                         <i class="fa fa-thumbs-down"></i> Accès refusé pour '<%= UserName %>'  
+    17|                     </div>
+    18|                     <div class="msgDetailAccesRefuse">
+    19|                         <p><%= msgAccesRefuse %></p>
+
+UserName is not defined
+    at eval (eval at <anonymous> (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:524:12), <anonymous>:11:26)
+    at returnedFn (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:555:17)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:203:34)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\session.js:51:21
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\session.js:114:13
+2017-07-27 18:29:28 898ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:956:10)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\CreationAccordController.js:15:13
+2017-07-27 18:29:29 270ms - error: uncaughtException: Cannot read property 'replace' of undefined date=Thu Jul 27 2017 18:29:29 GMT+0200 (Paris, Madrid (heure d’été)), pid=17360, uid=null, gid=null, cwd=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions, execPath=C:\Program Files\nodejs\node.exe, version=v4.4.4, argv=[C:\Program Files\nodejs\node.exe, D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app, app.js], rss=41836544, heapTotal=33159504, heapUsed=22386304, loadavg=[0, 0, 0], uptime=808579.7536517, trace=[column=42, file=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js, function=ServerResponse.res.end, line=87, method=end, native=false, column=9, file=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\finalhandler\index.js, function=Array.write, line=213, method=write, native=false, column=15, file=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\on-finished\index.js, function=listener, line=169, method=null, native=false, column=5, file=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\on-finished\index.js, function=onFinish, line=100, method=null, native=false, column=10, file=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ee-first\index.js, function=callback, line=55, method=null, native=false, column=5, file=D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ee-first\index.js, function=IncomingMessage.onevent, line=93, method=onevent, native=false, column=13, file=events.js, function=emitNone, line=67, method=null, native=false, column=7, file=events.js, function=IncomingMessage.emit, line=166, method=emit, native=false, column=12, file=_stream_readable.js, function=endReadableNT, line=913, method=null, native=false, column=9, file=node.js, function=nextTickCallbackWith2Args, line=442, method=null, native=false], stack=[TypeError: Cannot read property 'replace' of undefined,     at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42),     at Array.write (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\finalhandler\index.js:213:9),     at listener (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\on-finished\index.js:169:15),     at onFinish (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\on-finished\index.js:100:5),     at callback (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ee-first\index.js:55:10),     at IncomingMessage.onevent (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ee-first\index.js:93:5),     at emitNone (events.js:67:13),     at IncomingMessage.emit (events.js:166:7),     at endReadableNT (_stream_readable.js:913:12),     at nextTickCallbackWith2Args (node.js:442:9)]
+2017-07-28 12:24:11 913ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:956:10)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:127:37
+2017-07-28 12:29:31 805ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:956:10)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:127:37
+2017-07-28 15:45:52 464ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:956:10)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:127:37
+2017-07-28 15:45:57 948ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:173:25
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:171:21
+2017-07-28 15:45:58 22ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:173:25
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:171:21
+2017-07-28 15:46:02 103ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:956:10)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:127:37
+2017-07-28 15:46:06 805ms - error: Error: Suppression d'un établissement dans un accord => TypeError: Cannot read property 'replace' of undefined
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:745:18
+    at process._tickCallback (node.js:369:9)
+2017-07-28 15:46:09 887ms - error: Error: Suppression d'un accord => TypeError: Cannot read property 'replace' of undefined
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:720:18
+    at process._tickCallback (node.js:369:9)
+2017-07-28 15:46:13 786ms - error: TypeError: Cannot read property 'replace' of undefined
+    at ServerResponse.res.end (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\winston-request-logger\lib\winston-request-logger.js:87:42)
+    at ServerResponse.send (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:205:10)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:956:10)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:208:10)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\CreationAccordController.js:15:13
