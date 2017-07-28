@@ -20,15 +20,27 @@ exports.setSession = sessions({
 
 
 exports.authentification = function(req, res, next) {
-    var nomUtilisateur = req.app.get('userName');
+    /// Récupération de l'identifiant de l'utilisateur
+    var nomUtilisateur = "Non identifié";
+    if(req.app.locals.ENV == 'development') {
+        const path = require('path');
+        nomUtilisateur = process.env['USERPROFILE'].split(path.sep)[2];
+    } else if(req.app.locals.ENV == 'production') {
+        nomUtilisateur = req.headers['x-iisnode-auth_user'];
+        nomUtilisateur = nomUtilisateur.replace("AD\\", "").replace("ad\\", ""); // Pour retirer le nom de domaine, sinon 'AD\jmartin' par ex.
+    }
+    req.app.set('userName', nomUtilisateur);
+    req.app.locals.UserName = nomUtilisateur; /// Pour rendre l'info facilement accessible dans les vues
+           
 
     /// TEST
-    console.log('Ici, MiddleWare pour authentification !! | req.app.get(\'userName\') : ' + nomUtilisateur);  
+    console.log('Ici, MiddleWare pour authentification !! | nomUtilisateur : ' + nomUtilisateur);  
     req.maSession.userName ? console.log('Il y a un session.rights : ' + req.maSession.rights) : console.log('Pas de session : ' + req.maSession.rights);
     /// Fin TEST
 
     /// Si pas de session, on en créé une où l'on y stocke le role
-    if(!req.maSession.rights) { /**/  
+    /*if(!req.maSession.rights) {  */
+    if( (!req.maSession.rights) || (req.maSession.rights && req.maSession.userName !== nomUtilisateur) ) {  /// Nvelle version au 28/07/2017 /// Si pas de session, ou bien si session mais que l'utilisateur est différent de celui enregistré dans la session
 
         /// On va voir pour cet utilisateur s'il a des droits
         getRole(function(recordset) {
@@ -48,12 +60,9 @@ exports.authentification = function(req, res, next) {
                 
                 /// Pour rendre ces infos accessibles au niveau de la vue 'userInfo.ejs'
                 req.app.locals.Rights = req.Rights;
-                req.app.locals.UserName = nomUtilisateur;
-
-                /**/
+                /// Enregistrement dans la session des données
                 req.maSession.rights = req.Rights; 
                 req.maSession.userName = nomUtilisateur;
-                /**/
                 
                 next();
             }
@@ -61,16 +70,12 @@ exports.authentification = function(req, res, next) {
         }, nomUtilisateur, next);
 
 
-
-    /**/
+    
     } else {
         req.Rights = req.maSession.rights;
-        /// Pour rendre ces infos accessibles au niveau de la vue 'userInfo.ejs'
-        req.app.locals.Rights = req.Rights;
-        req.app.locals.UserName = nomUtilisateur;
+        req.app.locals.Rights = req.Rights; /// Pour rendre ces infos accessibles au niveau de la vue 'userInfo.ejs'
         next();
     }
-    /**/
 
 
 
