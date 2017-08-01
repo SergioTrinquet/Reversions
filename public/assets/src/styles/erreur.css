@@ -27,30 +27,38 @@ body {
     vertical-align: middle;
     text-align: center;
 }
-#Wrapper_Encart #Encart {
+#Wrapper_Encart #Encart,
+.ErreurRetourAjax #Encart {
     background-color: #ffffff;
     box-shadow: 0 0 8px rgba(0,0,0,0.2);
     padding: 50px;
     max-width: 750px;
     min-width: 580px;
 }
-#Wrapper_Encart #msg {
+.ErreurRetourAjax #Encart {
+    max-width: auto !important;
+    min-width: auto !important;
+}
+#Wrapper_Encart #msg,
+.ErreurRetourAjax #msg {
     padding: 15px 10px;
     background-color: #ff0000;
     margin: 0 0 20px;
     color: #ffffff;
     font-weight: bold;
     border-radius: 3px;
-    word-break: break-all;
+    overflow-wrap: break-word;
 }
-#Wrapper_Encart #stack {
-    word-break: break-all;
+#Wrapper_Encart #stack,
+.ErreurRetourAjax #stack {
+    overflow-wrap: break-word;
     text-align: left;
     font-weight: bold;
     font-size: 13px;
     color: #595959;
 }
-#Wrapper_Encart #Titre {
+#Wrapper_Encart #Titre,
+.ErreurRetourAjax #Titre {
     font-size: 24px;
     font-weight: bold;
     color: #828282;

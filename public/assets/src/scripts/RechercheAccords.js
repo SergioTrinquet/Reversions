@@ -8,9 +8,30 @@ var ConteneurListe = null;
 
 var fnrsSelected = [];
 
-var InterdictionEcriture = false; // 13/07/17
+var InterdictionEcriture = false;
 
 //var FlagOpenPopin = false; /* TEST au 09/06/17 */
+
+
+ /// TEST : Ajouté le 31/07/17
+var Pool_xhr = [];
+var Pool_rech = [];
+function SearchAccord(SaisieAddAccord) {
+    if(SaisieAddAccord.length > 2) {
+        //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
+        if(SaisieAddAccord != lastSaisie) { /// pour éviter appel ajax inutile
+            SearchAccordQuery(SaisieAddAccord); /* Version Originale au 31/07/17 */
+        } else if(SaisieAddAccord == lastSaisie && $('#AC_content').html() != '') {
+            $('#Autocomplete.Hidden').removeClass('Hidden');
+        }
+        lastSaisie = SaisieAddAccord;
+
+    } else {
+        $('#Autocomplete').addClass('Hidden');
+    }
+}
+/// FIN TEST : Ajouté le 31/07/17
+
 
 $(function () {
 
@@ -31,7 +52,15 @@ $(function () {
     var SaisieAddAccord = null;
     $('#SearchEtabl').on('keyup paste cut dragend focus', function() {
         SaisieAddAccord = $.trim($(this).val());
-        if(SaisieAddAccord.length > 2) {
+
+        /* Nouvelle version au 31/07/17 : Pour éviter des appels AJAX à chaque frappe donc trop nombreux */  
+        $(Pool_rech).each(function (idx, el) { /*console.log(el);*/ clearTimeout(el); }); /// On vide le pool
+        Pool_rech = []; 
+        Pool_rech.push(setTimeout(function(){ SearchAccord(SaisieAddAccord); }, 300)); /// Une fois le pool vide, ajout de la fonction qui fait l'appel AJAX et qui se déclenche au bout de X millisec.       
+        /* Fin Nouvelle version au 31/07/17 */
+
+        /// Version actuelle au 31/07/17
+        /*if(SaisieAddAccord.length > 2) {
 
             //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
             if(SaisieAddAccord != lastSaisie) { /// pour éviter appel ajax inutile
@@ -44,6 +73,7 @@ $(function () {
         } else {
             $('#Autocomplete').addClass('Hidden');
         }
+        */
     });
     $('body').click(function (event) {
         var $target = $(event.target);
@@ -159,6 +189,15 @@ $(function () {
     ///--- Fin partie Popin 'Définir les marchés' ---///
 
 
+    /// Pour fermeture encart d'erreur s'il existe
+    $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
+        $('.ErreurRetourAjax').addClass('Hidden');
+        $('.ErreurRetourAjax .Content').empty();
+        $('.Masque').addClass('Hidden');
+    });
+
+
+
 });
 
 
@@ -202,12 +241,7 @@ function GetDataPopin(IdAccord, IdEtb) {
     /// Récupération des catalogues auxquels l'etbl. n'a pas droit pour les mettre n disabled dans la popin
     $.ajax({
         method: "GET",
-        /*
-        url: "/RechercheAccords",
-        data: { IdAcc_ToGetListCatsNoRight: IdAccord, IdEtb_ToGetListCatsNoRight: IdEtb },
-        */
-        url: "/RechercheAccords/Marches/" + IdAccord + "/" + IdEtb,
-        
+        url: "/RechercheAccords/Marches/" + IdAccord + "/" + IdEtb,        
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
         beforeSend: function () {
@@ -234,16 +268,8 @@ function GetDataPopin(IdAccord, IdEtb) {
         /// Apparition encart exclusion des fnrs
         $('.Popin_ExclusionFnrs').addClass('Display');
     })
-    /*.fail(function(jqXHR, textStatus, errorThrown) {
-       /// ==> TROUVER UN MOYEN D'AFFICHER LE HTML DE LA PAGE D ERREUR !!!
-       //console.warn(jqXHR.responseText);
-        var Thehtml = $.parseHTML(jqXHR.responseText);
-        var html_PgErreur = $(Thehtml).find("html");
-        //console.log($(html_PgErreur).prop('outerHTML')); //TEST
-        $("html").replaceWith(html_PgErreur);
-    })*/
-    .always(function () {
-        //$('.Masque').addClass('Hidden'); /// Retrait masque
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        DisplayError(jqXHR.responseText);
     });
 }
 
@@ -352,7 +378,7 @@ function Mdf() {
                 $(SelectorPart + ' .LstAdh_SaisieTxAdd').removeClass('Hidden');
             }
 
-            /// Ajouté le 13/07/17
+            
             if(InterdictionEcriture == true) { 
                 $(SelectorPart + ' .Bt_Valid').addClass('Disabled');
                 $(SelectorPart + ' .DataDest input[type="text"], ' + SelectorPart + ' .LstAdh_SaisieTxAdd  > input[type="text"]').prop('disabled', true); /// Désactivation des chps qd juste droits en lecture  
@@ -574,16 +600,6 @@ function ValidModifs() {
         var html = $.parseHTML(data);
 
         if($(html).hasClass('AccesRefuse')) { /// Si pas les droits pour modifier, alors affichage contenu page 'AccesRefuse'
-            /*
-            /// Le code '$(html).find('#Wrapper_Encart')' ne focntionne pas, donc boucle sur le DOM
-            var ContenuPgAccesRefuse = null;
-            $.each( html, function( i, el ) {  //console.warn(el.nodeName + " | " + el.id + " | " + el.className); //TEST
-                if(el.id == 'Wrapper_Encart') { ContenuPgAccesRefuse = el; }
-            });
-            if(ContenuPgAccesRefuse != null) {
-                $('body').empty().append(ContenuPgAccesRefuse); /// Remplacement du contenu de la page actuelle par celui reçu en Ajax, à savoir celui de la pg 'AccesRefuse'
-            }
-            */
 
             DisplayScreenAccesRefuse(html);
         
@@ -620,17 +636,13 @@ function ValidModifs() {
             Modif_LgnAccord_AccordSection = -1;
             Modif_LgnAccord_EtbSection = -1;
 
+            $('.Masque').addClass('Hidden'); /// Retrait masque
+
         }///
     
     })
     .fail(function (jqXHR, textStatus, errorThrown) {   
-        console.log("Erreur lors de la phase de modification d'un accord ou d'un établissement dans un accord => textStatus : " + textStatus + " | errorThrown : " + errorThrown + ' | jqXHR.responseText : ' + jqXHR.responseText);
-        /// Affichage erreur dans l'encart en disant que pas possible de sélectionner des etb pour ce grpmt
-        var html_Error = "Erreur lors de la phase de modification d'un accord ou d'un établissement dans un accord<p><div>textStatus : " + textStatus + "</div><div>errorThrown : " + errorThrown + '</div><div>jqXHR.responseText : ' + jqXHR.responseText + "</div></p>";
-        //$('.PopinError').removeClass('Hidden').html(html_Error);
-    })
-    .always(function () {
-        $('.Masque').addClass('Hidden'); /// Retrait masque
+        DisplayError(jqXHR.responseText);
     });
     /////===== Fin requete =====////
 
@@ -702,17 +714,32 @@ function CreateEnteteFlottante() {
 
 
 function SearchAccordQuery(Saisie) {
+
+    /// TEST : Ajouté le 31/07/17
+    /// On supprime les requetes AJAX en cours
+    $(Pool_xhr).each(function (idx, jqXHR) {jqXHR.abort(); });
+    Pool_xhr = [];
+    /// FIN TEST : Ajouté le 31/07/17
+
+
     $.ajax({
         method: "POST",
         url: "/RechercheAccords",
         data: {SaisieRecherche: Saisie},
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         ifModified: true,
-        beforeSend: function () {
+        /* Version actuelle au 31/07/17 *//*beforeSend: function () {
+            $('.masque').removeClass('Hidden');
+        }*/
+        /* Nouvelle Version au 31/07/17 */beforeSend: function (jqXHR) {
+            Pool_xhr.push(jqXHR);
             $('.masque').removeClass('Hidden');
         }
     })
     .done(function (data) {
+        
+        $('.masque').addClass('Hidden'); /// Retrait masque
+
         //console.log("La data est : " + data); //TEST
         if($.trim(data) != "") {
             $('#Autocomplete.Hidden').removeClass('Hidden');
@@ -723,14 +750,9 @@ function SearchAccordQuery(Saisie) {
             $('#AC_content').html("");
         }
     })
-    .fail(function () {
-        /// Affichage erreur
-        $('.Popin').removeClass('Hidden').addClass('Error').html("");
-    })
-    .always(function () {
-        /// Retrait masque
-        $('.masque').addClass('Hidden');
-    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        DisplayError(jqXHR.responseText);
+    });
 }
 
 
@@ -774,7 +796,7 @@ function Init_InfosLgnModifiee() {
 
 
 /// 12/07/2017
-function DisplayScreenAccesRefuse(html) {       console.warn('On y est !!');
+function DisplayScreenAccesRefuse(html) {
     /// Le code '$(html).find('#Wrapper_Encart')' ne focntionne pas, donc boucle sur le DOM
     var ContenuPgAccesRefuse = null;
     $.each( html, function( i, el ) {  //console.warn(el.nodeName + " | " + el.id + " | " + el.className); //TEST
@@ -782,5 +804,21 @@ function DisplayScreenAccesRefuse(html) {       console.warn('On y est !!');
     });
     if(ContenuPgAccesRefuse != null) {
         $('body').empty().append(ContenuPgAccesRefuse); /// Remplacement du contenu de la page actuelle par celui reçu en Ajax, à savoir celui de la pg 'AccesRefuse'
+    }
+}
+
+
+/// Pour affichage de l'erreur dans un encart suite à requete AJAX
+function DisplayError(jqXHRresponseText) {
+    $('.Masque').removeClass('Hidden'); /// Apparition masque
+
+    var Thehtml = $.parseHTML(jqXHRresponseText);
+    var html_PgErreur = $(Thehtml).find("#Encart");
+    if($('.ErreurRetourAjax').length > 0) {
+        $('.ErreurRetourAjax .Content').html(html_PgErreur);
+        $('.ErreurRetourAjax').removeClass('Hidden');
+    } else {
+        $("<div class='ErreurRetourAjax'><i class='fa fa-times ClosePopin'></i><div class='Content'></div></div>").appendTo("body");
+        $(".ErreurRetourAjax .Content").html(html_PgErreur);
     }
 }

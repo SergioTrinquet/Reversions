@@ -1278,7 +1278,8 @@ button.ValidSearch:hover {
 .MoreOptions.Hidden,
 #LgnError.Hidden,
 .creationAccordReversion .MaskPopin.Hidden, #PopinCreationAccord_Etp2 .MsgGrpPasDispo.Hidden, #PopinCreationAccord_Etp2 .MsgEtbPasDispo.Hidden,
-#EncartEtape2TypeAccord.Hidden {
+#EncartEtape2TypeAccord.Hidden,
+.ErreurRetourAjax.Hidden {
         display: none;
 }
 /*================ Fin Pg Création / consultation des réversions ==============*/
@@ -2638,4 +2639,33 @@ i#DeleteDatepickerStart:hover {
     line-height: 25px;
 }
 /* FIN Icone info utilisateur */
+
+
+.ErreurRetourAjax {
+    position: fixed;
+    z-index: 10005;
+    width:700px;
+    left:calc(50% - 350px);
+    top:25%;
+    border-radius: 3px;
+    font-family: "Maven Pro",Verdana,Trebuchet MS,Arial,sans-serif;
+    color: #232D36;
+    text-align: center;
+}
+.ErreurRetourAjax .ClosePopin {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 25px;
+    cursor: pointer;
+    padding: 3px;
+    text-align: center;
+    color:#828282;
+    -webkit-transition: color 0.2s ease-out;
+    -moz-transition: color 0.2s ease-out;
+    transition: color 0.2s ease-out;
+}
+.ErreurRetourAjax .ClosePopin:hover {
+    color: #232D36;
+}
 
