@@ -17,7 +17,6 @@ const async = require('async');
 
 
 
-
 module.exports = function(app) {
     //console.log('Mode : ' + process.env.NODE_ENV)
 
@@ -61,90 +60,58 @@ module.exports = function(app) {
             },
             // optional callback
             function(err, results){
-                //if(err) { logger.log('error', err); }
+                //if(err) { logger.log('error', err); };
                 res.send({CatsInterdits: results.CataloguesInterdits, FnrsExclus: results.FournisseursExclus});
             });
             /**/
 
          }
     });
-    /*----------------*/
+    
 
     
     app.get('/RechercheAccords/:idAccord?/:EtbId?', userRightsAccess, function(req, res, next) {
         //console.log(req.params); //TEST
-        //console.log(req.query); //TEST
-        // TEST  //if(req.query) { console.log('Y a du query ! --> Mais est-ce un query vide ? : ' + (_.isEmpty(req.query)).toString()); }*/
-
-/*
-        if(!_.isEmpty(req.query)) {
-            // V2 /// Utiliser un Array au lieu d'un Objet ci-dessous garantie l'ordre d'éxecution des fonctions (autrement pas garanti !!)
-            async.series({
-                CataloguesInterdits : function (callback) {
-                    GetListeCataloguesEtablissement(function(recordset) {
-                        var CatsInterdits = recordset[0];
-                        //callback();
-                        callback(null, CatsInterdits);
-                    }, req.query, next);
-                },
-                FournisseursExclus : function (callback){
-                    GetFnrsExclusEtablissement(function(recordset) {
-                        var FnrsExclus = recordset[0];
-                        //callback();
-                        callback(null, FnrsExclus);
-                    }, req.query, next);
-                }
-            },
-            // optional callback
-            function(err, results){
-                //if(err) { logger.log('error', err); }
-                res.send({CatsInterdits: results.CataloguesInterdits, FnrsExclus: results.FournisseursExclus});
-            });
         
-        } else {
-*/
+        /// Affichage Accord
+        if(typeof req.params.idAccord !== 'undefined') {
 
-            /// Affichage Accord
-            if(typeof req.params.idAccord !== 'undefined') {
+            /// Récupération de l'accord...
+            getAccords(function(recordset) {
+                var newRecordset = [];
+                newRecordset = FormatData(recordset); /// <-- Fonction pour formater les données comme on veut pour affichage ds vue
+                //console.log(colors.bgWhite.blue(JSON.stringify(newRecordset))); //TEST
 
-                /// Récupération de l'accord...
-                getAccords(function(recordset) {
-                    var newRecordset = [];
-                    newRecordset = FormatData(recordset); /// <-- Fonction pour formater les données comme on veut pour affichage ds vue
-                    //console.log(colors.bgWhite.blue(JSON.stringify(newRecordset))); //TEST
+                /// Récupération des data pour alimenter liste déroulante des taux...
+                getTypeTaux(function(recordset) {
+                    recordset_Tx = recordset;
 
-                    /// Récupération des data pour alimenter liste déroulante des taux...
-                    getTypeTaux(function(recordset) {
-                        recordset_Tx = recordset;
+                    /// ...Et récupération de la liste des cats pour la popin 'Définir les marchés' + Récup liste de tous les fournisseurs
+                    getListeCatalogues(function(recordset) {
+                        ListeCats = recordset[0];
+                        
+                        getListeFournisseurs(function(recordset) { 
+                            var ListeFnrs = recordset[0];
 
-                        /// ...Et récupération de la liste des cats pour la popin 'Définir les marchés' + Récup liste de tous les fournisseurs
-                        getListeCatalogues(function(recordset) {
-                            ListeCats = recordset[0];
-                            
-                            getListeFournisseurs(function(recordset) { 
-                                var ListeFnrs = recordset[0];
-
-                                res.render('RechercheAccords', { 
-                                    dataAccords: newRecordset, 
-                                    listeTypeTaux: recordset_Tx, 
-                                    etbId: req.params.EtbId, 
-                                    listeCatalogues: ListeCats, 
-                                    listeFournisseurs: ListeFnrs 
-                                });                
-                    
-                            }, next);
+                            res.render('RechercheAccords', { 
+                                dataAccords: newRecordset, 
+                                listeTypeTaux: recordset_Tx, 
+                                etbId: req.params.EtbId, 
+                                listeCatalogues: ListeCats, 
+                                listeFournisseurs: ListeFnrs 
+                            });                
+                
                         }, next);
-
                     }, next);
-                    
-                }, req.params.idAccord, next);
 
-            } else { /// Chargement de la page sans recherche préalable
-                res.render('RechercheAccords');
-            }
+                }, next);
+                
+            }, req.params.idAccord, next);
 
+        } else { /// Chargement de la page sans recherche préalable
+            res.render('RechercheAccords');
+        }
 
-        //}
 
     });
 
@@ -655,10 +622,8 @@ function GetListeCataloguesEtablissement(callback, data, next) {
         var request = new sql.Request(conn);
 
         request
-        //.input('EtablissementId', sql.Int, parseInt(data.IdEtb_ToGetListCatsNoRight)) // <= Version avec req.query (donc avec URL passé du style 'xxxxx?IdEtb_ToGetListCatsNoRight=y&IdAcc_ToGetListCatsNoRight=z')
-        //.input('AccordReversionId', sql.Int, parseInt(data.IdAcc_ToGetListCatsNoRight)) // <= Version avec req.query (donc avec URL passé du style 'xxxxx?IdEtb_ToGetListCatsNoRight=y&IdAcc_ToGetListCatsNoRight=z')
-        .input('EtablissementId', sql.Int, parseInt(data.EtbId)) // <= Version avec req.params (donc avec URL passé du style 'xxxxx/y/z')
-        .input('AccordReversionId', sql.Int, parseInt(data.idAccord)) // <= Version avec req.params (donc avec URL passé du style 'xxxxx/y/z')
+        .input('EtablissementId', sql.Int, parseInt(data.EtbId))
+        .input('AccordReversionId', sql.Int, parseInt(data.idAccord))
         .execute('ReversionApp.ps_GetListeCatalogueEtablissement')
         .then(function(recordset) {
             console.log(colors.bgGreen.white(JSON.stringify(recordset))); //TEST
@@ -682,10 +647,8 @@ function GetFnrsExclusEtablissement(callback, data, next) {
         var request = new sql.Request(conn);
 
         request
-        //.input('EtablissementId', sql.Int, parseInt(data.IdEtb_ToGetListCatsNoRight)) // <= Version avec req.query (donc avec URL passé du style 'xxxxx?IdEtb_ToGetListCatsNoRight=y&IdAcc_ToGetListCatsNoRight=z')
-        //.input('AccordReversionId', sql.Int, parseInt(data.IdAcc_ToGetListCatsNoRight)) // <= Version avec req.query (donc avec URL passé du style 'xxxxx?IdEtb_ToGetListCatsNoRight=y&IdAcc_ToGetListCatsNoRight=z')
-        .input('EtablissementId', sql.Int, parseInt(data.EtbId)) // <= Version avec req.params (donc avec URL passé du style 'xxxxx/y/z')
-        .input('AccordReversionId', sql.Int, parseInt(data.idAccord)) // <= Version avec req.params (donc avec URL passé du style 'xxxxx/y/z')
+        .input('EtablissementId', sql.Int, parseInt(data.EtbId))
+        .input('AccordReversionId', sql.Int, parseInt(data.idAccord))
         .execute('ReversionApp.ps_getListeFournisseurEtablissement')
         .then(function(recordset) {
             console.log(colors.bgBlue.white(JSON.stringify(recordset))); //TEST
