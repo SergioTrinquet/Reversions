@@ -311,7 +311,7 @@ function Mdf() {
         /// On détermine quelle type de taux a été choisi
         var TypeTx = $('.LgnAccordSection .LstAdh_TypeTx').attr('data-TypeTx'); 
         
-         var SelectorPart = '#' + Id_Lgn;
+        var SelectorPart = '#' + Id_Lgn;
 
         /// Apparition boutons
         $(SelectorPart + ' .Bt_Valid, ' + SelectorPart + ' .Bt_Undo, ' + SelectorPart + ' .Bt_gestionFnrs').removeClass('Hidden');
@@ -491,7 +491,8 @@ function Dtls() {}
 function ValidModifs() {
     var Id_Lgn = GetLgnID(this);
 
-    var ValSelectTypeTx = $('.LgnAccordSection .LstAdh_saisieTypeTx option:selected').val(); /// Pour déterminer le type de taux sélectionné (Fixe ou variable)
+    //var ValSelectTypeTx = $('.LgnAccordSection .LstAdh_saisieTypeTx option:selected').val(); /// Pour déterminer le type de taux sélectionné (Fixe ou variable)
+    var ValSelectTypeTx = (Modif_LgnAccord_AccordSection > 0 ? $('.LgnAccordSection .LstAdh_saisieTypeTx option:selected').val() : (Modif_LgnAccord_EtbSection > 0 ? $('.LgnAccordSection .LstAdh_TypeTx').attr('data-TypeTx') : -1) ); /// Pour déterminer le type de taux sélectionné (Fixe ou variable)
     var ChpSaisieTxRev = $('.LgnAccordSection .LstAdh_SaisieTx > input[type="text"]');    
     var ChpSaisieTxEDI = $('#' + Id_Lgn + ' .LstAdh_SaisieTxAdd > input[type="text"]'); /// Si n'existe pas (cas lgn Etb sans Taux EDI), ne bug pas
     
@@ -567,18 +568,14 @@ function ValidModifs() {
     InfosLgnModifiee.PeriodeFin = $('#' + Id_Lgn + ' .LstAdh_SaisiePeriode .ChpSaisieDateFin').val();
     InfosLgnModifiee.TypeTauxReversion = ValSelectTypeTx;
     InfosLgnModifiee.LibelleTypeTauxReversion = $('.LgnAccordSection .LstAdh_saisieTypeTx option:selected').text();
-    //if(ValSelectTypeTx != 1) { ChpSaisieTxRev.val(''); ChpSaisieTxEDI.val(''); } /// valeur des chps de saisie vidés si selection d'un tx variable lors de la validation 
-    //InfosLgnModifiee.TauxReversion = ChpSaisieTxRev.val();  /// <= Fonctionne auss, mais moins clair ! 
-    //InfosLgnModifiee.TauxReversionAdd = ChpSaisieTxEDI.val();  /// <= Fonctionne auss, mais moins clair !
-    if(InfosLgnModifiee.TypeTauxReversion != 1) { /**/
-         InfosLgnModifiee.TauxReversion = null; /**/
-         InfosLgnModifiee.TauxReversionAdd = null; /**/
-    } else { /**/
 
-    InfosLgnModifiee.TauxReversion = ((Modif_LgnAccord_AccordSection == 1) ? ChpSaisieTxRev.val() : null); /// Valeur NULL si c'est un établissement     
-    InfosLgnModifiee.TauxReversionAdd = (ChpSaisieTxEDI.length > 0 ? ChpSaisieTxEDI.val() : null);  /// Valeur NULL s'il n'y a pas de champ de saisie 'Taux de rev. avec EDI' (=> Cas ou ligne Etb sans EDI)
-    
-    }/**/
+    if(InfosLgnModifiee.TypeTauxReversion != 1) { /// valeur des chps de saisie à 'null' si selection d'un tx variable lors de la validation
+         InfosLgnModifiee.TauxReversion = null;
+         InfosLgnModifiee.TauxReversionAdd = null;
+    } else {
+        InfosLgnModifiee.TauxReversion = ((Modif_LgnAccord_AccordSection == 1) ? ChpSaisieTxRev.val() : null); /// Valeur NULL si c'est un établissement     
+        InfosLgnModifiee.TauxReversionAdd = (ChpSaisieTxEDI.length > 0 ? ChpSaisieTxEDI.val() : null);  /// Valeur NULL s'il n'y a pas de champ de saisie 'Taux de rev. avec EDI' (=> Cas ou ligne Etb sans EDI)  
+    }
 
     /////===== Requête Ajax pour enregistrement données de l'objet ds bdd =====////
     $.ajax({
@@ -717,7 +714,7 @@ function SearchAccordQuery(Saisie) {
 
     /// TEST : Ajouté le 31/07/17
     /// On supprime les requetes AJAX en cours
-    $(Pool_xhr).each(function (idx, jqXHR) {jqXHR.abort(); });
+    $(Pool_xhr).each(function (idx, jqXHR) { jqXHR.abort(); });
     Pool_xhr = [];
     /// FIN TEST : Ajouté le 31/07/17
 
