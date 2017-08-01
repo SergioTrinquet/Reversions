@@ -8,6 +8,8 @@ const CreateAccordController = require('./controllers/CreationAccordController')
 const RechAccordsController = require('./controllers/RechercheAccordsController'); // Custom module
 const ListeFacturesEtblController = require('./controllers/ListeFacturesEtblController'); // Custom module
 
+const colors = require('colors'); // juste pour le développement
+
 const app = express();
 
 /// Pour rendre les fonctionnalités de 'dateformat' accessibles dans ttes les pages .ejs, sous forme d'une variable locale
@@ -35,7 +37,6 @@ app.locals.ENV = env; // Pour être eccessible ds les .ejs
 app.use(express.static('./public/assets/' + (env === 'development' ? 'src' : 'dist')));
 
 
-
 /// Placer la partie authentification après l'appel des static files car sinon ne trouve pas le chemin du .css pour 'AccesRefuse.ejs'
 var session = require('./app_modules/session.js');
 /// Middleware pour authentification
@@ -43,14 +44,14 @@ app.use(session.setSession);
 app.use(session.authentification);
 
 
-
 ///Partie log (placé après l'appel des static files, sinon les enregistre)
-app.use(require('winston-request-logger').create(logger, {
-    'login': app.get('userName'),
+//console.log(colors.bgBlue.white('=> userName : ' + app.get('userName'))); //TEST
+/*app.use(require('winston-request-logger').create(logger, {
+    //'login': app.get('userName'),
     'method': ':method', 
     'url': ':url[pathname]',
     'responseTime': ':responseTime ms'  // output 'X ms'   	
-}));
+}));*/
 
 
 /// Middleware pour le POST
@@ -74,7 +75,6 @@ app.use(function (err, req, res, next) {
         console.error('Mode Production : ' + err.message);
         res.status(err.status || 500).send(err.message);
     }*/
-    const colors = require('colors'); // juste pour le développement
     console.log(colors.bgRed.white(err.stack));
     logger.log('error', err.stack); 
     res.status(err.status || 500);
