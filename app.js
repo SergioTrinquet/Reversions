@@ -7,6 +7,8 @@ const listHistoGrpController = require('./controllers/ListeHistoriqueGroupements
 const CreateAccordController = require('./controllers/CreationAccordController'); // Custom module
 const RechAccordsController = require('./controllers/RechercheAccordsController'); // Custom module
 const ListeFacturesEtblController = require('./controllers/ListeFacturesEtblController'); // Custom module
+var session = require('./app_modules/session.js');
+var authentification = require('./app_modules/authentification.js');
 
 const colors = require('colors'); // juste pour le développement
 
@@ -21,7 +23,6 @@ app.set('view engine', 'ejs');
 app.use(helmet()); /// Helmet helps you secure your Express apps 
 
 
-
 /*==== Partie récupération de l'environnement ====*/
 //app.set('env', 'development'); //TEST au 20/06/17
 //app.locals.ENV = app.get('env');//TEST au 20/06/17
@@ -33,15 +34,13 @@ console.log('TEST sur module CONFIG: ' + config.get('env') + " | " + config.get(
 
 /// Static files
 const env = app.get('env'); /// Pour détecter si on est en mode 'development' ou 'production', ou autre
-app.locals.ENV = env; // Pour être eccessible ds les .ejs
+app.locals.ENV = env; /// Pour être eccessible ds les .ejs
 app.use(express.static('./public/assets/' + (env === 'development' ? 'src' : 'dist')));
 
 
-/// Placer la partie authentification après l'appel des static files car sinon ne trouve pas le chemin du .css pour 'AccesRefuse.ejs'
-var session = require('./app_modules/session.js');
-/// Middleware pour authentification
-app.use(session.setSession);
-app.use(session.authentification);
+/// Partie authentification après l'appel des static files car sinon ne trouve pas le chemin du .css pour 'AccesRefuse.ejs'
+app.use(session); /// Middleware pour création de session
+app.use(authentification); /// Middleware pour authentification
 
 
 ///Partie log (placé après l'appel des static files, sinon les enregistre)

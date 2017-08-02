@@ -93,7 +93,7 @@ $(function () {
     $('.ListeEtbl').on('click', '.Bt_Suppr:not(.Disabled)', Suppr);
     
     ///--- Fonction pour pointer sur pg 'Liste des factures' : A faire dans un 2eme temps ---///
-    $('.ListeEtbl').on('click', '.Bt_Details:not(.Disabled)', Dtls);
+    //$('.ListeEtbl').on('click', '.Bt_Details:not(.Disabled)', Dtls);
 
     ///--- Quand Validation des modif sur une ligne (ligne Accord ou Etablissement d'un accord) ---///
     $('.ListeEtbl').on('click', '.Bt_Valid:not(.Disabled)', ValidModifs);
@@ -482,9 +482,9 @@ function Suppr() {
 }
 
 
-///--- Fctions à faire ---///
-function Dtls() {}
-///--- FIN Fctions à faire ---///
+///--- Fctions à faire ds un 2eme temps ---///
+//function Dtls() {}
+///--- FIN ---///
 
 
 ///--- Quand click sur bouton de validation (bt vert avec coche) après modif : Validation des champs de saisie ---///
