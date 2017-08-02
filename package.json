@@ -11,11 +11,11 @@
   "dependencies": {
     "async": "^2.4.1",
     "body-parser": "^1.16.1",
-    "client-sessions": "^0.8.0",
     "config": "^1.26.1",
     "dateformat": "^2.0.0",
     "ejs": "^2.5.6",
     "express": "^4.14.1",
+    "express-session": "^1.15.4",
     "helmet": "^3.6.1",
     "jsonschema": "^1.1.1",
     "mssql": "^3.3.0",
