@@ -1036,9 +1036,9 @@ button.ValidSearch:hover {
     width: 75px;
 }
 
-.Bt_gestionFnrs {
+.Bt_gestionFnrs,
+.Bt_FnrsExclus {
     background-color: #6a7987;
-    /*background-color: #687597;*/
     width: 90px;
     display: inline-block;
     color:#ffffff;
@@ -1051,32 +1051,39 @@ button.ValidSearch:hover {
     margin-right:25px;
     cursor: pointer;
 }
-.Bt_gestionFnrs:hover {
+.Bt_gestionFnrs:hover,
+.Bt_FnrsExclus:hover {
     background-color: #41444B;
+}
+
+.Bt_FnrsExclus.Disabled { 
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .Bt_Undo,
 .Bt_Suppr,
 .Bt_Valid,
 .Bt_Modif,
+.Bt_Add,
 .Bt_Details {
     border-radius: 50%;
     color:#ffffff;
-    display: table-cell;
     text-align: center;
     cursor: pointer;
     font-size: 23px;
     height: 40px;
     width: 40px;
-
-    /* V2 : Qd pas table-cell */
     display: block;
     padding: 8px;
 }
+.Bt_Add i { padding: 1px 0 0 0; }
+
 .Bt_Undo a,
 .Bt_Suppr a,
 .Bt_Valid a,
 .Bt_Modif a,
+.Bt_Add a,
 .Bt_Details a { color: #ffffff; }
 .Bt_Details {
     font-size: 20px;
@@ -1085,18 +1092,21 @@ button.ValidSearch:hover {
 .Bt_Suppr { background-color: #ff0000; }
 .Bt_Valid { background-color: #22b600; }
 .Bt_Modif { background-color: #FF9500; }
+.Bt_Add { background-color: #2063A7; }
 .Bt_Details { background-color: #2063A7; }
 
 .Bt_Undo:hover { background-color: #1D9BC2; }
 .Bt_Suppr:hover { background-color: #e10000; }
 .Bt_Valid:hover { background-color: #229d00; }
 .Bt_Modif:hover { background-color: #ff7c00; }
+.Bt_Add:hover { background-color: #204AA7; }
 .Bt_Details:hover { background-color: #204AA7; }
 
 
 .blocBts button.Disabled,
 .Bt_Modif.Disabled,
 .Bt_Suppr.Disabled,
+.Bt_Add.Disabled,
 .Bt_Details.Disabled,
 .Bt_Valid.Disabled {
     opacity: 0.4; 
@@ -1104,6 +1114,7 @@ button.ValidSearch:hover {
 }
 .Bt_Modif.Disabled,
 .Bt_Suppr.Disabled,
+.Bt_Add.Disabled,
 .Bt_Details.Disabled,
 .Bt_Valid.Disabled {  
     background-color: #898989; 
@@ -1116,6 +1127,7 @@ button.ValidSearch:hover {
 .Bt_Suppr:before,
 .Bt_Valid:before,
 .Bt_Modif:before,
+.Bt_Add:before,
 .Bt_Details:before,
 .Pourcentage.Xsmall:before {
     content: " ";
@@ -1131,6 +1143,7 @@ button.ValidSearch:hover {
 .Bt_Suppr:after,
 .Bt_Valid:after,
 .Bt_Modif:after,
+.Bt_Add:after,
 .Bt_Details:after,
 .Pourcentage.Xsmall:after {
     content: " ";
@@ -1149,12 +1162,14 @@ button.ValidSearch:hover {
 .Bt_Suppr:not(.Disabled):hover:before,
 .Bt_Valid:hover:before,
 .Bt_Modif:not(.Disabled):hover:before,
+.Bt_Add:not(.Disabled):hover:before,
 .Bt_Details:hover:before,
 .Pourcentage.Xsmall:hover:before,
 .Bt_Undo:hover:after,
 .Bt_Suppr:not(.Disabled):hover:after,
 .Bt_Valid:hover:after,
 .Bt_Modif:not(.Disabled):hover:after,
+.Bt_Add:not(.Disabled):hover:after,
 .Bt_Details:hover:after,
 .Pourcentage.Xsmall:hover:after {
     display: block;
@@ -1164,6 +1179,7 @@ button.ValidSearch:hover {
 .ListeEtbl .Bt_Modif:before,
 .ListeEtbl .Bt_Suppr:before,
 .ListeEtbl .Bt_Valid:before,
+.ListeEtbl .Bt_Add:before,
 .ListeEtbl .Bt_Details:before { margin: 36px 0 0 3px; }
 
 .ListeEtbl .Bt_Undo:after {
@@ -1191,6 +1207,11 @@ button.ValidSearch:hover {
     content: "Valider les modifications";
     margin: 24px 0 0 -38px;
     width: 94px;
+}
+.ListeEtbl .Bt_Add:after {
+    content: "Ajouter un établissement";
+    margin: 26px 0 0 -25px;
+    width: 70px;
 }
 .ListeEtbl .Bt_Details:after {
     content: "Détail calcul réversion";
@@ -1244,7 +1265,8 @@ button.ValidSearch:hover {
     width: 94px;
 }
 
-
+.Bt_Add.Disabled:hover:before,
+.Bt_Add.Disabled:hover:after,
 .Bt_Details.Disabled:hover:before,
 .Bt_Details.Disabled:hover:after { display: none; }
 
@@ -1279,7 +1301,8 @@ button.ValidSearch:hover {
 #LgnError.Hidden,
 .creationAccordReversion .MaskPopin.Hidden, #PopinCreationAccord_Etp2 .MsgGrpPasDispo.Hidden, #PopinCreationAccord_Etp2 .MsgEtbPasDispo.Hidden,
 #EncartEtape2TypeAccord.Hidden,
-.ErreurRetourAjax.Hidden {
+.ErreurRetourAjax.Hidden,
+.WrapLoader.Hidden {
         display: none;
 }
 /*================ Fin Pg Création / consultation des réversions ==============*/
@@ -1653,8 +1676,15 @@ button.ValidSearch:hover {
     margin: 110px 25%;
     top: -170%;
 }
+.Popin_FnrsExclus {
+    width: 40%;
+    min-width: 500px;
+    height: calc(100% - 400px);
+    min-height: 400px;
+    margin: 170px 30%;
+    top: -170%;
+}
 .Popin.Display {
-    /*top: 0% !important; /*!important ajouté le 04/05/17*/
     top: 0%;
 }
 
@@ -1733,17 +1763,36 @@ button.ValidSearch:hover {
 
 
 .Popin_ExclusionFnrs .TopPart,
+.Popin_FnrsExclus .TopPart, 
 .PopinDetailsExclusionReversion .TopPart,
 .creationAccordReversion .TopPart  {
     padding: 12px;
     min-height:85px;
 }
-.Popin_ExclusionFnrs .TopPart > div {
+.Popin_ExclusionFnrs .TopPart > div,
+.Popin_FnrsExclus .TopPart > div {
     font-size: 14px;
     line-height: 14px;
 }
-.Popin_ExclusionFnrs .NomEtblGrp {
+.Popin_ExclusionFnrs .TopPart > div.TxtIntro,
+.Popin_FnrsExclus .TopPart > div.TxtIntro {
+    margin-bottom: 10px;
+    font-style: italic;
+}
+.Popin_ExclusionFnrs .NomEtblGrp,
+.Popin_FnrsExclus .NomEtblGrp {
     font-size: 16px;
+}
+
+.Popin_FnrsExclus .CentralPart { 
+    display: block; 
+    height: calc(100% - 85px); 
+    width: 100%;
+    padding: 30px 40px;
+}
+.Popin_FnrsExclus .CentralPart div { 
+    text-align: center;
+    margin: 6px 0;
 }
 
 .PopinDetailsExclusionReversion .CentralPart {
@@ -2253,20 +2302,14 @@ i#DeleteDatepickerStart:hover {
 }
 
 .creationAccordReversion .Popin {
-    width: 620px;
-    left: calc(50% - 310px);
-    height: calc(100% - 400px);
-    min-height: 400px;
-    max-height: 500px;
-    margin: 150px 0;
     top:-170%;
-    font-size: 15px;
-    /*V2*/
     height: 80%;
     left: calc(50% - 400px);
     width: 800px;
     max-height: initial;
+    min-height: 400px;
     margin: initial;
+    font-size: 15px;
 }
 .creationAccordReversion .Popin.Display {
     top: 10%; /* --> (100% - 80%)/2 soit (H. fenetre - H. popin)/2 */
@@ -2640,7 +2683,7 @@ i#DeleteDatepickerStart:hover {
 }
 /* FIN Icone info utilisateur */
 
-
+/* Encart suite à erreur sur retour AJAX */
 .ErreurRetourAjax {
     position: fixed;
     z-index: 10005;
@@ -2669,3 +2712,11 @@ i#DeleteDatepickerStart:hover {
     color: #232D36;
 }
 
+
+.WrapLoader {
+    position:fixed; 
+    z-index: 10004;
+    top:calc(50% - 25px); 
+    left: calc(50% - 30px); 
+    color: #ffffff;
+}

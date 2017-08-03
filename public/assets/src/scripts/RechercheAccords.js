@@ -133,10 +133,9 @@ $(function () {
         //if(FlagOpenPopin == false) { /* TEST au 09/06/17 */ // Flag pour ne pas à faire un appel AJAX si plusieurs clics de suite sur même ligne Etb
             //FlagOpenPopin = true; /* TEST au 09/06/17 */
 
-            var Id_Lgn = GetLgnID(this);
             /// Copie dans entete popin du nom et groupe de l'établissement
-            var html = $('#' + Id_Lgn + ' .DataEtbl').html();
-            $('.Popin_ExclusionFnrs .TopPart').html(html);
+            var html = GetDataEntetePopin(this);
+            $('.Popin_ExclusionFnrs .TopPart').html('<div class="TxtIntro">Définir les marchés :</div>' + html);
 
             var Id_Accord = $('.Lgn_Accord').data('numaccord');
             var Id_Etb = $(this).closest('.LgnEtbSection.ModifEnCours').data('idetablismt');
@@ -166,14 +165,14 @@ $(function () {
 
     /// Boutons Annulation du popin
     $('#AnnulationSelectionFnrs, .Popin_ExclusionFnrs .ClosePopin').click(function() {
-        var r = confirm("Vous allez perdre la saisie de vos données.\nConfirmez votre choix svp!");
+        var r = confirm("En cas de confirmation, toutes vos saisies depuis l'ouverture de cet encart seront perdues.");
         if(r) {
             $('.Popin_ExclusionFnrs li input[type="checkbox"]').removeAttr('checked');
             $('.Popin_ExclusionFnrs li span').removeClass('Selected');
             fnrsSelected = [];
             /// On alimente l'objet InfosLgnModifiee
             InfosLgnModifiee.ExclusionFnrs = fnrsSelected;
-            InfosLgnModifiee.ModificationExclusionFnrs = false; //12/06/17
+            InfosLgnModifiee.ModificationExclusionFnrs = false;
             ClosePopin('.Popin_ExclusionFnrs');
         }
     });
@@ -182,11 +181,35 @@ $(function () {
     $('#ValidationSelectionFnrs').click(function() {
         /// On alimente l'objet InfosLgnModifiee
         InfosLgnModifiee.ExclusionFnrs = fnrsSelected;
-        InfosLgnModifiee.ModificationExclusionFnrs = true; //12/06/17
+        InfosLgnModifiee.ModificationExclusionFnrs = true;
         /// Fermeture popin
         ClosePopin('.Popin_ExclusionFnrs');
     });
     ///--- Fin partie Popin 'Définir les marchés' ---///
+
+
+    ///--- Partie Popin 'Fournisseurs exclus' ---///
+    /// Gestion bouton pour ouvrir et charger data popin d'exclusion des fournisseurs sur lignes Etablissement
+    $('.ListeEtbl').on('click', '.LgnEtbSection .Bt_FnrsExclus:not(.Disabled)', function() {
+        $('.LgnEtbSection .Bt_FnrsExclus').addClass('Disabled'); /// Désactivation de tous les boutons '.Bt_FnrsExclus'...
+        $(this).removeClass('Disabled'); ///...sauf celui sur lequel l'utilisateur a cliqué
+
+        /// Copie dans entete popin du nom et groupe de l'établissement
+        var html = GetDataEntetePopin(this);
+        $('.Popin_FnrsExclus .TopPart').html('<div class="TxtIntro">Fournisseurs exclus pour :</div>' + html);
+        
+        var Id_Accord = $('.Lgn_Accord').data('numaccord');
+        var Id_Etb = $(this).closest('.LgnEtbSection').data('idetablismt');
+        /// Initialisation des données propres à l'établissement dans la popin
+        GetDataPopinFnrsExclus(Id_Accord, Id_Etb);
+    });
+
+        /// Boutons Annulation du popin
+    $('.Popin_FnrsExclus .ClosePopin').click(function() {
+        ClosePopin('.Popin_FnrsExclus'); /// Fermeture popin
+        $('.LgnEtbSection .Bt_FnrsExclus').removeClass('Disabled'); /// Réactivation de tous les boutons '.Bt_FnrsExclus'
+    });
+    ///--- Partie Popin 'Fournisseurs exclus' ---///
 
 
     /// Pour fermeture encart d'erreur s'il existe
@@ -246,10 +269,11 @@ function GetDataPopin(IdAccord, IdEtb) {
         dataType: "json",
         beforeSend: function () {
             $('.Masque').removeClass('Hidden');
+            $('.WrapLoader').removeClass('Hidden');
         }
     })
     .done(function (data) {
-        console.warn(data.FnrsExclus); //TEST
+        //console.warn(data.FnrsExclus); //TEST
 
         /// Ici, on met en disabled les cats et les fournisseurs auxquels l'étbl. n'a pas droit...
         data.CatsInterdits.forEach(function(el) {       //console.log(el.CatalogueId + ' | ' + el.CatalogueDispo); //TEST
@@ -266,7 +290,46 @@ function GetDataPopin(IdAccord, IdEtb) {
         SelectionFnrsPopin(chbxsFnrsCoches);
 
         /// Apparition encart exclusion des fnrs
+        $('.WrapLoader').removeClass('Hidden');
         $('.Popin_ExclusionFnrs').addClass('Display');
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        DisplayError(jqXHR.responseText);
+    });
+}
+
+
+///--- Qd ouverture popin 'fnrs exclus' (est affiché sur l'interface seulement qd utilisateur a un role n'autorisant que la lecture, pas la modification) : Récupération des datas propres à l'établissement (fnrs auxquels il n'a pas le droit + fnrs déjà exclus) ---///
+function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
+    /// Récupération des catalogues auxquels l'etbl. n'a pas droit pour les mettre n disabled dans la popin
+    $.ajax({
+        method: "GET",
+        url: "/RechercheAccords/FnrsExclus/" + IdAccord + "/" + IdEtb,        
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        beforeSend: function () {
+            $('.Masque').removeClass('Hidden');
+            $('.WrapLoader').removeClass('Hidden');
+        }
+    })
+    .done(function (data) {
+        /// Affichage des fnrs exclus
+        var DataLocation = $('.Popin_FnrsExclus .CentralPart');
+        var i = 0;
+        DataLocation.empty();
+        data.FnrsExclus.forEach(function(el) {
+            if(el.ExclureFrs == 1) {
+                DataLocation.append('<div>' + el.CFR + '</div>');                
+                i++;
+            }
+        });
+        if(i == 0) {
+            DataLocation.html('<div>Pas de fournisseur(s) exclu(s) pour cet établissement</div>');
+        }
+
+        /// Apparition encart exclusion des fnrs
+        $('.WrapLoader').removeClass('Hidden');
+        $('.Popin_FnrsExclus').addClass('Display');
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
         DisplayError(jqXHR.responseText);
@@ -297,7 +360,8 @@ function Mdf() {
         ThisLgn.addClass('Hidden');
 
         $('.bandeauHaut input[type="text"]').prop('disabled', true); /// Désactivation des chps dans BandeauHaut       
-        $('.Bt_Modif, .Bt_Suppr, .Bt_Details').addClass('Disabled'); /// Désactivation des boutons
+        //$('.Bt_Modif, .Bt_Suppr, .Bt_Details').addClass('Disabled'); /// Désactivation des boutons
+        $('.Bt_Modif, .Bt_Suppr, .Bt_Add').addClass('Disabled'); /// Désactivation des boutons
         $('.Bt_Modif').off('click', Mdf);
         
         $('#' + Id_Lgn).addClass('ModifEnCours'); /// Ajout d'un marqueur identifiant la ligne en cours de modif
@@ -757,7 +821,6 @@ function SearchAccordQuery(Saisie) {
 function FocusLgn() {
     var LgnSelected = $('.LgnEtbSection.Selected');
     if(LgnSelected.length > 0) {
-        //var pos = ($('#' + LgnSelected.attr('id')).offset().top) - ConteneurListe - ($('.LgnAccordSection.clone').outerHeight(true));       
         var pos = ($('#' + LgnSelected.attr('id')).offset().top) - ConteneurListe - ($('.LgnAccordSection').outerHeight(true));       
         $(window).scrollTop(pos);
     }
@@ -771,6 +834,11 @@ function ClosePopin(popin) {
 }
 
 
+function GetDataEntetePopin(Bt) {
+    var Id_Lgn = GetLgnID(Bt);
+    /// Copie dans entete popin du nom et groupe de l'établissement
+    return $('#' + Id_Lgn + ' .DataEtbl').html();
+}
 
 function Init_InfosLgnModifiee() {
     return {

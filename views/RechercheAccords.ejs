@@ -13,51 +13,65 @@
     </head>
     <body>
         <div class="Masque Hidden"></div>
+        <div class="WrapLoader Hidden"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
 
         <!-- Popin 'Exclusion fournisseurs' -->
-        <% if(typeof listeCatalogues !== 'undefined') { /*Affichage par défaut*/ %>
+        <% if(limitationAcces == false) { %>
 
-        <div class="Popin Popin_ExclusionFnrs">
-            <i class="fa fa-times ClosePopin"></i>
-            <div class="TopPart"></div>
-            <div class="CentralPart">
-                <div class="TxtGuide">
-                    <i class="fa fa-info-circle"></i>
-                    <span>Sélectionnez les fournisseurs à exclure en cochant leur nom, ou bien en cochant un/des catalogue(s). Les 2 procédés peuvent être utilisés conjointement.</span>
-                </div>
+            <% if(typeof listeCatalogues !== 'undefined') { /*Affichage par défaut*/ %>
 
-                <div class="EnteteCln">Catalogues</div>
-                <div class="EnteteCln last">Fournisseurs <span><span id="NbFnrSelected">0</span> exclu(s)</span></div>
-            
-                <div class="Listes">
-                    <div class="Cln" id="LstCats"><!-- autocomplete="off" sur checkbox pour empecher cache avec FireFox ! -->
-                        <ul>
-                        <% listeCatalogues.forEach(function(cat) { %>
-                            <li><span><input type="checkbox" value="" id="<%= cat.CatalogueId %>" disabled="disabled" autocomplete="off"><label for="<%= cat.CatalogueId %>"><%= cat.CatalogueDesignation %></label></span></li>
-                        <% }); %>
-                        </ul>
+            <div class="Popin Popin_ExclusionFnrs">
+                <i class="fa fa-times ClosePopin"></i>
+                <div class="TopPart"></div>
+                <div class="CentralPart">
+                    <div class="TxtGuide">
+                        <i class="fa fa-info-circle"></i>
+                        <span>Sélectionnez les fournisseurs à exclure en cochant leur nom, ou bien en cochant un/des catalogue(s). Les 2 procédés peuvent être utilisés conjointement.</span>
                     </div>
-                    <div class="Cln" id="LstFnrs">
-                        <ul>
-                        <% listeFournisseurs.forEach(function(fnr) { %>
-                            <li><span><input type="checkbox" value="" id="<%= fnr.CFR %>" data-fnridcat="<%= fnr.CatalogueId %>"  disabled="disabled" autocomplete="off"><label for="<%= fnr.CFR %>"><%= fnr.DesignationFrCatalogue %> (<%= fnr.DesignationCourte %>)</label></span></li>
-                        <% }); %>
-                        </ul>
-                    </div>
-                </div>
-            
 
+                    <div class="EnteteCln">Catalogues</div>
+                    <div class="EnteteCln last">Fournisseurs <span><span id="NbFnrSelected">0</span> exclu(s)</span></div>
+                
+                    <div class="Listes">
+                        <div class="Cln" id="LstCats"><!-- autocomplete="off" sur checkbox pour empecher cache avec FireFox ! -->
+                            <ul>
+                            <% listeCatalogues.forEach(function(cat) { %>
+                                <li><span><input type="checkbox" value="" id="<%= cat.CatalogueId %>" disabled="disabled" autocomplete="off"><label for="<%= cat.CatalogueId %>"><%= cat.CatalogueDesignation %></label></span></li>
+                            <% }); %>
+                            </ul>
+                        </div>
+                        <div class="Cln" id="LstFnrs">
+                            <ul>
+                            <% listeFournisseurs.forEach(function(fnr) { %>
+                                <li><span><input type="checkbox" value="" id="<%= fnr.CFR %>" data-fnridcat="<%= fnr.CatalogueId %>"  disabled="disabled" autocomplete="off"><label for="<%= fnr.CFR %>"><%= fnr.DesignationFrCatalogue %> (<%= fnr.DesignationCourte %>)</label></span></li>
+                            <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="BottomPart"> 
+                    <button id="AnnulationSelectionFnrs"><i class="fa fa-undo"></i>Annuler</button>
+                    <button id="ValidationSelectionFnrs"><i class="fa fa-check"></i>Valider</button>
+                </div>
             </div>
-            <div class="BottomPart"> 
-                <% if(limitationAcces == false) { %>
-                <button id="AnnulationSelectionFnrs"><i class="fa fa-undo"></i>Annuler</button>
-                <button id="ValidationSelectionFnrs"><i class="fa fa-check"></i>Valider</button>
-                <% } %>
-            </div>
-        </div>
-        
+            
+            <% } %>
+
         <% } %>
         <!-- FIN Popin 'Exclusion fournisseurs' -->
+
+
+        <!-- Popin 'Fournisseurs exclus' : Uniquement accessible en mode lecture -->
+        <% if(limitationAcces == true) { %>
+        <div class="Popin Popin_FnrsExclus">
+            <i class="fa fa-times ClosePopin"></i>
+            <div class="TopPart"></div>
+            <div class="CentralPart"></div>
+        </div>
+        <% } %>
+        <!-- FIN Popin 'Fournisseurs exclus' : Uniquement accessible en mode lecture -->
+
 
 
 
@@ -109,7 +123,7 @@
                         <div>Dest. réversion / Dest. justificatif</div>
                         <div>Période</div>
                         <div>Taux de réversion</div>
-                        <div><!--Taux<br/>complém. (EDI)-->Taux de rév. avec EDI</div>
+                        <div>Taux de rév. avec EDI</div>
                         <div><!--Réversion(s)<br />validée(s)--></div>
                         <div></div>
                         <div></div>
@@ -175,12 +189,8 @@
                             <div class="LstAdh_TxAdd"><span class="<%= (item.TauxAvecEDI == '' ? 'Empty' : '') %>"><%= item.TauxAvecEDI %></span></div>
                             <div class="LstAdh_SaisieTxAdd Hidden"><input type="text" maxlength="3" placeholder="-" />%</div>
                         </div>
-                        <div>
-                            <!-- Pas encore ds la requete !! A FAIRE -->
-                        </div>
-                        <div>
-                            <!--<span class="Bt_gestionFnrs Hidden">Définir les marchés</span>-->
-                        </div>
+                        <div></div>
+                        <div></div>
                         <div>
                             <div class="Bt_Undo Hidden"><i class="fa fa-undo"></i></div>
                         </div>
@@ -193,7 +203,7 @@
                         </div>
                         <div>
                             <!--<a href="<%= (item.IsAccord == false ? '/ListeFacturesEtbl' : '/ListeFacturesGrp') + '?accordId=' + item.AccordReversionId + '&revId=' + 7 %>"><div class="Bt_Details"><i class="fa fa-file-text"></i></div></a>--> <!-- version antérieure au 01/06/17 : Mis en comm. car partie Liste des factures à developper plus tard -->
-                            <div class="Bt_Details Disabled"><i class="fa fa-file-text"></i></div>    <!-- Nouvelle version au 01/06/17 -->
+                            <div class="Bt_Add Disabled"><i class="fa fa-plus"></i></div>    <!-- Nouvelle version au 01/06/17 -->
                         </div>
                     </div>    
 
@@ -245,13 +255,18 @@
                             <% } %>
                             </div>
                             <div></div>
-                            <div><span class="Bt_gestionFnrs Hidden">Définir les marchés</span></div>
+                            <div><% if(limitationAcces == false) { %>
+                                <span class="Bt_gestionFnrs Hidden">Définir les marchés</span>
+                                <% } else if(limitationAcces == true) { %>
+                                <span class="Bt_FnrsExclus">Afficher les fnrs exclus</span>
+                                <% } %>
+                            </div>
                             <div>
                                 <div class="Bt_Undo Hidden"><i class="fa fa-undo"></i></div>
                             </div>
                             <div>    
                                 <div class="Bt_Valid Hidden"><i class="fa fa-check"></i></div>
-                                <div class="Bt_Modif"><i class="fa fa-pencil"></i></div>
+                                <div class="Bt_Modif <%= limitationAcces == true ? 'Disabled' : '' %>"><i class="fa fa-pencil"></i></div>
                             </div>
                             <div>
                                 <!-- Pour interdire suppr. d'un etb ds un accord avec 1 seul etb -->

@@ -25,7 +25,7 @@ module.exports = function(app) {
         res.redirect('/RechercheAccords');
     });
 
-    /// Lorsque clic sur bouton 'Définir les marchés', affichage des catalogues et fournisseurs auquel l'établissement a droit
+    /// Lorsque clic sur bouton 'Définir les marchés', affichage des catalogues et fournisseurs auquel l'établissement a droit + les fournisseurs exclus
     app.get('/RechercheAccords/Marches/:idAccord/:EtbId', userRightsAccess, function(req, res, next) {
         //console.log(colors.bgWhite.black(JSON.stringify(req.params))); //TEST
         if(req.xhr == true) { 
@@ -66,6 +66,14 @@ module.exports = function(app) {
             /**/
 
          }
+    });
+
+
+    /// Lorsque clic sur bouton 'Afficher les fnrs exclus' (existe seulement en mode lecture sur la page de recherche des accords) : Affichage des fournisseurs exclus
+    app.get('/RechercheAccords/FnrsExclus/:idAccord/:EtbId', userRightsAccess, function(req, res, next) {
+        GetFnrsExclusEtablissement(function(recordset) {
+            res.send({FnrsExclus: recordset[0]});
+        }, req.params, next);
     });
     
 
