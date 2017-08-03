@@ -290,7 +290,7 @@ function GetDataPopin(IdAccord, IdEtb) {
         SelectionFnrsPopin(chbxsFnrsCoches);
 
         /// Apparition encart exclusion des fnrs
-        $('.WrapLoader').removeClass('Hidden');
+        $('.WrapLoader').addClass('Hidden');
         $('.Popin_ExclusionFnrs').addClass('Display');
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -328,7 +328,7 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
         }
 
         /// Apparition encart exclusion des fnrs
-        $('.WrapLoader').removeClass('Hidden');
+        $('.WrapLoader').addClass('Hidden');
         $('.Popin_FnrsExclus').addClass('Display');
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
