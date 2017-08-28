@@ -812,7 +812,9 @@ function SearchAccordQuery(Saisie) {
         }
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
-        DisplayError(jqXHR.responseText);
+        if(jqXHR.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
+            DisplayError(jqXHR.responseText);
+        }
     });
 }
 
