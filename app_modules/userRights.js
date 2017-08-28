@@ -45,9 +45,9 @@ module.exports = function (req, res, next) {
 
 
     /// 3. Gestion des accès aux pages ou fonctionnalités dans les pages
-    var limitationAccesCoteClient = false; /// Pour limiter l'accès côté client (menu et boutons désactivés par ex.)    
     //console.log(req.Rights); //TEST
-    if(_.contains(req.Rights, "ReversionsAdministrateur")) {
+    if(_.contains(req.Rights, "ReversionsAdministrateur")) {    
+        req.app.locals.limitationAcces = false; /// Variable coté vue : On ne limite pas l'accès
         next();
     } else {
         switch(pg) {        
@@ -60,13 +60,14 @@ module.exports = function (req, res, next) {
                 break;
             case "RechercheAccords":
                 if(_.contains(req.Rights, "ReversionsRechercheAccordLectureEcriture")) {
+                    req.app.locals.limitationAcces = false; /// Variable coté vue : On ne limite pas l'accès/
                     next();
                 } else if(_.contains(req.Rights, "ReversionsRechercheAccordLecture")) {
-                    limitationAccesCoteClient = true;
                     console.log('typeof req.body.NumeroAccord : ' + typeof req.body.NumeroAccord + ' | req.xhr : ' + req.xhr); //TEST
                     if((req.method == 'POST' && typeof req.body.NumeroAccord !== 'undefined') || req.method == 'DELETE') {
                         res.render('AccesRefuse', {msgAccesRefuse: 'Vous n\'avez pas les droits pour utiliser cette fonctionnalité (rôle : ' + req.Rights + ').'}); //Envoi coté client car POST fait en AJAX      
                     } else {
+                        req.app.locals.limitationAcces = true; /// Pour limiter l'accès côté client (menu et boutons désactivés par ex.)
                         next();
                     }
                 } else {
@@ -78,8 +79,6 @@ module.exports = function (req, res, next) {
                 next();
         }
     }
-    req.app.locals.limitationAcces = limitationAccesCoteClient;
-
-
+    
 }
 
