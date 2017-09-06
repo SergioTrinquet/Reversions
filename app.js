@@ -43,6 +43,8 @@ app.use(session); /// Middleware pour création de session
 app.use(authentification); /// Middleware pour authentification
 
 
+
+
 ///Partie log (placé après l'appel des static files, sinon les enregistre)
 //console.log(colors.bgBlue.white('=> userName : ' + app.get('userName'))); //TEST
 /*app.use(require('winston-request-logger').create(logger, {
@@ -65,7 +67,7 @@ ListeFacturesEtblController(app); /// Pour la page de liste des factures pour un
 CreateAccordController(app); /// Pour la page de création d'un accord
 
 
-// Middleware pour gérer les erreurs qui sont remontéeos
+// Middleware pour gérer les erreurs qui sont remontées
 app.use(function (err, req, res, next) {
     /*if(app.get('env') === 'development') {
         console.error('Mode Développement : ' + err.stack);

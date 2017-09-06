@@ -190,13 +190,6 @@ module.exports = function(app) {
                         
                         res.redirect(req.get('referer')); // ou 'res.redirect('back');'   /// Pour rediriger vers le app.get avec l'URL du referer
                     }
-
-                    /* TEST */
-                    /*req.MessageLog = {
-                        msg: 'AAAAAAAAA',
-                        data: 'YYYYYYYY'
-                    };*/
-                    /* FIN TEST */
                     
                 }, req.body, next);  
             }
