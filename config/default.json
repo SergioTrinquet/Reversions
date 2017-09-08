@@ -12,6 +12,20 @@
         "database": "CRM"
     },
 
+    "infosMail": {
+        "mailTransporter": {
+            "host": "smtp.office365.com",
+            "port": 587,
+            "secure": false,
+            "user": "No_reply@cahpp.fr",
+            "pass": "@Noreply75!"
+        },
+        "mailMessage": {
+            "from": "No_reply@cahpp.fr",
+            "to": "strinquet@cahpp.fr"
+        }
+    },
+
     /// Afficher ici tous les rôles possibles pour cette appli
     "listeApplicationRole": ["ReversionsCreationAccord", "ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture", "ReversionsAdministrateur"],
     //"listeApplicationRole": ["ReversionsCreationAccord", "ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture", "ReversionsAdministrateur", "BackOfficeCatalogueNutrition"], /// Afficher ici tous les rôles possibles pour cette appli
