@@ -9,6 +9,7 @@ const RechAccordsController = require('./controllers/RechercheAccordsController'
 const ListeFacturesEtblController = require('./controllers/ListeFacturesEtblController'); // Custom module
 var session = require('./app_modules/session.js');
 var authentification = require('./app_modules/authentification.js');
+var email = require('./app_modules/mail.js');
 
 const colors = require('colors'); // juste pour le développement
 
@@ -44,7 +45,6 @@ app.use(authentification); /// Middleware pour authentification
 
 
 
-
 ///Partie log (placé après l'appel des static files, sinon les enregistre)
 //console.log(colors.bgBlue.white('=> userName : ' + app.get('userName'))); //TEST
 /*app.use(require('winston-request-logger').create(logger, {
@@ -76,6 +76,10 @@ app.use(function (err, req, res, next) {
         console.error('Mode Production : ' + err.message);
         res.status(err.status || 500).send(err.message);
     }*/
+
+    if(env === 'production') {
+        email(err.message, err.stack);
+    }
     console.log(colors.bgRed.white(err.stack));
     logger.log('error', err.stack); 
     res.status(err.status || 500);
