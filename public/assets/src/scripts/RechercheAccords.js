@@ -268,8 +268,7 @@ function GetDataPopin(IdAccord, IdEtb) {
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
         beforeSend: function () {
-            $('.Masque').removeClass('Hidden');
-            $('.WrapLoader').removeClass('Hidden');
+            $('.Masque, .WrapLoader').removeClass('Hidden');
         }
     })
     .done(function (data) {
@@ -308,8 +307,7 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
         beforeSend: function () {
-            $('.Masque').removeClass('Hidden');
-            $('.WrapLoader').removeClass('Hidden');
+            $('.Masque, .WrapLoader').removeClass('Hidden');
         }
     })
     .done(function (data) {
@@ -789,10 +787,7 @@ function SearchAccordQuery(Saisie) {
         data: {SaisieRecherche: Saisie},
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         ifModified: true,
-        /* Version actuelle au 31/07/17 *//*beforeSend: function () {
-            $('.masque').removeClass('Hidden');
-        }*/
-        /* Nouvelle Version au 31/07/17 */beforeSend: function (jqXHR) {
+        beforeSend: function (jqXHR) {
             Pool_xhr.push(jqXHR);
             $('.masque').removeClass('Hidden');
         }
