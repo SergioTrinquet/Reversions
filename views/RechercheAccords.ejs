@@ -74,6 +74,31 @@
 
 
 
+        <!-- Création Popin pour ajout d'un établissement -->
+        <% if(limitationAcces == false) { %>
+        <div class="Popin Popin_AjoutEtablissement">
+            <i class="fa fa-times ClosePopin"></i>
+            <div class="TopPart"></div>
+            <div class="CentralPart">
+                <div id="BtFiltreEtbsDispos"><span>
+                    <span class="fa-stack">
+                        <i class="fa fa-filter"></i>
+                        <i class="fa fa-ban fa-stack-2x NoFilter Hidden"></i>
+                    </span>
+                    <span data-label="TxtBt_Filtered">N'afficher que les établissements disponibles</span>
+                    <span data-label="TxtBt_NoFilter" class="Hidden" >Afficher tous les établissements</span>
+                </span></div>
+                <div id="LstAjoutEtbs"><ul></ul></div>
+            </div>
+            <div class="BottomPart"> 
+                <button id="AnnulationAjoutEtbs"><i class="fa fa-undo"></i>Annuler</button>
+                <button id="ValidationAjoutEtbs"><i class="fa fa-check"></i>Valider</button>
+            </div>
+        </div>
+        <% } %>
+        <!-- FIN 08/12/17 -->
+
+
 
         <% include partials/menu.ejs %>
 
@@ -124,7 +149,7 @@
                         <div>Période</div>
                         <div>Taux de réversion</div>
                         <div>Taux de rév. avec EDI</div>
-                        <div><!--Réversion(s)<br />validée(s)--></div>
+                        <div>Réversion<br />validée</div>
                         <div></div>
                         <div></div>
                         <div></div>
@@ -140,7 +165,7 @@
             <% dataAccords.forEach(function(item, index) { %>  
                
                 <!-- Lgn Accord -->
-                <div class="Lgn Lgn_Accord" id="LgnAccord_<%= item.AccordReversionId %>" data-numaccord="<%= item.AccordReversionId %>" ><!-- Modèle de l'id : 'LgnAccord_' + N°accord --> 
+                <div class="Lgn Lgn_Accord" id="LgnAccord_<%= item.AccordReversionId %>" data-numaccord="<%= item.AccordReversionId %>" data-anneeaccord="<%= item.AnneeReversion %>" data-accordgroupe="<%= item.AccordGroupe %>" ><!-- Modèle de l'id : 'LgnAccord_' + N°accord --> 
                     
                     <div class="Lgn LgnAccordSection" id="LgnAccordSection_<%= item.AccordReversionId %>" ><!-- Modèle de l'id : 'LgnAccordSection_' + N°accord --> 
                         <div>
@@ -189,21 +214,22 @@
                             <div class="LstAdh_TxAdd"><span class="<%= (item.TauxAvecEDI == '' ? 'Empty' : '') %>"><%= item.TauxAvecEDI %></span></div>
                             <div class="LstAdh_SaisieTxAdd Hidden"><input type="text" maxlength="3" placeholder="-" />%</div>
                         </div>
-                        <div></div>
+                        <div>
+                            <div><span class="LstAdh_RevValidee <%= item.ReversionValidee ? 'oui' : 'non' %>"><%= item.ValidationReversionDate %></span></div>
+                        </div>
                         <div></div>
                         <div>
                             <div class="Bt_Undo Hidden"><i class="fa fa-undo"></i></div>
                         </div>
                         <div>
                             <div class="Bt_Valid Hidden"><i class="fa fa-check"></i></div>
-                            <div class="Bt_Modif <%= (limitationAcces == true ? 'Disabled' : '') %>"><i class="fa fa-pencil"></i></div>
+                            <div class="Bt_Modif <%= (limitationAcces == true || item.ReversionValidee ? 'Disabled' : '') %>"><i class="fa fa-pencil"></i></div>
                         </div>
                         <div>
-                            <div class="Bt_Suppr <%= limitationAcces == true ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
+                            <div class="Bt_Suppr <%= limitationAcces == true || item.ReversionValidee ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
                         </div>
                         <div>
-                            <!--<a href="<%= (item.IsAccord == false ? '/ListeFacturesEtbl' : '/ListeFacturesGrp') + '?accordId=' + item.AccordReversionId + '&revId=' + 7 %>"><div class="Bt_Details"><i class="fa fa-file-text"></i></div></a>--> <!-- version antérieure au 01/06/17 : Mis en comm. car partie Liste des factures à developper plus tard -->
-                            <div class="Bt_Add Disabled"><i class="fa fa-plus"></i></div>    <!-- Nouvelle version au 01/06/17 -->
+                            <div class="Bt_Add <%= (item.AccordGroupe == false) || limitationAcces || item.ReversionValidee || (isBtAddEtbActive == 1) ? 'Disabled' : '' %>"><i class="fa fa-plus"></i></div>
                         </div>
                     </div>    
 
@@ -266,11 +292,11 @@
                             </div>
                             <div>    
                                 <div class="Bt_Valid Hidden"><i class="fa fa-check"></i></div>
-                                <div class="Bt_Modif <%= limitationAcces == true ? 'Disabled' : '' %>"><i class="fa fa-pencil"></i></div>
+                                <div class="Bt_Modif <%= limitationAcces || item.ReversionValidee ? 'Disabled' : '' %>"><i class="fa fa-pencil"></i></div>
                             </div>
                             <div>
                                 <!-- Pour interdire suppr. d'un etb ds un accord avec 1 seul etb -->
-                                <div class="Bt_Suppr <%= (item.ListeEtbInAccord.length == 1 || limitationAcces == true) ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
+                                <div class="Bt_Suppr <%= (item.ListeEtbInAccord.length == 1 || limitationAcces == true || item.ReversionValidee) ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
                             </div>
                             <div></div>
                         </div>

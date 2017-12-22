@@ -3,6 +3,7 @@ const fs = require('fs'); // juste pour le développement
 
 const _ = require('underscore');
 const sql = require('mssql');
+const dateFormat = require('dateformat');
 var config = JSON.parse(JSON.stringify(require('config').get('dbConfig'))); // Nvelle version avec module 'config'
 var logger = require('../log/logConfig.js').logger; // Pour les logs
 var userRightsAccess = require('../app_modules/userRights.js'); /// Middleware pour gérer les accès en fonction des droits de l'utilisateur
@@ -10,6 +11,7 @@ var userRightsAccess = require('../app_modules/userRights.js'); /// Middleware p
 var recordset_Tx = [];
 var ListeCats = [];
 
+var btAddEtbActivation = null;
 
 
 /// Essai avec 'async' pour supprimer les callbacks <= Fonctionne !!!
@@ -75,46 +77,82 @@ module.exports = function(app) {
             res.send({FnrsExclus: recordset[0]});
         }, req.params, next);
     });
+
+
+    /////////----------- EN COURS DE DEV. 11/12/17 -----------/////////
+    /// Lorsque clic sur ajout d'un établissement dans ligne Accord
+    app.get('/RechercheAccords/AjoutEtb/:idAccord', userRightsAccess, function(req, res, next) {
+        GetListeEtablissements(function(recordset) {
+            res.send({ListeAjoutEtablissements: recordset[0]});
+        }, req.params.idAccord, next);
+    });
     
 
-    
+    /// Lorsque clic sur un lien dans l'autocomplete qui apparait suite à une recherche dans le moteur en haut de page : Obtention de ttes les infos pour afficher l'accord et ses établissements
     app.get('/RechercheAccords/:idAccord?/:EtbId?', userRightsAccess, function(req, res, next) {
         //console.log(req.params); //TEST
+
+        console.log('req.app.locals.limitationAcces => ' + req.app.locals.limitationAcces); //TEST
+        const limitationAcces = req.app.locals.limitationAcces;
         
         /// Affichage Accord
         if(typeof req.params.idAccord !== 'undefined') {
 
+
+
             /// Récupération de l'accord...
             getAccords(function(recordset) {
                 var newRecordset = [];
-                newRecordset = FormatData(recordset); /// <-- Fonction pour formater les données comme on veut pour affichage ds vue
+                newRecordset = FormatData(recordset); /// Fonction pour formater les données comme on veut pour affichage ds vue
                 //console.log(colors.bgWhite.blue(JSON.stringify(newRecordset))); //TEST
 
-                /// Récupération des data pour alimenter liste déroulante des taux...
-                getTypeTaux(function(recordset) {
-                    recordset_Tx = recordset;
+                /**/if(limitationAcces) {
 
-                    /// ...Et récupération de la liste des cats pour la popin 'Définir les marchés' + Récup liste de tous les fournisseurs
-                    getListeCatalogues(function(recordset) {
-                        ListeCats = recordset[0];
-                        
-                        getListeFournisseurs(function(recordset) { 
-                            var ListeFnrs = recordset[0];
+                    res.render('RechercheAccords', { 
+                        dataAccords: newRecordset,
+                        etbId: req.params.EtbId
+                    });
 
-                            res.render('RechercheAccords', { 
-                                dataAccords: newRecordset, 
-                                listeTypeTaux: recordset_Tx, 
-                                etbId: req.params.EtbId, 
-                                listeCatalogues: ListeCats, 
-                                listeFournisseurs: ListeFnrs 
-                            });                
-                
+                } else {/**/
+
+                    /// Récupération des data pour alimenter liste déroulante des taux...
+                    getTypeTaux(function(recordset) {
+                        recordset_Tx = recordset;
+
+                        /// ...Et récupération de la liste des cats pour la popin 'Définir les marchés' + Récup liste de tous les fournisseurs
+                        getListeCatalogues(function(recordset) {
+                            ListeCats = recordset[0];
+                            
+                            getListeFournisseurs(function(recordset) { 
+                                var ListeFnrs = recordset[0];
+
+                                /// ...Et requete pour savoir si on active ou pas le bouton d'ajout d'établissement sur la ligne Accord dans la vue
+                                activateButtonAddEtablissements(function(recordset){ ///
+                                    btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet; ///  
+                                    //console.log("btAddEtbActivation : " + btAddEtbActivation);
+
+                                    res.render('RechercheAccords', { 
+                                        dataAccords: newRecordset, 
+                                        listeTypeTaux: recordset_Tx, 
+                                        etbId: req.params.EtbId, 
+                                        listeCatalogues: ListeCats, 
+                                        listeFournisseurs: ListeFnrs,
+                                        isBtAddEtbActive: btAddEtbActivation ///
+                                    });       
+                                    
+                                }, req.params.idAccord, next); ///
+                    
+                            }, next);
+
                         }, next);
+
                     }, next);
 
-                }, next);
+                /**/}/**/
                 
             }, req.params.idAccord, next);
+
+
 
         } else { /// Chargement de la page sans recherche préalable
             res.render('RechercheAccords');
@@ -220,7 +258,19 @@ module.exports = function(app) {
                 }, IdAccordASuppr, next);
             } else if(ElementASuppr == "etablissement") {
                 DeleteEtablissementAccord(function(recordset) {
-                    res.sendStatus(200); /// Pour confirmation coté client afin de donner le signal qu'il faut rafraichir les données
+                    //res.sendStatus(200); /// Pour confirmation coté client afin de donner le signal qu'il faut rafraichir les données
+                
+
+                //////-------------------------///////
+                /// ...Et requete pour savoir si on active ou pas le bouton d'ajout d'établissement sur la ligne Accord dans la vue
+                activateButtonAddEtablissements(function(recordset) {
+                    btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet; ///  
+                    console.log("btAddEtbActivation : " + btAddEtbActivation);
+                    res.send({ ActivationBtAddEtb: btAddEtbActivation }); /// Pour confirmation coté client afin de donner le signal qu'il faut rafraichir les données
+                }, IdAccordASuppr, next); 
+                //////-------------------------///////
+
+
                 }, IdAccordASuppr, IdEtbAccordASuppr, next);
             }
 
@@ -321,6 +371,8 @@ function FormatData(recordset) {
                 newdata.Desactive = item.Desactive
                 newdata.AccordGroupe = item.AccordGroupe; // Doit-on l'ajouter ?
                 newdata.ListeEtbInAccord = [];
+                newdata.ValidationReversionDate = (item.ValidationReversionDate != null ? dateFormat(item.ValidationReversionDate, 'dd/mm/yyyy') : 'Non');
+                newdata.ReversionValidee = (item.ValidationReversionDate != null ? true : false);
 
                 tabData.push(newdata);
             } 
@@ -531,7 +583,7 @@ function getAccords(callback, AccRevID, next) {
     "SELECT " +        
         "AcRv.AccordReversionId, Rv.ReversionId, AcRv.AnneeReversion, AcRv.DestinataireReversementEtablissementId, AcRv.AccordGroupe, AcRv.PeriodeDebut, AcRv.PeriodeFin, AcRv.Taux, AcRv.TauxAvecEDI, AcRv.DestinataireRaisonSociale, " +
         "AcRv.DestinataireContact, AcRv.DestinataireAd1, AcRv.DestinataireAd2, AcRv.DestinataireAd3, AcRv.DestinataireCP, AcRv.DestinataireVille, AcRv.Desactive, TxRv.TypeTauxReversionId, TxRv.Libelle, ARvE.EtablissementId, " +
-        "ARvE.RaisonSociale, ARvE.CC, ARvE.Ad1, ARvE.Ad2, ARvE.Ad3, ARvE.CP, ARvE.Ville, ARvE.Contact, ARvE.AvecEDI, Gr.[LIBELLE GROUPEMENT] As LibelleGroupement, AcRv.NomAccordReversion, ARvE.AutreTaux, ARvE.AutreTauxAvecEDI  " +
+        "ARvE.RaisonSociale, ARvE.CC, ARvE.Ad1, ARvE.Ad2, ARvE.Ad3, ARvE.CP, ARvE.Ville, ARvE.Contact, ARvE.AvecEDI, Gr.[LIBELLE GROUPEMENT] As LibelleGroupement, AcRv.NomAccordReversion, ARvE.AutreTaux, ARvE.AutreTauxAvecEDI, Rv.ValidationReversionDate  " +
     "FROM " +
         "Etablissement.dbo.GROUPEMENT AS Gr RIGHT OUTER JOIN " +
         "Reversion.AccordReversion AS AcRv INNER JOIN " +
@@ -541,7 +593,7 @@ function getAccords(callback, AccRevID, next) {
     "WHERE " +       
         "AcRv.AccordReversionId = " + AccRevID + " " +
         "and (AcRv.Desactive is NULL or AcRv.Desactive = 0) " +
-        "and Rv.ValidationReversionDate IS NULL " + 
+        /*"--and Rv.ValidationReversionDate IS NULL " + */
     "ORDER BY ARvE.RaisonSociale;"
 
 
@@ -787,7 +839,7 @@ function ModifEtablissementAccord(callback, data, next) {
 }
 
 
-///--- Modification d'un Etablissement dans un accord ---///
+///--- Modification des marchés d'un établissement ---///
 function ModificationEtablissementMarche(callback, data, next) {
     var conn = new sql.Connection(config); 
     conn.connect().then(function() {
@@ -812,4 +864,58 @@ function ModificationEtablissementMarche(callback, data, next) {
     });
 }
 
+
+
+
+///--- Récupération de liste de tous les établissments ---///
+function GetListeEtablissements(callback, idAccord, next) {
+    var conn = new sql.Connection(config);   
+    conn.connect().then(function() {
+        
+        var request = new sql.Request(conn);
+
+        request
+        .input('AccordReversionId', sql.Int, idAccord)
+        .execute('ReversionApp.ps_getEtablissementGroupementReversion')
+        .then(function(recordset) {
+            //console.log(colors.bgCyan.white(JSON.stringify(recordset))); //TEST
+            callback(recordset);
+            conn.close();
+        })
+        .catch(function(err) {
+            next(new Error("Récupération de la liste des établissements lors d'un ajout d'établissement dans une réversion => " + err));
+        });
+
+    }).catch(function(err) {
+        next(new Error("Récupération de la liste des établissements lors d'un ajout d'établissement dans une réversion => " + err));
+    });
+}
+
+
+///--- Pour savoir si le bouton 'Ajout d'établissement(s) doit être en disabled ou pas ---///
+///--- (Seulement pour un accord de Groupe(s) : Bouton doit être actif si un ou des établissements du groupe de l'accord ne sont pas compris dans l'accord, ---///
+///--- sinon si tous les établissements du groupe sont déjà dans l'accord de groupe, alors bouton doit être inactif) ---///
+///--- Renvoie -1 si pas un accord de groupe, renvoie 0 si accord de groupe avec Etbs pas dans l'accord, renvoie 1 si accord de groupe avec tous les Etbs dans l'accord ---///
+function activateButtonAddEtablissements(callback, idAccord, next) {    
+    var conn = new sql.Connection(config);   
+    conn.connect().then(function() {
+        
+        var request = new sql.Request(conn);
+
+        request
+        .input('AccordReversionId', sql.Int, idAccord)
+        .execute('ReversionApp.ps_AccordGroupementEstComplet')
+        .then(function(recordset) {
+            console.log(colors.bgCyan.white(JSON.stringify(recordset))); //TEST
+            callback(recordset);
+            conn.close();
+        })
+        .catch(function(err) {
+            next(new Error("Requete permettant de savoir si le bouton 'Ajout d'établissement(s) doit être actif ou pas => " + err));
+        });
+
+    }).catch(function(err) {
+        next(new Error("Requete permettant de savoir si le bouton 'Ajout d'établissement(s) doit être actif ou pas => " + err));
+    });    
+}
 

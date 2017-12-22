@@ -7,20 +7,26 @@ var lastSaisie = null;
 var ConteneurListe = null;
 
 var fnrsSelected = [];
+var etbsSelected = [];
+
+var TEMP_fnrsSelected = [];
 
 var InterdictionEcriture = false;
 
-//var FlagOpenPopin = false; /* TEST au 09/06/17 */
+let Masque = null;
+let Id_Accord = "";
+
+var FlagActivePopin = false;
 
 
- /// TEST : Ajouté le 31/07/17
+
 var Pool_xhr = [];
 var Pool_rech = [];
 function SearchAccord(SaisieAddAccord) {
     if(SaisieAddAccord.length > 2) {
         //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
         if(SaisieAddAccord != lastSaisie) { /// pour éviter appel ajax inutile
-            SearchAccordQuery(SaisieAddAccord); /* Version Originale au 31/07/17 */
+            SearchAccordQuery(SaisieAddAccord);
         } else if(SaisieAddAccord == lastSaisie && $('#AC_content').html() != '') {
             $('#Autocomplete.Hidden').removeClass('Hidden');
         }
@@ -30,10 +36,10 @@ function SearchAccord(SaisieAddAccord) {
         $('#Autocomplete').addClass('Hidden');
     }
 }
-/// FIN TEST : Ajouté le 31/07/17
 
 
-$(function () {
+
+$(function () {         
 
     ///--- Récupération des droits sur cette page ---///
     InterdictionEcriture = ($('#EncartInfoUser #Role').text() == 'ReversionsRechercheAccordLecture' ? true : false);
@@ -48,18 +54,23 @@ $(function () {
     FocusLgn();
 
 
+    /// Affectation variables globales
+    Masque = $('.Masque');
+    Id_Accord = $('.Lgn_Accord').data('numaccord');
+
+
     ///--- Moteur de recherche ---///
     var SaisieAddAccord = null;
     $('#SearchEtabl').on('keyup paste cut dragend focus', function() {
         SaisieAddAccord = $.trim($(this).val());
 
-        /* Nouvelle version au 31/07/17 : Pour éviter des appels AJAX à chaque frappe donc trop nombreux */  
+        ///--- Pour éviter des appels AJAX à chaque frappe donc trop nombreux ---///  
         $(Pool_rech).each(function (idx, el) { /*console.log(el);*/ clearTimeout(el); }); /// On vide le pool
         Pool_rech = []; 
         Pool_rech.push(setTimeout(function(){ SearchAccord(SaisieAddAccord); }, 300)); /// Une fois le pool vide, ajout de la fonction qui fait l'appel AJAX et qui se déclenche au bout de X millisec.       
-        /* Fin Nouvelle version au 31/07/17 */
 
-        /// Version actuelle au 31/07/17
+
+        /// Version antérieure au 31/07/17
         /*if(SaisieAddAccord.length > 2) {
 
             //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
@@ -75,6 +86,8 @@ $(function () {
         }
         */
     });
+
+    /// Pour cacher l'autocomplete
     $('body').click(function (event) {
         var $target = $(event.target);
         if (!($target.is($('#Autocomplete, #Autocomplete *, #SearchEtabl')))) {/// Si click sur un element de la pg autre que le menu déroulant et ses éléments descendants ET autre que la zone de click 'Survoler ici pour trouver une info' pour déplier le menu
@@ -91,16 +104,15 @@ $(function () {
 
     ///--- Suppression d'une ligne établissement d'un accord ou bien de l'accord lui-même ---///
     $('.ListeEtbl').on('click', '.Bt_Suppr:not(.Disabled)', Suppr);
-    
-    ///--- Fonction pour pointer sur pg 'Liste des factures' : A faire dans un 2eme temps ---///
-    //$('.ListeEtbl').on('click', '.Bt_Details:not(.Disabled)', Dtls);
 
     ///--- Quand Validation des modif sur une ligne (ligne Accord ou Etablissement d'un accord) ---///
     $('.ListeEtbl').on('click', '.Bt_Valid:not(.Disabled)', ValidModifs);
 
     ///--- Quand Annulation des modif sur une ligne ---///
     $('.ListeEtbl').on('click', '.Bt_Undo', Undo);
-
+    
+    ///--- Pour ajouter un établissement à l'accord déjà créé ---///
+    $('.LgnAccordSection').on('click', '.Bt_Add:not(.Disabled)', Add);    
 
 
 
@@ -130,22 +142,24 @@ $(function () {
     /// Gestion bouton pour ouvrir et charger data popin d'exclusion des fournisseurs sur lignes Etablissement
     $('.ListeEtbl').on('click', '.LgnEtbSection.ModifEnCours .Bt_gestionFnrs', function() {
 
-        //if(FlagOpenPopin == false) { /* TEST au 09/06/17 */ // Flag pour ne pas à faire un appel AJAX si plusieurs clics de suite sur même ligne Etb
-            //FlagOpenPopin = true; /* TEST au 09/06/17 */
+        if(FlagActivePopin == false) { /// Flag pour ne pas avoir à faire un appel AJAX si plusieurs clics de suite sur même ligne Etb
+            FlagActivePopin = true;
 
             /// Copie dans entete popin du nom et groupe de l'établissement
             var html = GetDataEntetePopin(this);
             $('.Popin_ExclusionFnrs .TopPart').html('<div class="TxtIntro">Définir les marchés :</div>' + html);
 
-            var Id_Accord = $('.Lgn_Accord').data('numaccord');
             var Id_Etb = $(this).closest('.LgnEtbSection.ModifEnCours').data('idetablismt');
             /// Initialisation des données propres à l'établissement dans la popin
-            GetDataPopin(Id_Accord, Id_Etb);
+            GetDataPopinFnrsAexclure(Id_Accord, Id_Etb);
 
-        /* */// } else { $('.Popin_ExclusionFnrs').addClass('Display'); }/* TEST au 09/06/17 */
+        } else { 
+            Masque.removeClass('Hidden');
+            $('.Popin_ExclusionFnrs').addClass('Display'); 
+        }
     });
 
-    /// Lorsque click sur un Catalogue
+    /// Lorsque click sur une checkbox Catalogue
     $('body').on('click', '.Popin_ExclusionFnrs #LstCats input[type="checkbox"]:not(:disabled)', function() {
         var ThisChbx = $(this);
 
@@ -157,23 +171,48 @@ $(function () {
         SelectionFnrsPopin(goodChbxs, (ThisChbx.is(':checked') ? true : false));
     });
 
-    /// Lorsque click sur un Fnr
+    /// Lorsque click sur une checkbox Fnr
     $('body').on('click', '.Popin_ExclusionFnrs #LstFnrs input[type="checkbox"]:not(:disabled)', function() {
         var ThisChbx = $(this);
         SelectionFnrsPopin(ThisChbx, (ThisChbx.is(':checked') ? true : false));
     });
 
-    /// Boutons Annulation du popin
+    /// Boutons Annulation du popin ou fermeture en haut à droite de la popin
     $('#AnnulationSelectionFnrs, .Popin_ExclusionFnrs .ClosePopin').click(function() {
-        var r = confirm("En cas de confirmation, toutes vos saisies depuis l'ouverture de cet encart seront perdues.");
+        var r = confirm("En cas de confirmation, toutes vos saisies dans cet encart\ndepuis le début de la phase de modification de la ligne établissement\nseront perdues.");
         if(r) {
-            $('.Popin_ExclusionFnrs li input[type="checkbox"]').removeAttr('checked');
-            $('.Popin_ExclusionFnrs li span').removeClass('Selected');
-            fnrsSelected = [];
+            /* VO : Ancienne version au 19/12/17 */
+            /*fnrsSelected = [];
             /// On alimente l'objet InfosLgnModifiee
             InfosLgnModifiee.ExclusionFnrs = fnrsSelected;
             InfosLgnModifiee.ModificationExclusionFnrs = false;
+            UnselectCheckboxes('.Popin_ExclusionFnrs');
             ClosePopin('.Popin_ExclusionFnrs');
+            */
+
+            /* V1 */
+            InfosLgnModifiee.ExclusionFnrs = [];
+            InfosLgnModifiee.ModificationExclusionFnrs = false;
+            
+            ///// Si annulation, on remet les checkboxs des fnrs déjà enregistrés avant cette phase de modif (ceux qui sont déjà enregistrés ds la bdd)
+
+            /// Réinitialisation
+            fnrsSelected = []; /// on vide le tableau listant les fnrs exclus
+            UnselectCheckboxes('.Popin_ExclusionFnrs'); /// On désélectionne ttes les checkboxs
+            
+            TEMP_fnrsSelected.forEach(function(el){ fnrsSelected.push(el) }); /// Réaffectation du tableau listant des fnrs exclus
+
+            /// On 'marque' les bonnes checkboxs
+            fnrsSelected.forEach(function(el) {
+                $('.Popin_ExclusionFnrs #LstFnrs input[id="' + el + '"]').attr('data-tempFnrsSelected', 'true'); // Le data-* sert juste pour marquer/identifier les bons checkboxs, on le supprime juste après
+            });
+            var chbxs = $('.Popin_ExclusionFnrs #LstFnrs input[data-tempFnrsSelected]');
+            //console.log(chbxs); //TEST
+            SelectionFnrsPopin(chbxs, true); /// On resélectionne les bonnes et on affecte le tableau
+            $('.Popin_ExclusionFnrs #LstFnrs input[data-tempFnrsSelected]').removeAttr('data-tempFnrsSelected'); /// On supprime le marqueur qui ne servait qu'à créer la variable 'chbxs' ci-dessus
+            
+            ClosePopin('.Popin_ExclusionFnrs');
+            /* Fin V1 */
         }
     });
 
@@ -188,7 +227,45 @@ $(function () {
     ///--- Fin partie Popin 'Définir les marchés' ---///
 
 
-    ///--- Partie Popin 'Fournisseurs exclus' ---///
+
+    ///--- Partie Popin 'Ajout d'établissement' ---///
+    /// lorsque click sur une checkbox Etablissement
+    $('body').on('click', '.Popin_AjoutEtablissement input[type="checkbox"]:not(:disabled)', function() {
+        var ThisChbx = $(this);
+        SelectionEtbsPopin(ThisChbx);
+    });
+
+    /// Boutons Annulation du popin ou fermeture en haut à droite de la popin
+    $('#AnnulationAjoutEtbs, .Popin_AjoutEtablissement .ClosePopin').click(function() {
+        var r = confirm("En cas de confirmation, toutes vos saisies seront perdues.");
+        if(r) {
+            etbsSelected = []; /// On vide le tableau répertoriant les etbs sélectionnés
+            UnselectCheckboxes('.Popin_AjoutEtablissement'); /// Déselection des checkbox
+            ClosePopin('.Popin_AjoutEtablissement'); /// Fermeture popin
+            ReinitBtFiltresEtbsDispos(); /// Réinitialisation bouton de filtre sur etbs
+        }
+    });
+
+    /// Boutons Validation de la popin
+    $('#ValidationAjoutEtbs').click(function() {
+        /// Appel AJAX pour ajouter etb(s) via proc. stock.
+        RecordEtablissements(etbsSelected);
+        //Transférer IdAccord + etbsSelected
+        ClosePopin('.Popin_AjoutEtablissement'); /// Fermeture popin
+        ReinitBtFiltresEtbsDispos(); /// Réinitialisation bouton de filtre sur etbs
+    });
+
+    /// Bouton pour filtrer sur les établissements dispos ou pas
+    $('#BtFiltreEtbsDispos > span').click(function() {
+        $('#LstAjoutEtbs input[disabled="disabled"]').closest('li').toggleClass('Hidden');
+        $('#BtFiltreEtbsDispos span[data-label], #BtFiltreEtbsDispos i.NoFilter').toggleClass('Hidden');
+    });
+    ///--- Fin partie Popin 'Ajout d'établissement' ---///
+
+
+
+
+    ///--- Partie Popin 'Fournisseurs exclus' (Uniquement accessible en mode lecture) ---///
     /// Gestion bouton pour ouvrir et charger data popin d'exclusion des fournisseurs sur lignes Etablissement
     $('.ListeEtbl').on('click', '.LgnEtbSection .Bt_FnrsExclus:not(.Disabled)', function() {
         $('.LgnEtbSection .Bt_FnrsExclus').addClass('Disabled'); /// Désactivation de tous les boutons '.Bt_FnrsExclus'...
@@ -198,13 +275,13 @@ $(function () {
         var html = GetDataEntetePopin(this);
         $('.Popin_FnrsExclus .TopPart').html('<div class="TxtIntro">Fournisseurs exclus pour :</div>' + html);
         
-        var Id_Accord = $('.Lgn_Accord').data('numaccord');
+        //var Id_Accord = $('.Lgn_Accord').data('numaccord');
         var Id_Etb = $(this).closest('.LgnEtbSection').data('idetablismt');
         /// Initialisation des données propres à l'établissement dans la popin
         GetDataPopinFnrsExclus(Id_Accord, Id_Etb);
     });
 
-        /// Boutons Annulation du popin
+    /// Boutons Annulation du popin
     $('.Popin_FnrsExclus .ClosePopin').click(function() {
         ClosePopin('.Popin_FnrsExclus'); /// Fermeture popin
         $('.LgnEtbSection .Bt_FnrsExclus').removeClass('Disabled'); /// Réactivation de tous les boutons '.Bt_FnrsExclus'
@@ -212,14 +289,19 @@ $(function () {
     ///--- Partie Popin 'Fournisseurs exclus' ---///
 
 
+
     /// Pour fermeture encart d'erreur s'il existe
     $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
         $('.ErreurRetourAjax').addClass('Hidden');
         $('.ErreurRetourAjax .Content').empty();
-        $('.Masque').addClass('Hidden');
+        Masque.addClass('Hidden');
     });
 
 
+    /// Pour loader qd clic sur liens de l'autocomplete
+    $('#Autocomplete').click('.Lgn.AC a[href]', function() {
+        $('.Masque, .WrapLoader').removeClass('Hidden');
+    });
 
 });
 
@@ -230,26 +312,43 @@ function SelectionFnrsPopin(Chbxs, bool) {
     Chbxs.prop('checked', bool);
     /// Ajout class pour mieux identifier ligne(s) cochée(s)
     AddClassSelected(Chbxs);
+    /// Affectation du tableau listant les fournisseurs cochés
+    fnrsSelected = RecordSelectionCheckboxes(Chbxs, fnrsSelected);
+    /// Affichage nb de fnr(s) sélectionné(s)
+    $('#NbFnrSelected').text(fnrsSelected.length);
+    console.log(fnrsSelected); //TEST
+}
 
-    /// Ajout/suppression ds tableau stockant les fnrs sélectionnés à passer coté serveur
+
+///--- Gestion de la sélection des Etablissements à intégrer dans l'accord (popin Ajouter un/des établissement(s) à l'accord) ---///
+function SelectionEtbsPopin(Chbxs) {
+    /// Ajout class pour mieux identifier ligne(s) cochée(s)
+    AddClassSelected(Chbxs);
+    /// Affectation du tableau listant les établissents cochés
+    etbsSelected = RecordSelectionCheckboxes(Chbxs, etbsSelected);
+    console.log(etbsSelected); //TEST
+}
+
+ 
+/// Ajout/suppression ds tableau stockant les fnrs/établissements sélectionnés à passer coté serveur
+function RecordSelectionCheckboxes(Chbxs, ArrayTypeInfoSelected) {
     if(Chbxs.length > 0) {  //console.log(Chbxs.length); //TEST
         $.each(Chbxs, function(i, chbx) {
             //console.log(chbx);
             var chbx = $(chbx);
             /// Stockage des idfnr ds un tableau
             if(chbx.is(':checked')) {
-                fnrsSelected.push(chbx.attr('id'));
+                ArrayTypeInfoSelected.push(chbx.attr('id'));
             } else {
-                fnrsSelected.splice( fnrsSelected.indexOf(chbx.attr('id')), 1);
+                ArrayTypeInfoSelected.splice( ArrayTypeInfoSelected.indexOf(chbx.attr('id')), 1);
             }
         });
-        fnrsSelected = _.uniq(fnrsSelected); /// Pour supprimer les doublons
+        ArrayTypeInfoSelected = _.uniq(ArrayTypeInfoSelected); /// Pour supprimer les doublons
     }
-    /// Affichage nb de fnr(s) sélectionné(s)
-    $('#NbFnrSelected').text(fnrsSelected.length);
-    
-    console.log(fnrsSelected); //TEST
+    return ArrayTypeInfoSelected;
 }
+
+
 
 
 ///--- Ajout/suppression d'une class pour faciliter visuellement l'identification des cases cochées dans popin  ---///
@@ -257,11 +356,23 @@ function AddClassSelected(Chbx) {
     Chbx.closest('span').toggleClass('Selected', Chbx.is(':checked'));
 }
 
+///--- Pour désélectionner ttes les checkboxs et retirer les marqueurs visuels ---///
+function UnselectCheckboxes(DOMelemPopin) {
+    $(DOMelemPopin + ' li input[type="checkbox"]').removeAttr('checked');
+    $(DOMelemPopin + ' li span').removeClass('Selected');
+}
+
+///--- Réinitialisation bouton de filtre qui sert à n'afficher que les etbs dispos ---///
+function ReinitBtFiltresEtbsDispos() {
+    $('#BtFiltreEtbsDispos span[data-label="TxtBt_Filtered"]').removeClass('Hidden');
+    $('#BtFiltreEtbsDispos span[data-label="TxtBt_NoFilter"], #BtFiltreEtbsDispos i.NoFilter').addClass('Hidden');
+}
+
 
 
 ///--- Qd ouverture popin exclusion fnrs : Récupération des datas propres à l'établissement (cats et fnrs auxquels il n'a pas le droit + fnrs déjà exclus) ---///
-function GetDataPopin(IdAccord, IdEtb) {
-    /// Récupération des catalogues auxquels l'etbl. n'a pas droit pour les mettre n disabled dans la popin
+function GetDataPopinFnrsAexclure(IdAccord, IdEtb) {
+    /// Récupération des catalogues auxquels l'etbl. n'a pas droit pour les mettre en disabled dans la popin
     $.ajax({
         method: "GET",
         url: "/RechercheAccords/Marches/" + IdAccord + "/" + IdEtb,        
@@ -283,6 +394,7 @@ function GetDataPopin(IdAccord, IdEtb) {
         /// ... + Coche des fnrs déjà exclus
         data.FnrsExclus.forEach(function(el) {
             $('.Popin_ExclusionFnrs #LstFnrs input[id="' + el.CFR + '"]').prop('checked', el.ExclureFrs);
+            if (el.ExclureFrs == true) { TEMP_fnrsSelected.push(el.CFR); } // tableau pour bt 'Annulation' et bt Close 
         });
         /// et on Rempli le tableau des idfnr sélectionnés pour inscription dans l'objet global à passer coté serveur au moment de la validation de la ligne
         var chbxsFnrsCoches = $('.Popin_ExclusionFnrs #LstFnrs input[type="checkbox"]:checked');
@@ -336,9 +448,46 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
 
 
 
+///--- Quand ouverture popin 'Ajout d'un établissement ---///
+function GetDataPopinAddEtablissement(IdAccord) {
+    $.ajax({
+        method: "GET",
+        url: "/RechercheAccords/AjoutEtb/" + IdAccord,        
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        beforeSend: function () {
+            $('.Masque, .WrapLoader').removeClass('Hidden');
+        }
+    })
+    .done(function (data) {
+        /// Contruction de la liste des checkbox d'établissements
+        var DataLocation = $('.Popin_AjoutEtablissement #LstAjoutEtbs ul');
+
+        var i = 0;
+        DataLocation.empty();
+        var htmlListeEtbs = "";
+        data.ListeAjoutEtablissements.forEach(function(el) {
+            htmlListeEtbs += '<li><span><input type="checkbox" id="' + el.EtablissementId + '" value="' + el.EtablissementId + '" ' + (el.EstDansUnAccord ? 'disabled="disabled"' : '') + '  autocomplete="off" ><label for="' + el.EtablissementId + '">' + el.NomEtablissement + ' (' + el.cc + ')<br />' + el.Ville + '</label></span></li>';
+        });
+        DataLocation.append(htmlListeEtbs);
+
+        /// Apparition encart exclusion des fnrs
+        $('.WrapLoader').addClass('Hidden');
+        $('.Popin_AjoutEtablissement').addClass('Display');
+
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        DisplayError(jqXHR.responseText);
+    });
+}
+
+
+
+
+
 ///--- A appeler qd click sur 'Undo' ou bien sur Enregistrement Modif ---///
 function ReinitialisationPopin() {
-    //FlagOpenPopin = false; /* */
+    FlagActivePopin = false;    TEMP_fnrsSelected = [];//
     fnrsSelected = []; /// On vide le tableau 'fnrsSelected'
     $('.Popin_ExclusionFnrs input[type="checkbox"]').prop('checked', false).prop('disabled', true);/// On remet à enable toutes les checkboxes + on décoche toutes les checkboxes
     $('.Popin_ExclusionFnrs li span').removeClass('Selected'); /// Retrait indicateur visuelle de sélection
@@ -358,7 +507,6 @@ function Mdf() {
         ThisLgn.addClass('Hidden');
 
         $('.bandeauHaut input[type="text"]').prop('disabled', true); /// Désactivation des chps dans BandeauHaut       
-        //$('.Bt_Modif, .Bt_Suppr, .Bt_Details').addClass('Disabled'); /// Désactivation des boutons
         $('.Bt_Modif, .Bt_Suppr, .Bt_Add').addClass('Disabled'); /// Désactivation des boutons
         $('.Bt_Modif').off('click', Mdf);
         
@@ -452,6 +600,7 @@ function Mdf() {
 
 }
 
+
 ///--- Fonction pour supprimer l'accord entier ou bien simplement la ligne établissement dans l'accord, selon la ligne qui a été cliquée ---///
 function Suppr() {
     var Id_Lgn = GetLgnID(this);
@@ -484,7 +633,7 @@ function Suppr() {
                 data: { IdAccordASuppr: IdAccord_aSuppr, IdEtbAccordASuppr: IdEtb_aSuppr, ElementASuppr: ElemToDelete },
                 contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                 beforeSend: function () {
-                    $('.Masque').removeClass('Hidden'); /// Ajout masque
+                    Masque.removeClass('Hidden'); /// Ajout masque
                 }
             })
             .done(function (data) {
@@ -503,7 +652,20 @@ function Suppr() {
                             $(this).remove();
                         });
 
-                    } else if (ElemToDelete == 'etablissement') {
+                    } else if (ElemToDelete == 'etablissement') {           
+                        
+                        ///////--- ATTENTION : A CHECKER => Pas sûr que l'on ait besoin dans 'RechercheAccordController.js' d'appeler Proc. stock. ---/////////
+                        ///////--- pour savoir si on peut activer le bouton ou pas puisque dans notre cas précis ici, il doit toujours être activé ---/////////
+                        ///////--- car si on a pu cliquer sur bt Suppression d'établissement, cela signifie que 
+                        ///////--- 1. c'est un accord de groupe, 
+                        ///////--- 2. qu'on est pas limité en droits d'accès, 
+                        ///////--- 3. que la réversion n'est pas encore validée et 
+                        ///////--- 4. que l'accord n'a forcément pas tous les établissments de son/ses groupe(s)
+                        /// Pour activer ou non le bouton d'ajout
+                        //console.log('data.ActivationBtAddEtb : ' + data.ActivationBtAddEtb); //TEST
+                        if(data.ActivationBtAddEtb == 0) { $('.Bt_Add').removeClass('Disabled'); };
+                        ///////--- FIN ---/////////
+                    
                         /// Pour changer le nb total d'étbl.
                         $('#NbTotalEtbs > span').text(parseInt($('#NbTotalEtbs > span').text()) - 1);
 
@@ -532,7 +694,7 @@ function Suppr() {
 
             })
             .always(function () {
-                $('.Masque').addClass('Hidden'); /// Retrait masque
+                Masque.addClass('Hidden'); /// Retrait masque
             });
 
         }
@@ -544,16 +706,10 @@ function Suppr() {
 }
 
 
-///--- Fctions à faire ds un 2eme temps ---///
-//function Dtls() {}
-///--- FIN ---///
-
-
 ///--- Quand click sur bouton de validation (bt vert avec coche) après modif : Validation des champs de saisie ---///
 function ValidModifs() {
     var Id_Lgn = GetLgnID(this);
 
-    //var ValSelectTypeTx = $('.LgnAccordSection .LstAdh_saisieTypeTx option:selected').val(); /// Pour déterminer le type de taux sélectionné (Fixe ou variable)
     var ValSelectTypeTx = (Modif_LgnAccord_AccordSection > 0 ? $('.LgnAccordSection .LstAdh_saisieTypeTx option:selected').val() : (Modif_LgnAccord_EtbSection > 0 ? $('.LgnAccordSection .LstAdh_TypeTx').attr('data-TypeTx') : -1) ); /// Pour déterminer le type de taux sélectionné (Fixe ou variable)
     var ChpSaisieTxRev = $('.LgnAccordSection .LstAdh_SaisieTx > input[type="text"]');    
     var ChpSaisieTxEDI = $('#' + Id_Lgn + ' .LstAdh_SaisieTxAdd > input[type="text"]'); /// Si n'existe pas (cas lgn Etb sans Taux EDI), ne bug pas
@@ -650,7 +806,7 @@ function ValidModifs() {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(InfosLgnModifiee),
         beforeSend: function () {
-            $('.Masque').removeClass('Hidden'); /// Ajout masque pdt traitement
+            Masque.removeClass('Hidden'); /// Ajout masque pdt traitement
         } 
     })
     .done(function (data) {
@@ -681,8 +837,7 @@ function ValidModifs() {
                 var html_lgnEtablissementAccord = $(html).find(LgnEtbSection_EnCoursDeModif);
                 $(LgnEtbSection_EnCoursDeModif).replaceWith(html_lgnEtablissementAccord);
 
-                //$('.Bt_Modif, .Bt_Suppr, .Bt_Details, .Lgn').removeClass('Disabled'); /// Réactivation Boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
-                $('.Bt_Modif, .Bt_Suppr, .Lgn').removeClass('Disabled'); /// Réactivation Boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
+                $('.Bt_Modif, .Bt_Suppr, .Bt_Add, .Lgn').removeClass('Disabled'); /// Réactivation Boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
                 if($('.LgnEtbSection').length == 1) { $('.LgnEtbSection .Bt_Suppr').addClass('Disabled');  } /// Surcharge : Si 1 seul etb dans l'accord, on interdit la possibilité de le supprimer
             }
 
@@ -695,7 +850,7 @@ function ValidModifs() {
             Modif_LgnAccord_AccordSection = -1;
             Modif_LgnAccord_EtbSection = -1;
 
-            $('.Masque').addClass('Hidden'); /// Retrait masque
+            Masque.addClass('Hidden'); /// Retrait masque
 
         }///
     
@@ -717,8 +872,7 @@ function Undo() {
     $('#' + Id_Lgn + ' .Bt_Modif').removeClass('Hidden');
 
     $('.bandeauHaut input[type="text"]').prop('disabled', false); /// Réactivation moteur de recherche
-    /* Ajouté le 13/07/17 */$(InterdictionEcriture == true ? '.LgnEtbSection .Bt_Modif, .Lgn' : '.Bt_Modif, .Bt_Suppr, .Lgn').removeClass('Disabled'); /// Réactivation boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
-    /* Mis en comm. le 13/07/17 *///$('.Bt_Modif, .Bt_Suppr, .Lgn').removeClass('Disabled'); /// Réactivation boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
+    $(InterdictionEcriture == true ? '.LgnEtbSection .Bt_Modif, .Lgn' : '.Bt_Modif, .Bt_Suppr ' + ($('.Lgn_Accord').attr('data-accordgroupe') == 'true' ? ', .Bt_Add' : '') + ', .Lgn').removeClass('Disabled'); /// Réactivation boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
     if($('.LgnEtbSection').length == 1) { $('.LgnEtbSection .Bt_Suppr').addClass('Disabled');  } /// Surcharge : Si 1 seul etb dans l'accord, on interdit la possibilité de le supprimer
     $('#' + Id_Lgn).removeClass('ModifEnCours'); /// Retrait du marqueur identifiant la ligne en cours de modif
 
@@ -762,6 +916,19 @@ function Undo() {
 
 
 
+///--- Quand click sur bouton Ajout d'établissement  ---///
+function Add() {
+    var NomAccord = $('.LgnAccordSection .NomEtblGrp').text();
+    $('.Popin_AjoutEtablissement .TopPart').html('<div class="TxtIntro">Ajouter un/des établissement(s) à l\'accord :</div><div class="NomAccord">' + NomAccord + '</div>'); /// Insertion nom du groupe ds entete Popin
+    GetDataPopinAddEtablissement(Id_Accord); /// Appel fonction pour aller chercher les infos et remplir la Popin avant de l'afficher
+}
+
+
+function RecordEtablissements(Etbs) {
+
+}
+
+
 function GetLgnID(Bt) {
    return $(Bt).closest('.Lgn').attr('id');
 }
@@ -774,12 +941,9 @@ function CreateEnteteFlottante() {
 
 function SearchAccordQuery(Saisie) {
 
-    /// TEST : Ajouté le 31/07/17
     /// On supprime les requetes AJAX en cours
     $(Pool_xhr).each(function (idx, jqXHR) { jqXHR.abort(); });
     Pool_xhr = [];
-    /// FIN TEST : Ajouté le 31/07/17
-
 
     $.ajax({
         method: "POST",
@@ -789,12 +953,12 @@ function SearchAccordQuery(Saisie) {
         ifModified: true,
         beforeSend: function (jqXHR) {
             Pool_xhr.push(jqXHR);
-            $('.masque').removeClass('Hidden');
+            Masque.removeClass('Hidden');
         }
     })
     .done(function (data) {
         
-        $('.masque').addClass('Hidden'); /// Retrait masque
+        Masque.addClass('Hidden'); /// Retrait masque
 
         //console.log("La data est : " + data); //TEST
         if($.trim(data) != "") {
@@ -826,7 +990,7 @@ function FocusLgn() {
 
 
 function ClosePopin(popin) {
-    $('.Masque').addClass('Hidden');
+    Masque.addClass('Hidden');
     $(popin).removeClass('Display');
 }
 
@@ -857,7 +1021,7 @@ function Init_InfosLgnModifiee() {
 
 
 
-/// 12/07/2017
+
 function DisplayScreenAccesRefuse(html) {
     /// Le code '$(html).find('#Wrapper_Encart')' ne focntionne pas, donc boucle sur le DOM
     var ContenuPgAccesRefuse = null;
@@ -872,7 +1036,7 @@ function DisplayScreenAccesRefuse(html) {
 
 /// Pour affichage de l'erreur dans un encart suite à requete AJAX
 function DisplayError(jqXHRresponseText) {
-    $('.Masque').removeClass('Hidden'); /// Apparition masque
+    Masque.removeClass('Hidden'); /// Apparition masque
 
     var Thehtml = $.parseHTML(jqXHRresponseText);
     var html_PgErreur = $(Thehtml).find("#Encart");
