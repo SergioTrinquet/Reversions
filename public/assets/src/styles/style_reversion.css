@@ -1209,9 +1209,9 @@ button.ValidSearch:hover {
     width: 94px;
 }
 .ListeEtbl .Bt_Add:after {
-    content: "Ajouter un établissement";
-    margin: 26px 0 0 -25px;
-    width: 70px;
+    content: "Ajouter un/des établissement(s)";
+    margin: 23px 0 0 -39px;
+    width: 94px;
 }
 .ListeEtbl .Bt_Details:after {
     content: "Détail calcul réversion";
@@ -1302,7 +1302,8 @@ button.ValidSearch:hover {
 .creationAccordReversion .MaskPopin.Hidden, #PopinCreationAccord_Etp2 .MsgGrpPasDispo.Hidden, #PopinCreationAccord_Etp2 .MsgEtbPasDispo.Hidden,
 #EncartEtape2TypeAccord.Hidden,
 .ErreurRetourAjax.Hidden,
-.WrapLoader.Hidden {
+.WrapLoader.Hidden,
+#LstAjoutEtbs li.Hidden, #BtFiltreEtbsDispos [data-label].Hidden, #BtFiltreEtbsDispos i.NoFilter.Hidden {
         display: none;
 }
 /*================ Fin Pg Création / consultation des réversions ==============*/
@@ -1567,7 +1568,8 @@ button.ValidSearch:hover {
     margin-left: 17px;
 }
 
-.NomEtblGrp {
+.NomEtblGrp,
+.NomAccord {
     font-weight: bold;
 }
 .LgnEtbSection .NomEtblGrp {
@@ -1656,6 +1658,16 @@ button.ValidSearch:hover {
     color: #ff8599;
 }
 
+.LstAdh_RevValidee {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+.LstAdh_RevValidee.oui { background-color: #00b916 ; }
+.LstAdh_RevValidee.non { background-color: #ff0000; }
+
 
 .Popin {
     position: fixed;
@@ -1667,22 +1679,27 @@ button.ValidSearch:hover {
     transition: all 0.25s;
     background-color: #485577;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    
+    top: -170%;
+    min-height: 400px;
 }
 .Popin_ExclusionFnrs {
     width: 50%;
     min-width: 660px;
     height: calc(100% - 200px);
-    min-height: 400px;
     margin: 110px 25%;
-    top: -170%;
 }
 .Popin_FnrsExclus {
     width: 40%;
     min-width: 500px;
     height: calc(100% - 400px);
-    min-height: 400px;
     margin: 170px 30%;
-    top: -170%;
+}
+.Popin_AjoutEtablissement {
+    width: 40%;
+    min-width: 500px;
+    height: calc(100% - 340px);
+    margin: 170px 30%;
 }
 .Popin.Display {
     top: 0%;
@@ -1769,13 +1786,19 @@ button.ValidSearch:hover {
     padding: 12px;
     min-height:85px;
 }
+.Popin_AjoutEtablissement .TopPart {
+    padding: 12px;
+    min-height:65px;
+}
 .Popin_ExclusionFnrs .TopPart > div,
-.Popin_FnrsExclus .TopPart > div {
+.Popin_FnrsExclus .TopPart > div,
+.Popin_AjoutEtablissement .TopPart > div {
     font-size: 14px;
     line-height: 14px;
 }
 .Popin_ExclusionFnrs .TopPart > div.TxtIntro,
-.Popin_FnrsExclus .TopPart > div.TxtIntro {
+.Popin_FnrsExclus .TopPart > div.TxtIntro,
+.Popin_AjoutEtablissement .TopPart > div.TxtIntro {
     margin-bottom: 10px;
     font-style: italic;
 }
@@ -1793,6 +1816,13 @@ button.ValidSearch:hover {
 .Popin_FnrsExclus .CentralPart div { 
     text-align: center;
     margin: 6px 0;
+}
+
+.Popin_AjoutEtablissement .CentralPart { 
+    display: block; 
+    height: calc(100% - 120px); 
+    width: 100%;
+    padding: 30px 40px; padding: 60px 40px 30px 40px;
 }
 
 .PopinDetailsExclusionReversion .CentralPart {
@@ -1826,26 +1856,66 @@ button.ValidSearch:hover {
     height: calc(100% - 70px);
 }
 
-.Popin_ExclusionFnrs ul {
+.Popin_ExclusionFnrs ul,
+.Popin_AjoutEtablissement ul {
     list-style: outside none none;
     margin: 0 5px;
     padding: 0;
 }
-.Popin_ExclusionFnrs li {
+.Popin_ExclusionFnrs li,
+.Popin_AjoutEtablissement li {
     text-align: center;
     margin: 4px;
 }
-.Popin_ExclusionFnrs li > span {
+.Popin_ExclusionFnrs li > span,
+.Popin_AjoutEtablissement li > span {
     border-radius: 2px;
     display: inline-block;
     padding: 5px 10px;
     line-height: 14px;
 }
 .Popin_ExclusionFnrs li:first-child,
-.Popin_ExclusionFnrs li:last-child {
+.Popin_ExclusionFnrs li:last-child,
+.Popin_AjoutEtablissement li:first-child,
+.Popin_AjoutEtablissement li:last-child {
     margin:0;
 }
 
+.Popin_AjoutEtablissement #LstAjoutEtbs {    
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+#BtFiltreEtbsDispos {
+    text-align: center;
+    margin: -40px 0 20px 0;
+}
+#BtFiltreEtbsDispos i.fa-filter {
+    font-size: 14px;
+}
+#BtFiltreEtbsDispos > span {
+    background-color:#eff2f9; 
+    font-size: 12px; 
+    display: inline-block; 
+    padding: 2px 12px; 
+    border-radius: 2px; 
+    color: #29334E;
+    font-weight: bold;
+    cursor: pointer;
+    width: 400px;
+    line-height: 2em;
+
+    padding: 0 12px; 
+    box-shadow: 0 0px 0px 3px rgba(255,255,255,0.4);
+}
+#BtFiltreEtbsDispos > span:hover {
+    background-color:#ffffff; 
+}
+#BtFiltreEtbsDispos i.NoFilter {
+    font-size: 1.7em;
+    color: #ce0101;
+}
 
 /*=== popin sur page de liste des factures ===*/
 .TitrePopin {
@@ -2482,7 +2552,8 @@ i#DeleteDatepickerStart:hover {
 }
 #PopinCreationAccord_Etp2 li label,
 #PopinCreationAccord_Etp3 li label,
-.Popin_ExclusionFnrs li label { 
+.Popin_ExclusionFnrs li label,
+.Popin_AjoutEtablissement li label { 
     margin: 0 0 0 7px; 
     cursor: pointer;
     font-size: 13px;
@@ -2501,7 +2572,8 @@ i#DeleteDatepickerStart:hover {
 }
 #PopinCreationAccord_Etp2 li > span.Selected,
 #PopinCreationAccord_Etp3 li > span.Selected,
-.Popin_ExclusionFnrs li > span.Selected {
+.Popin_ExclusionFnrs li > span.Selected,
+.Popin_AjoutEtablissement li > span.Selected {
     background-color: #29334E;
 }
 #PopinCreationAccord_Etp2 input[type="checkbox"],
@@ -2509,7 +2581,9 @@ i#DeleteDatepickerStart:hover {
 #PopinCreationAccord_Etp2 input[type="checkbox"]:disabled,
 #PopinCreationAccord_Etp2 input[type="checkbox"]:disabled + label,
 .Popin_ExclusionFnrs input[type="checkbox"]:disabled,
-.Popin_ExclusionFnrs input[type="checkbox"]:disabled + label {
+.Popin_ExclusionFnrs input[type="checkbox"]:disabled + label,
+.Popin_AjoutEtablissement input[type="checkbox"]:disabled,
+.Popin_AjoutEtablissement input[type="checkbox"]:disabled + label  {
     opacity: 0.4;
     cursor: not-allowed;
     text-decoration: line-through;
