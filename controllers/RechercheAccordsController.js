@@ -79,14 +79,15 @@ module.exports = function(app) {
     });
 
 
-    /////////----------- EN COURS DE DEV. 11/12/17 -----------/////////
+
     /// Lorsque clic sur ajout d'un établissement dans ligne Accord
-    app.get('/RechercheAccords/AjoutEtb/:idAccord', userRightsAccess, function(req, res, next) {
+    app.get('/RechercheAccords/GetListeEtbs/:idAccord', userRightsAccess, function(req, res, next) {
         GetListeEtablissements(function(recordset) {
             res.send({ListeAjoutEtablissements: recordset[0]});
         }, req.params.idAccord, next);
     });
-    
+
+
 
     /// Lorsque clic sur un lien dans l'autocomplete qui apparait suite à une recherche dans le moteur en haut de page : Obtention de ttes les infos pour afficher l'accord et ses établissements
     app.get('/RechercheAccords/:idAccord?/:EtbId?', userRightsAccess, function(req, res, next) {
@@ -106,14 +107,14 @@ module.exports = function(app) {
                 newRecordset = FormatData(recordset); /// Fonction pour formater les données comme on veut pour affichage ds vue
                 //console.log(colors.bgWhite.blue(JSON.stringify(newRecordset))); //TEST
 
-                /**/if(limitationAcces) {
+                if(limitationAcces) {
 
                     res.render('RechercheAccords', { 
                         dataAccords: newRecordset,
                         etbId: req.params.EtbId
                     });
 
-                } else {/**/
+                } else {
 
                     /// Récupération des data pour alimenter liste déroulante des taux...
                     getTypeTaux(function(recordset) {
@@ -129,8 +130,7 @@ module.exports = function(app) {
                                 /// ...Et requete pour savoir si on active ou pas le bouton d'ajout d'établissement sur la ligne Accord dans la vue
                                 activateButtonAddEtablissements(function(recordset){ ///
                                     btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet; ///  
-                                    //console.log("btAddEtbActivation : " + btAddEtbActivation);
-
+                                    
                                     res.render('RechercheAccords', { 
                                         dataAccords: newRecordset, 
                                         listeTypeTaux: recordset_Tx, 
@@ -148,7 +148,7 @@ module.exports = function(app) {
 
                     }, next);
 
-                /**/}/**/
+                }
                 
             }, req.params.idAccord, next);
 
@@ -237,6 +237,23 @@ module.exports = function(app) {
     });
 
 
+
+    /// Ajout d'établissement(s) dans l'accord
+    app.post('/RechercheAccords/AddEtbs/:idAccord', userRightsAccess, function(req, res, next) {
+        //console.log("PRESENT ds fct° 'Ajout d'etablissement' : req.body => " + JSON.stringify(req.body)); //TEST
+        //console.log("req.body.ListeEtablissements => " + JSON.stringify(req.body.ListeEtablissements)); //TEST
+        console.log("PRESENT ds fct° 'Ajout d'etablissement' : req.body => " + req.body); //TEST
+
+        if (!req.body) return res.sendStatus(400);
+
+        var IdAccord = req.params.idAccord;
+
+        AddEtablissementsAccord(function() {
+            logger.log('info', "Ajout d'établissement(s) dans l'accord (idAccord :" + IdAccord + ")", {Login: app.get('userName'), data: req.body}); 
+            res.redirect(req.get('referer')); // ou 'res.redirect('back');'   /// Pour rediriger vers le app.get avec l'URL du referer              
+        }, IdAccord, req.body, next);
+    });   
+    
 
 
     /// Partie suppression sur une ligne Accord ou Etablissement avec methode 'DELETE' (existait déjà avec méthode 'POST') => FONCTIONNE !!!
@@ -906,16 +923,42 @@ function activateButtonAddEtablissements(callback, idAccord, next) {
         .input('AccordReversionId', sql.Int, idAccord)
         .execute('ReversionApp.ps_AccordGroupementEstComplet')
         .then(function(recordset) {
-            console.log(colors.bgCyan.white(JSON.stringify(recordset))); //TEST
+            //console.log(colors.bgCyan.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })
         .catch(function(err) {
-            next(new Error("Requete permettant de savoir si le bouton 'Ajout d'établissement(s) doit être actif ou pas => " + err));
+            next(new Error("Requete permettant de savoir si le bouton 'Ajout d'établissement(s)' doit être actif ou pas => " + err));
         });
 
     }).catch(function(err) {
-        next(new Error("Requete permettant de savoir si le bouton 'Ajout d'établissement(s) doit être actif ou pas => " + err));
+        next(new Error("Requete permettant de savoir si le bouton 'Ajout d'établissement(s)' doit être actif ou pas => " + err));
     });    
+}
+
+
+///--- Pour enregistrer le ou les nouveaux établissement(s) ajouté(s) via la popin d'ajout d'établissement ---///
+function AddEtablissementsAccord(callback, idAccord, listeEtbs, next) {
+    var conn = new sql.Connection(config);   
+    conn.connect().then(function() {
+        
+        var request = new sql.Request(conn);
+
+        request
+        .input('AccordReversionId', sql.Int, idAccord)
+        .input('Liste_EtablissementId', sql.VarChar(sql.MAX), listeEtbs.join(','))
+        .execute('ReversionApp.ps_AjoutEtablissementAccord')
+        .then(function(recordset) {
+            //callback(recordset);
+            callback();
+            conn.close();
+        })
+        .catch(function(err) {
+            next(new Error("Requete permettant d'enregistrer un ou plusieurs établissements ajoutés dans un accord => " + err));
+        });
+
+    }).catch(function(err) {
+        next(new Error("Requete permettant d'enregistrer un ou plusieurs établissements ajoutés dans un accord => " + err));
+    });
 }
 

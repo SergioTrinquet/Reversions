@@ -96,7 +96,7 @@
             </div>
         </div>
         <% } %>
-        <!-- FIN 08/12/17 -->
+        <!-- FIN Popin pour ajout d'un établissement -->
 
 
 
@@ -114,7 +114,7 @@
                     <div>
 
                         <i class="fa fa-search IconSearch"></i>
-                        <input type="text" class="SearchFieldBandeau" id="SearchEtabl" name="" value="" placeholder="Saisissez un nom d'accord, d'établissement ou de groupement, CC, code postal, ville" />
+                        <input type="text" class="SearchFieldBandeau" id="SearchEtabl" name="" value="" placeholder="Saisissez un nom d'accord, d'établissement ou de groupement, CC, code postal, ville" autocomplete="off" />
                         <!--<button type="button" class="ValidSearch"><i class="fa fa-search"></i></button>-->
                         
                         <div id="Autocomplete" class="Hidden" data-typeautocomplete="rechercheAccords" >
@@ -139,6 +139,11 @@
             </div>
             
             <div class="blocContenu">
+
+                <div id="CommentMoteurRecherche">
+                    <span id="TextNoResults" class="Hidden"><i class="fa fa-exclamation-circle"></i> Pas de résultat(s) pour '<span></span>'</span>
+                    <span id="TxtTooShort" class="Hidden"><i class="fa fa-exclamation-circle"></i> Votre recherche doit compter <span></span> caractères minimum</span>
+                </div>
 
                 <div class="MskTopListe"></div>
 

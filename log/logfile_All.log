@@ -287,3 +287,1494 @@ UserName is not defined
     at EventEmitter.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
     at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
     at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\CreationAccordController.js:15:13
+2017-12-20 16:58:00 373ms - error: Error: Récupération des catalogues auxquels l'établissement n'a pas droit => ConnectionError: Failed to connect to SERVDEVSQL:undefined in 15000ms
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:671:14
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+2017-12-20 17:00:43 746ms - info: Modification de la ligne Etablissement, avec validation de la popin 'Définir les marchés' (pour sélection fournisseurs à exclure) 
+{ Login: 'STRINQUET',
+  data: 
+   { NumeroAccord: 4802,
+     IsAccord: false,
+     IDetablissement: 23097,
+     DestinataireReversion: 
+      { NomPrenom: 'Mme Anne-Françoise BASQUIN',
+        Adresse1: '187 RUE PARADIS',
+        Adresse2: '',
+        Adresse3: '',
+        CP: '13006',
+        Ville: 'MARSEILLE' },
+     TypeTauxReversion: '1',
+     LibelleTypeTauxReversion: 'Fixe',
+     TauxReversion: null,
+     TauxReversionAdd: null,
+     ModificationExclusionFnrs: true,
+     ExclusionFnrs: [ '44020', '13104' ] } }
+2017-12-20 18:41:17 588ms - info: Modification de la ligne Etablissement, avec validation de la popin 'Définir les marchés' (pour sélection fournisseurs à exclure) 
+{ Login: 'STRINQUET',
+  data: 
+   { NumeroAccord: 4802,
+     IsAccord: false,
+     IDetablissement: 23097,
+     DestinataireReversion: 
+      { NomPrenom: 'Mme Anne-Françoise BASQUIN',
+        Adresse1: '187 RUE PARADIS',
+        Adresse2: '',
+        Adresse3: '',
+        CP: '13006',
+        Ville: 'MARSEILLE' },
+     TypeTauxReversion: '1',
+     LibelleTypeTauxReversion: 'Fixe',
+     TauxReversion: null,
+     TauxReversionAdd: null,
+     ModificationExclusionFnrs: true,
+     ExclusionFnrs: [ '13104', '44020', '32049' ] } }
+2017-12-20 18:42:00 111ms - info: Modification de la ligne Etablissement, avec validation de la popin 'Définir les marchés' (pour sélection fournisseurs à exclure) 
+{ Login: 'STRINQUET',
+  data: 
+   { NumeroAccord: 4802,
+     IsAccord: false,
+     IDetablissement: 23097,
+     DestinataireReversion: 
+      { NomPrenom: 'Mme Anne-Françoise BASQUIN',
+        Adresse1: '187 RUE PARADIS',
+        Adresse2: '',
+        Adresse3: '',
+        CP: '13006',
+        Ville: 'MARSEILLE' },
+     TypeTauxReversion: '1',
+     LibelleTypeTauxReversion: 'Fixe',
+     TauxReversion: null,
+     TauxReversionAdd: null,
+     ModificationExclusionFnrs: true,
+     ExclusionFnrs: [ '13104' ] } }
+2017-12-21 17:46:29 88ms - error: uncaughtException: Unexpected token } 
+{ date: 'Thu Dec 21 2017 17:46:29 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 21304,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37670912,
+        heapTotal: 20291584,
+        heapUsed: 10994392,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 288211.5312174 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:138',
+     '                                    });       ',
+     '                                    ^',
+     '',
+     'SyntaxError: Unexpected token }',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2017-12-21 18:01:07 300ms - error: ReferenceError: D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\views\RechercheAccords.ejs:233
+    231|                         <div>
+    232|                             <!--<div class="Bt_Add <%= (item.AccordGroupe ? '' : 'Disabled') %>"><i class="fa fa-plus"></i></div>-->
+ >> 233|                             <div class="Bt_Add <%= (item.AccordGroupe == false) || limitationAcces || item.ReversionValidee || (btAddEtbActivation == 1) ? 'Disabled' : '' %>"><i class="fa fa-plus"></i></div>
+    234|                         </div>
+    235|                     </div>    
+    236| 
+
+btAddEtbActivation is not defined
+    at eval (eval at compile (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:524:12), <anonymous>:267:103)
+    at Array.forEach (<anonymous>)
+    at eval (eval at compile (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:524:12), <anonymous>:179:20)
+    at returnedFn (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:555:17)
+    at tryHandleCache (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:203:34)
+    at View.exports.renderFile [as engine] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\ejs\lib\ejs.js:412:10)
+    at View.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\view.js:126:8)
+    at tryRender (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:639:10)
+    at Function.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\application.js:591:3)
+    at ServerResponse.render (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\response.js:960:7)
+2017-12-22 10:32:41 96ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '7069' }
+2017-12-22 10:34:18 866ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '5959' }
+2017-12-22 11:29:10 437ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '13498' }
+2017-12-22 11:31:11 253ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '12110' }
+2018-1-2 11:53:08 506ms - error: TypeError: req.body.join is not a function
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:244:89
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 14:23:22 568ms - error: TypeError: Cannot convert object to primitive value
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:244:78
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 15:32:09 575ms - error: uncaughtException: Unexpected token , 
+{ date: 'Tue Jan 02 2018 15:32:09 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 47736,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37892096,
+        heapTotal: 20291584,
+        heapUsed: 11013736,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1316952.0756405 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:945',
+     '        .input(\'\', sql., listeEtbs)',
+     '                       ^',
+     '',
+     'SyntaxError: Unexpected token ,',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 15:34:39 951ms - error: uncaughtException: Unexpected token ) 
+{ date: 'Tue Jan 02 2018 15:34:39 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 38844,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37916672,
+        heapTotal: 20291584,
+        heapUsed: 11010728,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1317102.4521864 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:251',
+     '    });   ',
+     '     ^',
+     '',
+     'SyntaxError: Unexpected token )',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 15:35:12 956ms - error: uncaughtException: Unexpected token ) 
+{ date: 'Tue Jan 02 2018 15:35:12 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 39608,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37998592,
+        heapTotal: 20291584,
+        heapUsed: 11011272,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1317135.4581266 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:251',
+     '    });   ',
+     '     ^',
+     '',
+     'SyntaxError: Unexpected token )',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 15:35:56 594ms - error: uncaughtException: Unexpected token ) 
+{ date: 'Tue Jan 02 2018 15:35:56 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 48308,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37949440,
+        heapTotal: 20291584,
+        heapUsed: 11010640,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1317179.0945653 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:251',
+     '    });   ',
+     '     ^',
+     '',
+     'SyntaxError: Unexpected token )',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 16:33:19 287ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET',
+  data: { 'ListeEtablissements[]': '13498' } }
+2018-1-2 16:43:58 59ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET',
+  data: { 'ListeEtablissements[]': '8382' } }
+2018-1-2 17:04:07 26ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:949:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:250:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:06:26 896ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:13:50 650ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:15:18 968ms - error: uncaughtException: Unexpected token ] 
+{ date: 'Tue Jan 02 2018 17:15:18 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 44220,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37703680,
+        heapTotal: 20291584,
+        heapUsed: 11012632,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1323141.4692535 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:245',
+     '        console.log("req.body.ListeEtablissements[] => " + req.body.ListeEtablissements[]); //TEST',
+     '                                                                                        ^',
+     '',
+     'SyntaxError: Unexpected token ]',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 17:16:01 961ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:16:29 624ms - error: uncaughtException: Unexpected token ] 
+{ date: 'Tue Jan 02 2018 17:16:29 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 38788,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37847040,
+        heapTotal: 20291584,
+        heapUsed: 11012792,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1323212.1253271 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:245',
+     '        console.log("req.body.ListeEtablissements => " + JSON.stringify(req.body.ListeEtablissements[])); //TEST',
+     '                                                                                                     ^',
+     '',
+     'SyntaxError: Unexpected token ]',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 17:16:48 840ms - error: TypeError: req.body.ListeEtablissements is not a function
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:245:82
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 17:17:09 974ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:18:23 988ms - error: uncaughtException: Unexpected token ] 
+{ date: 'Tue Jan 02 2018 17:18:23 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 41732,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37924864,
+        heapTotal: 20291584,
+        heapUsed: 11026856,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1323326.488825 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:245',
+     '        console.log("req.body.ListeEtablissements => " + req.body.ListeEtablissements[]); //TEST',
+     '                                                                                      ^',
+     '',
+     'SyntaxError: Unexpected token ]',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 17:18:41 33ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:19:37 432ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:23:23 683ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:26:32 362ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:28:08 569ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:29:45 468ms - error: SyntaxError: Unexpected token u in JSON at position 0
+    at JSON.parse (<anonymous>)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:245:63
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:30:07 44ms - error: uncaughtException: Unexpected token ] 
+{ date: 'Tue Jan 02 2018 17:30:07 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 34384,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37896192,
+        heapTotal: 20291584,
+        heapUsed: 11012648,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1324029.5449972 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:245',
+     '        console.log("req.body.ListeEtablissements => " + JSON.parse(req.body.ListeEtablissements[])); //TEST',
+     '                                                                                                 ^',
+     '',
+     'SyntaxError: Unexpected token ]',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 17:31:08 820ms - error: ReferenceError: ListeEtablissements is not defined
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:245:78
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 17:31:40 186ms - error: ReferenceError: ListeEtablissements is not defined
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:245:78
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 17:32:05 820ms - error: TypeError: Cannot read property 'join' of undefined
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:951:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:252:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:39:48 747ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '13498', '2483' ] }
+2018-1-2 17:42:47 895ms - error: TypeError: Cannot convert object to primitive value
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:247:78
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 17:43:46 611ms - error: TypeError: listeEtbs.join is not a function
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:953:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:254:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:47:28 192ms - error: SyntaxError: Unexpected token u
+    at parse (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\body-parser\lib\types\json.js:83:15)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\body-parser\lib\read.js:116:18
+    at invokeCallback (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\raw-body\index.js:262:16)
+    at done (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\raw-body\index.js:251:7)
+    at IncomingMessage.onEnd (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\raw-body\index.js:307:7)
+    at emitNone (events.js:106:13)
+    at IncomingMessage.emit (events.js:208:7)
+    at endReadableNT (_stream_readable.js:1056:12)
+    at _combinedTickCallback (internal/process/next_tick.js:138:11)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+2018-1-2 17:48:47 619ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '2483', '11731' ] }
+2018-1-2 17:55:22 891ms - error: TypeError: listeEtbs.join is not a function
+    at AddEtablissementsAccord (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:953:98)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:254:9
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+2018-1-2 17:56:40 271ms - error: TypeError: Cannot read property '0' of undefined
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:245:101
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 17:57:31 418ms - error: uncaughtException: Unexpected token ] 
+{ date: 'Tue Jan 02 2018 17:57:31 GMT+0100 (Paris, Madrid)',
+  process: 
+   { pid: 27472,
+     uid: null,
+     gid: null,
+     cwd: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions',
+     execPath: 'C:\\Program Files\\nodejs\\node.exe',
+     version: 'v8.9.2',
+     argv: 
+      [ 'C:\\Program Files\\nodejs\\node.exe',
+        'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app',
+        'app.js' ],
+     memoryUsage: 
+      { rss: 37711872,
+        heapTotal: 20291584,
+        heapUsed: 11013000,
+        external: 24992 } },
+  os: { loadavg: [ 0, 0, 0 ], uptime: 1325673.9189565 },
+  trace: 
+   [ { column: 10,
+       file: 'vm.js',
+       function: 'createScript',
+       line: 80,
+       method: null,
+       native: false },
+     { column: 10,
+       file: 'vm.js',
+       function: 'Object.runInThisContext',
+       line: 139,
+       method: 'runInThisContext',
+       native: false },
+     { column: 28,
+       file: 'module.js',
+       function: 'Module._compile',
+       line: 599,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'module.js',
+       function: 'Module._extensions..js',
+       line: 646,
+       method: '.js',
+       native: false },
+     { column: 32,
+       file: 'module.js',
+       function: 'Module.load',
+       line: 554,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'module.js',
+       function: 'tryModuleLoad',
+       line: 497,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'module.js',
+       function: 'Module._load',
+       line: 489,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'module.js',
+       function: 'Module.require',
+       line: 579,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/module.js',
+       function: 'require',
+       line: 11,
+       method: null,
+       native: false },
+     { column: 31,
+       file: 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js',
+       function: null,
+       line: 8,
+       method: null,
+       native: false } ],
+  stack: 
+   [ 'D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\controllers\\RechercheAccordsController.js:245',
+     '        console.log("req.body.ListeEtablissements => " + JSON.stringify(req.body.ListeEtablissements[][])); //TEST',
+     '                                                                                                     ^',
+     '',
+     'SyntaxError: Unexpected token ]',
+     '    at createScript (vm.js:80:10)',
+     '    at Object.runInThisContext (vm.js:139:10)',
+     '    at Module._compile (module.js:599:28)',
+     '    at Object.Module._extensions..js (module.js:646:10)',
+     '    at Module.load (module.js:554:32)',
+     '    at tryModuleLoad (module.js:497:12)',
+     '    at Function.Module._load (module.js:489:3)',
+     '    at Module.require (module.js:579:17)',
+     '    at require (internal/module.js:11:18)',
+     '    at Object.<anonymous> (D:\\2017_ProjetReversion\\20171503_ProjetReversion_NodeJS_withGit\\GestionReversions\\app.js:8:31)' ] }
+2018-1-2 18:01:56 690ms - error: TypeError: Cannot convert object to primitive value
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:247:78
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at module.exports (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\app_modules\userRights.js:51:9)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\layer.js:95:5)
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:277:22
+    at param (D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\node_modules\express\lib\router\index.js:349:14)
+2018-1-2 18:02:39 289ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '11731', '2491' ] }
+2018-1-2 18:04:42 885ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '2491', '12110' ] }
+2018-1-2 18:06:50 865ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '8382', '12110' ] }
+2018-1-2 18:18:20 750ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '12110' ] }
+2018-1-2 18:20:42 456ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '7216' }
+2018-1-2 18:20:56 872ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '7037' }
+2018-1-2 18:23:08 124ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '7216' ] }
+2018-1-3 09:43:27 98ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '13318' }
+2018-1-3 09:49:11 854ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '13697' }
+2018-1-3 09:49:31 46ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '7069' ] }
+2018-1-3 10:13:26 974ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '13697' ] }
+2018-1-3 10:20:46 302ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '13024' }
+2018-1-3 10:20:49 663ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '13697' }
+2018-1-3 10:21:10 114ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '13697' ] }
+2018-1-3 10:28:35 497ms - info: Modification de la ligne Accord 
+{ Login: 'STRINQUET',
+  data: 
+   { NumeroAccord: 4801,
+     IsAccord: true,
+     IDetablissement: null,
+     DestinataireReversion: 
+      { NomPrenom: 'M. Stéphane ANCEL',
+        Adresse1: 'GROUP. ACHAT MUTUALISTE',
+        Adresse2: '255 RUE DE VAUGIRARD',
+        Adresse3: '',
+        CP: '75015',
+        Ville: 'PARIS' },
+     PeriodeDebut: '2016-01-01',
+     PeriodeFin: '2016-12-31',
+     TypeTauxReversion: '1',
+     LibelleTypeTauxReversion: 'Fixe',
+     TauxReversion: '35',
+     TauxReversionAdd: '35',
+     ModificationExclusionFnrs: false,
+     ExclusionFnrs: [] } }
+2018-1-3 10:28:44 588ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '7216' }
+2018-1-3 10:28:59 592ms - error: Error: Suppression d'un établissement dans un accord => ConnectionError: Failed to connect to SERVDEVSQL:undefined in 15000ms
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:792:14
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+2018-1-3 10:29:37 124ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '7216' }
+2018-1-3 10:29:45 674ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '6976' }
+2018-1-3 10:30:00 49ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '7216' ] }
+2018-1-3 10:33:02 181ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '13029' }
+2018-1-3 10:33:09 833ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4801',
+  IdEtabl_ASuppr: '8382' }
+2018-1-3 10:33:53 533ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '6976', '13024' ] }
+2018-1-3 10:51:31 302ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4801) 
+{ Login: 'STRINQUET', data: [ '13318' ] }
+2018-1-3 14:50:57 885ms - error: Error: Requete permettant d'enregistrer un ou plusieurs établissements ajoutés dans un accord => RequestError: Procedure or function 'ps_AjoutEtablissementAccord' expects parameter '@Liste_EtablissementId', which was not supplied.
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:971:18
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+2018-1-3 15:30:33 376ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4802) 
+{ Login: 'STRINQUET', data: [ '23656' ] }
+2018-1-3 15:30:40 206ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23467' }
+2018-1-3 15:30:57 410ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23187' }
+2018-1-3 15:31:18 417ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23097' }
+2018-1-3 15:31:28 883ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4802) 
+{ Login: 'STRINQUET', data: [ '23097', '23187' ] }
+2018-1-3 15:31:54 957ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23097' }
+2018-1-3 15:31:59 72ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23187' }
+2018-1-3 15:33:04 534ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4802) 
+{ Login: 'STRINQUET', data: [ '23097', '23467', '23187' ] }
+2018-1-3 15:33:20 551ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23202' }
+2018-1-3 15:33:26 24ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23188' }
+2018-1-3 15:33:32 36ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23182' }
+2018-1-3 15:33:40 782ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4802) 
+{ Login: 'STRINQUET',
+  data: [ '23097', '23467', '23187', '23188', '23182' ] }
+2018-1-3 15:34:02 838ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4802) 
+{ Login: 'STRINQUET',
+  data: [ '23097', '23467', '23187', '23188', '23182', '23202' ] }
+2018-1-3 16:06:03 587ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4806',
+  IdEtabl_ASuppr: '3645' }
+2018-1-3 16:08:22 828ms - info: Modification de la ligne Etablissement 
+{ Login: 'STRINQUET',
+  data: 
+   { NumeroAccord: 4806,
+     IsAccord: false,
+     IDetablissement: 10549,
+     DestinataireReversion: 
+      { NomPrenom: 'Mme Marie-Laure MARINI DE GREGORIO',
+        Adresse1: 'CROIX-ROUGE FRANÇAISE',
+        Adresse2: '589 RUE DES MUSINENS',
+        Adresse3: 'AA',
+        CP: '01200',
+        Ville: 'BELLEGARDE SUR VALSERINE' },
+     TypeTauxReversion: '1',
+     LibelleTypeTauxReversion: 'Fixe',
+     TauxReversion: null,
+     TauxReversionAdd: null,
+     ModificationExclusionFnrs: false,
+     ExclusionFnrs: [] } }
+2018-1-3 16:16:40 577ms - error: Error: Requete permettant d'enregistrer un ou plusieurs établissements ajoutés dans un accord => RequestError: Procedure or function 'ps_AjoutEtablissementAccord' expects parameter '@Liste_EtablissementId', which was not supplied.
+    at D:\2017_ProjetReversion\20171503_ProjetReversion_NodeJS_withGit\GestionReversions\controllers\RechercheAccordsController.js:967:18
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+2018-1-3 18:04:33 990ms - info: Suppression d'une ligne etablissement 
+{ Login: 'STRINQUET',
+  IdAccord_ASuppr: '4802',
+  IdEtabl_ASuppr: '23007' }
+2018-1-3 18:04:44 135ms - info: Ajout d'établissement(s) dans l'accord (idAccord :4802) 
+{ Login: 'STRINQUET', data: [ '23007' ] }

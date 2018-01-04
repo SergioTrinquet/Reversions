@@ -794,6 +794,18 @@ i.fa.IconSearch {
 }
 /*#endregion - Autocomplete*/
 
+/*#TextNoResults { */
+#CommentMoteurRecherche {
+    position: fixed;
+    z-index: 2;
+    top: 92px;
+    width: 100%;
+    font-size: 13px;
+    color: #29334E;
+    text-align: center;
+}
+#TextNoResults span { font-weight: bold; }
+
 #SearchPeriode,
 #SearchTaux { 
     width:25%;
@@ -1303,7 +1315,8 @@ button.ValidSearch:hover {
 #EncartEtape2TypeAccord.Hidden,
 .ErreurRetourAjax.Hidden,
 .WrapLoader.Hidden,
-#LstAjoutEtbs li.Hidden, #BtFiltreEtbsDispos [data-label].Hidden, #BtFiltreEtbsDispos i.NoFilter.Hidden {
+#LstAjoutEtbs li.Hidden, #BtFiltreEtbsDispos [data-label].Hidden, #BtFiltreEtbsDispos i.NoFilter.Hidden,
+#TextNoResults.Hidden, #TxtTooShort.Hidden {
         display: none;
 }
 /*================ Fin Pg Création / consultation des réversions ==============*/
