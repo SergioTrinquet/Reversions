@@ -1,3 +1,9 @@
-node_modules/
+# Logs
 log/
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+#fichier de config
 config/production.json

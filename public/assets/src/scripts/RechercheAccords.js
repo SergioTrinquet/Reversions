@@ -14,26 +14,35 @@ var TEMP_fnrsSelected = [];
 var InterdictionEcriture = false;
 
 let Masque = null;
+let MasqueEtLoader = null;
 let Id_Accord = "";
+var AC_content = null;
 
 var FlagActivePopin = false;
 
+let SaisieMinLength = 3;
 
 
 var Pool_xhr = [];
 var Pool_rech = [];
+///--- Pour gérer éxecution de la recherche ou pas en fonction de la saisie + l'affichage des textes d'infos ---///
 function SearchAccord(SaisieAddAccord) {
-    if(SaisieAddAccord.length > 2) {
+    if(SaisieAddAccord.length >= SaisieMinLength) {
+        
         //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
         if(SaisieAddAccord != lastSaisie) { /// pour éviter appel ajax inutile
             SearchAccordQuery(SaisieAddAccord);
-        } else if(SaisieAddAccord == lastSaisie && $('#AC_content').html() != '') {
+        } else if(SaisieAddAccord == lastSaisie && AC_content.html() != '') {
             $('#Autocomplete.Hidden').removeClass('Hidden');
         }
         lastSaisie = SaisieAddAccord;
 
+        $('#TxtTooShort').addClass('Hidden'); // Nouvelle version au 03/01/18
+
     } else {
-        $('#Autocomplete').addClass('Hidden');
+        //$('#Autocomplete').addClass('Hidden'); // Ancienne version au 03/01/18
+        $('#Autocomplete, #TextNoResults').addClass('Hidden'); // Nouvelle version au 03/01/18
+        $('#TxtTooShort').toggleClass('Hidden', (SaisieAddAccord.length == 0)); // Nouvelle version au 03/01/18
     }
 }
 
@@ -54,10 +63,14 @@ $(function () {
     FocusLgn();
 
 
-    /// Affectation variables globales
+    ///--- Affectation variables globales ---///
     Masque = $('.Masque');
+    MasqueEtLoader = $('.Masque, .WrapLoader');
     Id_Accord = $('.Lgn_Accord').data('numaccord');
+    AC_content = $('#AC_content');
 
+    /// 
+    $('#TxtTooShort > span').text(SaisieMinLength);
 
     ///--- Moteur de recherche ---///
     var SaisieAddAccord = null;
@@ -67,24 +80,7 @@ $(function () {
         ///--- Pour éviter des appels AJAX à chaque frappe donc trop nombreux ---///  
         $(Pool_rech).each(function (idx, el) { /*console.log(el);*/ clearTimeout(el); }); /// On vide le pool
         Pool_rech = []; 
-        Pool_rech.push(setTimeout(function(){ SearchAccord(SaisieAddAccord); }, 300)); /// Une fois le pool vide, ajout de la fonction qui fait l'appel AJAX et qui se déclenche au bout de X millisec.       
-
-
-        /// Version antérieure au 31/07/17
-        /*if(SaisieAddAccord.length > 2) {
-
-            //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
-            if(SaisieAddAccord != lastSaisie) { /// pour éviter appel ajax inutile
-                SearchAccordQuery(SaisieAddAccord);
-            } else if(SaisieAddAccord == lastSaisie && $('#AC_content').html() != '') {
-                $('#Autocomplete.Hidden').removeClass('Hidden');
-            }
-            lastSaisie = SaisieAddAccord;
-
-        } else {
-            $('#Autocomplete').addClass('Hidden');
-        }
-        */
+        Pool_rech.push(setTimeout(function(){ SearchAccord(SaisieAddAccord); }, 300)); /// Une fois le pool vide, ajout de la fonction qui fait l'appel AJAX et qui se déclenche au bout de X millisec.
     });
 
     /// Pour cacher l'autocomplete
@@ -112,7 +108,7 @@ $(function () {
     $('.ListeEtbl').on('click', '.Bt_Undo', Undo);
     
     ///--- Pour ajouter un établissement à l'accord déjà créé ---///
-    $('.LgnAccordSection').on('click', '.Bt_Add:not(.Disabled)', Add);    
+    $('.ListeEtbl').on('click', '.Bt_Add:not(.Disabled)', Add);    
 
 
 
@@ -154,7 +150,7 @@ $(function () {
             GetDataPopinFnrsAexclure(Id_Accord, Id_Etb);
 
         } else { 
-            Masque.removeClass('Hidden');
+            MasqueEtLoader.removeClass('Hidden');
             $('.Popin_ExclusionFnrs').addClass('Display'); 
         }
     });
@@ -248,11 +244,12 @@ $(function () {
 
     /// Boutons Validation de la popin
     $('#ValidationAjoutEtbs').click(function() {
-        /// Appel AJAX pour ajouter etb(s) via proc. stock.
-        RecordEtablissements(etbsSelected);
-        //Transférer IdAccord + etbsSelected
-        ClosePopin('.Popin_AjoutEtablissement'); /// Fermeture popin
+        
+        ClosePopin('.Popin_AjoutEtablissement'); /// Fermeture popin impérativement AVANT appel AJAX sinon risque de disparition du masque
         ReinitBtFiltresEtbsDispos(); /// Réinitialisation bouton de filtre sur etbs
+        
+        /// Appel AJAX pour ajouter etb(s) via proc. stock.
+        RecordEtablissements(Id_Accord);
     });
 
     /// Bouton pour filtrer sur les établissements dispos ou pas
@@ -300,7 +297,7 @@ $(function () {
 
     /// Pour loader qd clic sur liens de l'autocomplete
     $('#Autocomplete').click('.Lgn.AC a[href]', function() {
-        $('.Masque, .WrapLoader').removeClass('Hidden');
+        MasqueEtLoader.removeClass('Hidden');
     });
 
 });
@@ -379,7 +376,7 @@ function GetDataPopinFnrsAexclure(IdAccord, IdEtb) {
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
         beforeSend: function () {
-            $('.Masque, .WrapLoader').removeClass('Hidden');
+            MasqueEtLoader.removeClass('Hidden');
         }
     })
     .done(function (data) {
@@ -419,7 +416,7 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
         beforeSend: function () {
-            $('.Masque, .WrapLoader').removeClass('Hidden');
+            MasqueEtLoader.removeClass('Hidden');
         }
     })
     .done(function (data) {
@@ -452,11 +449,11 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
 function GetDataPopinAddEtablissement(IdAccord) {
     $.ajax({
         method: "GET",
-        url: "/RechercheAccords/AjoutEtb/" + IdAccord,        
+        url: "/RechercheAccords/GetListeEtbs/" + IdAccord,        
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         dataType: "json",
         beforeSend: function () {
-            $('.Masque, .WrapLoader').removeClass('Hidden');
+            MasqueEtLoader.removeClass('Hidden');
         }
     })
     .done(function (data) {
@@ -633,7 +630,7 @@ function Suppr() {
                 data: { IdAccordASuppr: IdAccord_aSuppr, IdEtbAccordASuppr: IdEtb_aSuppr, ElementASuppr: ElemToDelete },
                 contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                 beforeSend: function () {
-                    Masque.removeClass('Hidden'); /// Ajout masque
+                    MasqueEtLoader.removeClass('Hidden'); /// Ajout masque et loader
                 }
             })
             .done(function (data) {
@@ -694,7 +691,7 @@ function Suppr() {
 
             })
             .always(function () {
-                Masque.addClass('Hidden'); /// Retrait masque
+                MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
             });
 
         }
@@ -806,7 +803,7 @@ function ValidModifs() {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(InfosLgnModifiee),
         beforeSend: function () {
-            Masque.removeClass('Hidden'); /// Ajout masque pdt traitement
+            MasqueEtLoader.removeClass('Hidden'); /// Ajout masque et loader pdt traitement
         } 
     })
     .done(function (data) {
@@ -850,7 +847,7 @@ function ValidModifs() {
             Modif_LgnAccord_AccordSection = -1;
             Modif_LgnAccord_EtbSection = -1;
 
-            Masque.addClass('Hidden'); /// Retrait masque
+            MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
 
         }///
     
@@ -924,8 +921,43 @@ function Add() {
 }
 
 
-function RecordEtablissements(Etbs) {
+function RecordEtablissements(IdAccord) {
+    $.ajax({
+        method: "POST",
+        url: "/RechercheAccords/AddEtbs/" + IdAccord,
+        
+        dataType: "html", // Retourne du html
+        
+        /*data: {ListeEtablissements: etbsSelected},
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",*/
+        data: JSON.stringify(etbsSelected),
+        contentType: "application/json; charset=utf-8",
 
+        ifModified: true,
+        beforeSend: function (jqXHR) {
+            MasqueEtLoader.removeClass('Hidden');
+        }
+    })
+    .done(function (data) {
+        // IMPERATIF : A faire avec 'datatype: html' au dessus !
+        var html = $.parseHTML(data);
+
+        var $html = $(html);
+
+        if($html.hasClass('AccesRefuse')) { /// Si pas les droits pour modifier, alors affichage contenu page 'AccesRefuse'          
+            DisplayScreenAccesRefuse(html);
+        } else { /// Si pas de redirection vers page 'AccesRefuse'...
+            var ContenuAccord = $html.find('.Lgn_Accord');
+            $('.Lgn_Accord').replaceWith(ContenuAccord);
+        }        
+
+        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        if(jqXHR.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
+            DisplayError(jqXHR.responseText);
+        }
+    });
 }
 
 
@@ -953,22 +985,33 @@ function SearchAccordQuery(Saisie) {
         ifModified: true,
         beforeSend: function (jqXHR) {
             Pool_xhr.push(jqXHR);
-            Masque.removeClass('Hidden');
+            MasqueEtLoader.removeClass('Hidden');
         }
     })
     .done(function (data) {
         
-        Masque.addClass('Hidden'); /// Retrait masque
+        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
 
         //console.log("La data est : " + data); //TEST
         if($.trim(data) != "") {
             $('#Autocomplete.Hidden').removeClass('Hidden');
-            $('#AC_content').html(data);
+            AC_content.html(data);
             $('#AC_content *[data-tohighlight]').highlight(Saisie);
+
+            /// Ajout avec nouvelle version au 03/01/18
+            $('#TextNoResults > span').text('');
+            $('#TextNoResults').addClass('Hidden');
+            /// FIN
         } else {
             $('#Autocomplete').addClass('Hidden');
-            $('#AC_content').html("");
+            AC_content.html("");
+
+            /// Ajout avec nouvelle version au 03/01/18
+            $('#TextNoResults > span').text(Saisie);
+            $('#TextNoResults').removeClass('Hidden');
+            /// FIN
         }
+
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         if(jqXHR.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
@@ -1036,7 +1079,7 @@ function DisplayScreenAccesRefuse(html) {
 
 /// Pour affichage de l'erreur dans un encart suite à requete AJAX
 function DisplayError(jqXHRresponseText) {
-    Masque.removeClass('Hidden'); /// Apparition masque
+    $('.WrapLoader').addClass('Hidden'); /// Disparition loader
 
     var Thehtml = $.parseHTML(jqXHRresponseText);
     var html_PgErreur = $(Thehtml).find("#Encart");

@@ -301,7 +301,7 @@ function Record_SingleAccord(callback, data, next) {
 }
 
 
-///--- Fonction d'enregistrement deplusieurs accords Etablissent lors de la validation de la 3eme étape ---///
+///--- Fonction d'enregistrement de plusieurs accords Etablissement lors de la validation de la 3eme étape ---///
 function Record_MultiAccords(callback, data, next) {
 
     //-- TEST --//
