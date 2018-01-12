@@ -1,9 +1,12 @@
 # Logs
-log/
+log/*.log
 npm-debug.log*
 
 # Dependency directories
 node_modules/
 
-#fichier de config
-config/production.json
+# Fichier de config
+#config/production.json
+
+# Fichiers .css et .js coté client générés avec Gulp pour la prod.
+public/assets/dist/
