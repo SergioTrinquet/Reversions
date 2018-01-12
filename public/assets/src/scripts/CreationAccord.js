@@ -1,7 +1,6 @@
 var numEtapeActuel = null;
 var AnneeEnCours = null;
 var ValidateForm_part1 = null;
-//var wrapMsg = "p";
 
 var DataEtape1 = {};
 /*var NEW_DataEtape1 = {
@@ -13,12 +12,8 @@ var DataEtape1 = {};
     SaisieTauxRev : "",
     SaisieTauxEDI : ""
 };*/
-var DataEtape2 = {
-    Groupe: [],
-    Etablissement: "",
-    MultiAccord: null,
-    MultiAccordListeEtablissements: []
-};
+var DataEtape2 = Init_DataEtape2();
+
 var DataEtape3 = "";
 
 
@@ -29,12 +24,17 @@ var DataGlobal = {
     Etape3: ""
 };
 
-
 var NbGrpChecked = 0;
 var NbEtbChecked = 0;
 
+var Masque = null;
+
+var PrecedenteAnneeAccordSaisie = null; // 05/01/18
 
 $(function () {
+
+    /// Affectation variable globale
+    Masque = $('.Masque');
 
     /// Fermeture popin
     $('.Popin .ClosePopin').click(function() {
@@ -43,8 +43,7 @@ $(function () {
 
     /// Apparition 1ere popin de saisie
     $('#BtCreationAccord').on('click', function() {
-        //$(this).addClass('Hidden');
-        $('.Masque').removeClass('Hidden'); /// Apparition masque
+        Masque.removeClass('Hidden'); /// Apparition masque
         $('#PopinCreationAccord_Etp1').addClass('Display');
     });
 
@@ -114,7 +113,7 @@ function switchPopins(Bt, Suivant) {
     }
 
     /*if(Suivant == false && numEtape == 0) {
-        $('.Masque').addClass('Hidden'); /// Disparition masque
+        Masque.addClass('Hidden'); /// Disparition masque
     }*/
 }
 
@@ -125,7 +124,7 @@ function ClosePopin(Bt) {
     if(r) {
 
         /// Disparition du masque et de la popin
-        $('.Masque').addClass('Hidden');
+        Masque.addClass('Hidden');
         var IdPopin = $(Bt).closest('.Popin').attr('id');
         $('#' + IdPopin).removeClass('Display');
 
@@ -317,44 +316,63 @@ function Validation_Etape1(Bt) {
         if(!JSON.stringify(DataEtape1).match(reg_EDI)) {
             DataEtape1.push({name:'SaisieTauxEDI', value:''});
         }
-            
-        /*var NEW_DataEtape1 = {
-            NomAccord: $('#SaisieNomAccord').val(),
-            AnneeAccord: $('#SaisieAnneeAccord').val(),
-            DateDebutAccord: $('#SaisieDateDebutAccord').val(),
-            DateFinAccord: $('#SaisieDateFinAccord').val(),
-            SaisieTypeTauxRev : $('#SaisieTypeTauxRev').val(),
-            SaisieTauxRev : $('#SaisieTauxRev').val(),
-            SaisieTauxEDI : $('#SaisieTauxEDI').val()
+        
+
+
+        /// 05/01/18 : Intégrer le fait que la date d'accord a pu être changé : Si oui => Appel AJAX,
+        /// Si non : pas appel AJAX
+        var SaisieAnneeAccord = $('#SaisieAnneeAccord').val();
+        /// Si année de l'accord rentrée dans l'étape 1 est différente de null (cas ou champ saisi pour la 1ere fois) et différent de l'anné 
+        /*if((PrecedenteAnneeAccordSaisie !== SaisieAnneeAccord) && (PrecedenteAnneeAccordSaisie !== null)) {
+            console.log("PrecedenteAnneeAccordSaisie : " + PrecedenteAnneeAccordSaisie + " | SaisieAnneeAccord : " + SaisieAnneeAccord + "\nLa date a été changée depuis la dernière fois !"); //TEST
+        } else {
+            console.warn("Mêmes années ou pas d'année avant");
         };*/
 
+        /// Si année de l'accord rentrée lors du dernier passage à l'étape 1 
+        /// est différente de la date saisie antérieurement (cas ou au moins un aller-retour entre Etape 1 et Etape 2) 
+        /// ou bien si 1er passage à l'étape 1, on recharge les listes des Grps et Etbs et du même coup on supprime les sélections faites par l'utilisateur antérieurement dans l'étape 2
+        if(PrecedenteAnneeAccordSaisie !== SaisieAnneeAccord) {
+            DataEtape2 = Init_DataEtape2(); /// Réinitialisation de l'étape 2     
+        /// FIN 05/01/18
 
-        /// Appel AJAX pour charger la liste des groupes et etablissements en fonction de l'année saisie dans l'étape 1
-        $.ajax({
-            method: "GET",
-            url: "/CreationAccord/" + $('#SaisieAnneeAccord').val(),
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            /*ifModified: true,*/
-            beforeSend: function () {
-                $('.creationAccordReversion .MaskPopin').removeClass('Hidden');
-            }
-        })
-        .done(function (data) {
-            $('#PopinCreationAccord_FormEtp2').html(data);
 
-            /// Passage au prochain popin
-            switchPopins(Bt, true);
 
-            GetDataAccordForHeaders();
-        })
-        .fail(function () {
-            /// Affichage erreur dans l'encart en disant que pas possible de sélectionner des etb pour ce grpmt
-            //$('.Popin').removeClass('Hidden').addClass('Error').html("");
-        })
-        .always(function () {
-            /// Retrait masque
-            $('.creationAccordReversion .MaskPopin').addClass('Hidden');
-        });
+            /// Appel AJAX pour charger la liste des groupes et etablissements en fonction de l'année saisie dans l'étape 1
+            $.ajax({
+                method: "GET",
+                url: "/CreationAccord/" + SaisieAnneeAccord,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                /**/ifModified: true,/**/ /// Important car permet de ne pas déselectionner les checkboxs déjà cochées dans le cas de figure ou l'utilisateur est passé par l'étape 2 (et a coché) et revient sur l'étape 1 sans changer l'année puis revient sur l'étape 2
+                beforeSend: function () {
+                    $('.creationAccordReversion .MaskPopin').removeClass('Hidden');
+                }
+            })
+            .done(function (data) {
+                $('#PopinCreationAccord_FormEtp2').html(data);
+
+                /// Passage au prochain popin
+                switchPopins(Bt, true);
+
+                GetDataAccordForHeaders();
+            })
+            .fail(function () {
+                /// Affichage erreur dans l'encart en disant que pas possible de sélectionner des etb pour ce grpmt
+                //$('.Popin').removeClass('Hidden').addClass('Error').html("");
+            })
+            .always(function () {
+                /// Retrait masque
+                $('.creationAccordReversion .MaskPopin').addClass('Hidden');
+            });
+
+
+        ///* 05/01/18 *///
+        } else {
+            switchPopins(Bt, true); /// Passage au prochain popin
+            GetDataAccordForHeaders(); 
+        }
+        PrecedenteAnneeAccordSaisie = SaisieAnneeAccord;
+        ///* FIN 05/01/18 *///
         
 
     /// ...Sinon...
@@ -432,7 +450,7 @@ function Initialisation_Etape2() {
                 RecordData(data, selectionne, 'Grp');
 
                 
-                /// Affectation du nb de groupememnts et établissements cochés dans entetes des colonnes de checkbox
+                /// Affectation du nb de groupemements et établissements cochés dans entetes des colonnes de checkbox
                 NbGrpChecked = $('#PopinCreationAccord_Etp2 .Cln[data-type="Grps"] input[type="checkbox"]:checked').length;
                 NbEtbChecked = $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]:checked').length;
                 $('#NbGrpselected').text(NbGrpChecked);
@@ -627,13 +645,13 @@ function Validation_Etape2(Bt) {
 /// Choix entre un accord de groupement, ou autant d'accords que d'établissements et donc pas un accord de groupement
     if(NbGrpChecked > 0) {
 
-        $('.Masque').addClass('Hover');
+        Masque.addClass('Hover');
         $('#EncartEtape2TypeAccord').removeClass('Hidden');
 
         $('#EncartEtape2TypeAccord .Bt').click(function() {
             
             if($(this).attr('id') == 'Bt_CreaAccEtbs') { /// Click sur bt 'Accords établissements'
-                console.log('On a cliqué sur Accord Etbs !'); //TEST
+                //console.log('On a cliqué sur Accord Etbs !'); //TEST
 
                 DataEtape2.MultiAccord = true;
                 /// Transfert des idEtablissements de la propriété 'Groupe' vers la propriété 'MultiAccordListeEtablissements' 
@@ -664,7 +682,7 @@ function Validation_Etape2(Bt) {
             }
 
             /// Retrait masque et disparition encart
-            $('.Masque').removeClass('Hover');
+            Masque.removeClass('Hover');
             $('#EncartEtape2TypeAccord').addClass('Hidden');
         });
     
@@ -785,4 +803,14 @@ function RecordDataBDD() {
         $('.creationAccordReversion .MaskPopin').addClass('Hidden');
     });
 
+}
+
+
+function Init_DataEtape2() {
+    return {
+        Groupe: [],
+        Etablissement: "",
+        MultiAccord: null,
+        MultiAccordListeEtablissements: []
+    }
 }
