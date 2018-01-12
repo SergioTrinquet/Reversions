@@ -234,7 +234,7 @@
                             <div class="Bt_Suppr <%= limitationAcces == true || item.ReversionValidee ? 'Disabled' : '' %>"><i class="fa fa-times"></i></div>
                         </div>
                         <div>
-                            <div class="Bt_Add <%= (item.AccordGroupe == false) || limitationAcces || item.ReversionValidee || (isBtAddEtbActive == 1) ? 'Disabled' : '' %>"><i class="fa fa-plus"></i></div>
+                            <div class="Bt_Add <%= (item.AccordGroupe == false) || limitationAcces || item.ReversionValidee || (isBtAddEtbActive == 1) ? 'Disabled' : '' %>"    data-btinactif="<%= isBtAddEtbActive == 1 ? 'yes' : 'no' %>" ><i class="fa fa-plus"></i></div>
                         </div>
                     </div>    
 
