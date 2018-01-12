@@ -13,14 +13,20 @@ var TEMP_fnrsSelected = [];
 
 var InterdictionEcriture = false;
 
-let Masque = null;
+/* 'let' est de l'ES6 (version récente de JS) qui n'est pas pris en compte par certaines librairies pour GULP (en l'occurence ici problème avec gulp-uglify qui bugge). La solution serait de transformer via babel par exemple, l'ES6 en une version antérieure avnt "d'uglifier" */
+/* let Masque = null;
 let MasqueEtLoader = null;
 let Id_Accord = "";
+let SaisieMinLength = 3; */
+var Masque = null;
+var MasqueEtLoader = null;
+var Id_Accord = "";
+var SaisieMinLength = 3;
+
 var AC_content = null;
 
 var FlagActivePopin = false;
 
-let SaisieMinLength = 3;
 
 
 var Pool_xhr = [];
@@ -640,8 +646,7 @@ function Suppr() {
                     DisplayScreenAccesRefuse(html);
                 } else { // Si pas de redirection vers page 'AccesRefuse'...
                 
-
-                    console.log('data : ' + data + ' | Etab/Accord supprimé'); //TEST
+                    //console.log('data : ' + data + ' | Etab/Accord supprimé'); //TEST
                     
                     if (ElemToDelete == 'accord') {
                         /// Suppression ligne dans le DOM
@@ -660,7 +665,9 @@ function Suppr() {
                         ///////--- 4. que l'accord n'a forcément pas tous les établissments de son/ses groupe(s)
                         /// Pour activer ou non le bouton d'ajout
                         //console.log('data.ActivationBtAddEtb : ' + data.ActivationBtAddEtb); //TEST
-                        if(data.ActivationBtAddEtb == 0) { $('.Bt_Add').removeClass('Disabled'); };
+                        if(data.ActivationBtAddEtb == 0) { 
+                            $('.Bt_Add').removeClass('Disabled').attr('data-btinactif', 'no');
+                        };
                         ///////--- FIN ---/////////
                     
                         /// Pour changer le nb total d'étbl.
@@ -869,7 +876,7 @@ function Undo() {
     $('#' + Id_Lgn + ' .Bt_Modif').removeClass('Hidden');
 
     $('.bandeauHaut input[type="text"]').prop('disabled', false); /// Réactivation moteur de recherche
-    $(InterdictionEcriture == true ? '.LgnEtbSection .Bt_Modif, .Lgn' : '.Bt_Modif, .Bt_Suppr ' + ($('.Lgn_Accord').attr('data-accordgroupe') == 'true' ? ', .Bt_Add' : '') + ', .Lgn').removeClass('Disabled'); /// Réactivation boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
+    $(InterdictionEcriture == true ? '.LgnEtbSection .Bt_Modif, .Lgn' : '.Bt_Modif, .Bt_Suppr ' + ($('.Lgn_Accord').attr('data-accordgroupe') == 'true' ? ', .Bt_Add:not([data-btinactif="yes"])' : '') + ', .Lgn').removeClass('Disabled'); /// Réactivation boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
     if($('.LgnEtbSection').length == 1) { $('.LgnEtbSection .Bt_Suppr').addClass('Disabled');  } /// Surcharge : Si 1 seul etb dans l'accord, on interdit la possibilité de le supprimer
     $('#' + Id_Lgn).removeClass('ModifEnCours'); /// Retrait du marqueur identifiant la ligne en cours de modif
 
@@ -933,7 +940,6 @@ function RecordEtablissements(IdAccord) {
         data: JSON.stringify(etbsSelected),
         contentType: "application/json; charset=utf-8",
 
-        ifModified: true,
         beforeSend: function (jqXHR) {
             MasqueEtLoader.removeClass('Hidden');
         }
