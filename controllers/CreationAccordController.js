@@ -11,12 +11,13 @@ module.exports = function(app) {
 
     var ladate = new Date();
 
+    /// Pour récupérer l'année en cours au chargement de la page
     app.get('/CreationAccord', userRightsAccess, function(req, res, next) {
         res.render('CreationAccord', { AnneeEnCours: ladate.getFullYear() });
     });
 
 
-
+    /// Pour récupérer les groupes et établissements après validation de l'étape 1 de la saisie d'un accord
     app.get('/CreationAccord/:Annee', userRightsAccess, function(req, res, next) {
         var AnneeSaisie = parseInt(req.params.Annee);     //console.log('req.params : ' + req.params + ' | AnneeSaisie : ' + AnneeSaisie); //TEST
 
@@ -33,7 +34,8 @@ module.exports = function(app) {
     });
 
 
-
+    /// Multi-usage :   1 - Pour récupérer liste des étbs correspondant au Groupe coché ds l'étape 2, 
+    ///                 2 - Pour enregistrer l'accord créé à la fin de l'étape 3 (lors de la validation finale)
     app.post('/CreationAccord', userRightsAccess, function(req, res, next) {
         if (!req.body) return res.sendStatus(400);
 
@@ -88,7 +90,6 @@ module.exports = function(app) {
             /// Si cas ou l'utilisateur veut autant d'accords Etablissement qu'il en existe dans le groupe qu'il a sélectionné
             if(reqBody.Etape2.MultiAccord == true && reqBody.Etape2.MultiAccordListeEtablissements.length > 0) {
 
-                /// Intégrer la nvelle proc. stock. de Joel pour ce cas
                 Record_MultiAccords(function(recordset) {
                     logger.log('info',  "Enregistrement de nouveaux accords (accords établ. d'un groupe)", {Login: req.app.get('userName') });
                     res.send({ redirect: '/RechercheAccords' });

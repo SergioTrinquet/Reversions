@@ -277,17 +277,13 @@ module.exports = function(app) {
                 DeleteEtablissementAccord(function(recordset) {
                     //res.sendStatus(200); /// Pour confirmation coté client afin de donner le signal qu'il faut rafraichir les données
                 
-
-                //////-------------------------///////
-                /// ...Et requete pour savoir si on active ou pas le bouton d'ajout d'établissement sur la ligne Accord dans la vue
-                activateButtonAddEtablissements(function(recordset) {
-                    btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet; ///  
-                    console.log("btAddEtbActivation : " + btAddEtbActivation);
-                    res.send({ ActivationBtAddEtb: btAddEtbActivation }); /// Pour confirmation coté client afin de donner le signal qu'il faut rafraichir les données
-                }, IdAccordASuppr, next); 
-                //////-------------------------///////
-
-
+                    /// ...Et requete pour savoir si on active ou pas le bouton d'ajout d'établissement sur la ligne Accord dans la vue
+                    activateButtonAddEtablissements(function(recordset) {
+                        btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet; ///  
+                        console.log("btAddEtbActivation : " + btAddEtbActivation); //TEST
+                        res.send({ ActivationBtAddEtb: btAddEtbActivation }); /// Pour confirmation coté client afin de donner le signal qu'il faut rafraichir les données
+                    }, IdAccordASuppr, next); 
+                
                 }, IdAccordASuppr, IdEtbAccordASuppr, next);
             }
 
