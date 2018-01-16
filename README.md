@@ -1,11 +1,11 @@
-#**Présentation du projet**
+#**Présentation du projet**#
 
 Le projet "Reversions" est développé en node.js.  
 Il est installé sur le serveur de production sur un IIS.  
-Le site interroge le format de base de données SQL Server.  
+Le site interroge le format de base de données SQL Server.    
 
 
-#**Etapes pour mettre en production le projet "Reversions"**
+#**Etapes pour mettre en production le projet "Reversions"**#
 
 **GULP**
 
