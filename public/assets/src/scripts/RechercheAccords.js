@@ -841,8 +841,15 @@ function ValidModifs() {
                 var html_lgnEtablissementAccord = $(html).find(LgnEtbSection_EnCoursDeModif);
                 $(LgnEtbSection_EnCoursDeModif).replaceWith(html_lgnEtablissementAccord);
 
-                $('.Bt_Modif, .Bt_Suppr, .Bt_Add, .Lgn').removeClass('Disabled'); /// Réactivation Boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
-                if($('.LgnEtbSection').length == 1) { $('.LgnEtbSection .Bt_Suppr').addClass('Disabled');  } /// Surcharge : Si 1 seul etb dans l'accord, on interdit la possibilité de le supprimer
+                /// Réactivation ou pas des boutons
+                // Etape 1 : Réactivation Boutons sur toutes les lignes + Retrait des marqueurs sur les autres lignes que celle en cours de modif.
+                $('.Bt_Modif, .Bt_Suppr, .Bt_Add, .Lgn').removeClass('Disabled');
+                // Etape 2 : Surcharge. On désactive au cas par cas...
+                if($('.LgnEtbSection').length == 1) { $('.LgnEtbSection .Bt_Suppr').addClass('Disabled');  } // ...Si 1 seul etb dans l'accord, on interdit la possibilité de le supprimer
+                if( 
+                    ($('.Lgn_Accord').attr('data-accordgroupe') == 'false') || // Si pas accord de groupe, donc qu'1 seul etb. possible donc bouton d'ajout d'etb. en disabled 
+                    ($('.Lgn_Accord').attr('data-accordgroupe') == 'true' && $('.Lgn_Accord .Bt_Add').attr('data-btinactif') == 'yes') // Si accord de groupe mais tous les étab. du groupe sont présents ds l'accord, bouton d'ajout d'etb. en disabled 
+                ) { $('.LgnAccordSection .Bt_Add').addClass('Disabled'); } 
             }
 
             $('.bandeauHaut input[type="text"]').prop('disabled', false); /// Réactivation moteur de recherche
