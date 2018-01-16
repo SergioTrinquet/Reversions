@@ -91,14 +91,14 @@ module.exports = function(app) {
             if(reqBody.Etape2.MultiAccord == true && reqBody.Etape2.MultiAccordListeEtablissements.length > 0) {
 
                 Record_MultiAccords(function(recordset) {
-                    logger.log('info',  "Enregistrement de nouveaux accords (accords établ. d'un groupe)", {Login: req.app.get('userName') });
+                    logger.log('info',  "Enregistrement de nouveaux accords (accords établ. d'un groupe)", {Login: req.app.get('userName'), Details: dataGoodFormat });
                     res.send({ redirect: '/RechercheAccords' });
                 }, dataGoodFormat, next);
                 
             } else { /// Sinon autres cas (accord Etb, accord de Groupe, accord multi-groupes)...
 
                 Record_SingleAccord(function(recordset) {
-                    logger.log('info',  "Enregistrement d'un nouvel accord", {Login: req.app.get('userName') });
+                    logger.log('info',  "Enregistrement d'un nouvel accord", {Login: req.app.get('userName'), Details: dataGoodFormat });
                     var IdAccordNouvellementCree = recordset[0][0].AccordReversionID;
                     res.send({ redirect: '/RechercheAccords/' + IdAccordNouvellementCree });
                 }, dataGoodFormat, next);
