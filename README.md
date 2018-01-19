@@ -1,7 +1,7 @@
-## Présentation du projet
+## Technologies utilisées
 
 Le projet "Reversions" est développé en node.js.  
-Il est installé sur le serveur de production sur un IIS.  
+Il est installé sur le serveur de production sur IIS.  
 Le site interroge le format de base de données SQL Server.    
 
 
