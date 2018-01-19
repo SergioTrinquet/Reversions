@@ -1,7 +1,6 @@
 <div id="mySidenav" class="sidenav">
     <span class="closebtn"><i class="fa fa-times"></i></span>
 
-    <!--<a href="#">Tableau<br/>de bord</a>-->
     <% if(typeof menu !== 'undefined' && menu.length > 0) {
         menu.forEach(function(m) { 
             if(m.acces == true) {%><a href="/<%= m.pg %>"><%= m.intitule %></a><% } else { %><div><%= m.intitule %></div><% } 
