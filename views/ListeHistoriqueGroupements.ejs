@@ -2,24 +2,16 @@
 <html lang="en">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <title>Historique des groupements</title>
+        <title>Historique des groupes</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <% include partials/bundleCSS.ejs %>
 
-        <!--
-        <script src="https://use.fontawesome.com/68984c879a.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script><!-- pour datepickers -->   <!--
-        <script src="/scripts/datepicker-fr.js"></script>
-        <script src="/scripts/sidenav.js"></script>
-        <script src="/scripts/highlight.js"></script>
-        <script src="/scripts/ListeHistoriqueGroupe.js"></script>
-        -->
         <% include partials/bundleJS_ListeHistoriqueGroupements.ejs %>
     </head>
     <body>
+        <div class="Masque Hidden"></div>
 
         <% include partials/menu.ejs %>
 
@@ -30,23 +22,23 @@
 
 
             <div class="bandeauHaut">
-                <div>Historique des groupements</div>
+                <div>Historique des groupes</div>
                 <div>
                     <div>
-                    <form id="FiltresHistoGrp">
+                    <form id="FiltresHistoGrp"><!-- autocomplete="off" sur tous les éléments du form pour empecher cache avec FireFox ! -->
                         Filtres :
-                        <input class="SearchFieldBandeau" id="EtablFilter" name="Etablissement" placeholder="Tous les établissements" type="text">
-                        <input class="SearchFieldBandeau" id="GrpFilter" name="Groupe" placeholder="Tous les groupes" type="text">
-                        <select class="SearchFieldBandeau" id="HelpDateFilter" name="MotDate" disabled="disabled">
+                        <input class="SearchFieldBandeau" id="EtablFilter" name="Etablissement" placeholder="Tous les établissements" type="text" autocomplete="off">
+                        <input class="SearchFieldBandeau" id="GrpFilter" name="Groupe" placeholder="Tous les groupes" type="text" autocomplete="off">
+                        <select class="SearchFieldBandeau" id="HelpDateFilter" name="MotDate" disabled="disabled" autocomplete="off">
                             <option value="where">le</option>
                             <option value="from">à partir du</option>
                             <option value="upto">jusqu'au</option>
                             <option value="between">entre le</option>
                         </select>
-                        <input type="text" class="SearchFieldBandeau" id="DatepickerStart" name="DateDebut" readonly="readonly" placeholder="Date">
+                        <input type="text" class="SearchFieldBandeau" id="DatepickerStart" name="DateDebut" readonly="readonly" placeholder="Date" autocomplete="off">
                         <i class="fa fa-times-circle" id="DeleteDatepickerStart" ></i>
                         <span id="TxtSpanDates" class="Hidden">et le</span>
-                        <input type="text" class="SearchFieldBandeau Hidden" id="DatepickerEnd" name="DateFin" readonly="readonly" placeholder="Date">
+                        <input type="text" class="SearchFieldBandeau Hidden" id="DatepickerEnd" name="DateFin" readonly="readonly" placeholder="Date" autocomplete="off">
                         <button type="button" class="ValidSearch"><i class="fa fa-search"></i></button>
                     </form>
                     </div>

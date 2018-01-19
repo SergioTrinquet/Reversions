@@ -1,39 +1,49 @@
 var saisiesChampsFiltre = null;
 
+var DatepickerStart = null;
+var DatepickerEnd = null;
+var HelpDateFilter = null;
+
+var Masque = null;
+
 $(function () {
 
     /// Récupération des valeurs des champs filtres --> ESSAI
     $('#FiltresHistoGrp input[type]').each(function(){ $(this).val($.trim($(this).val())); });
     saisiesChampsFiltre = $('#FiltresHistoGrp').serialize();
 
-
+    /// Affectation variables globales
+    DatepickerStart = $("#DatepickerStart");
+    DatepickerEnd = $("#DatepickerEnd");
+    HelpDateFilter = $("#HelpDateFilter");
+    Masque = $("#Masque");
 
     /// Gestion des datePicker
-    $("#DatepickerStart").datepicker({
+    DatepickerStart.datepicker({
         showAnim: "slideDown",
         dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
         minDate: "-120m", /// La date minimum selectionnable : 120 mois avant la date d'aujourd'hui, donc ici "-120m". On peut mettre aussi un objet Date ou un String. Si la promotion est obsolète, date min. est = à la date déjà inscrite ds ce champ (sinon bug), sinon date du jour. 
-        maxDate: ($.trim($("#DatepickerEnd").val()) != "" ? $("#DatepickerEnd").val() : "+120m"), /// La date max. selectionnable : ici si 'Date de Fin' rempli, maxDate de 'Date Début' = valeur de 'date de Fin', sinon 120 mois après la date du jour ("+120m"). On peut mettre aussi un objet Date ou un nombre
+        maxDate: ($.trim(DatepickerEnd.val()) != "" ? DatepickerEnd.val() : "+120m"), /// La date max. selectionnable : ici si 'Date de Fin' rempli, maxDate de 'Date Début' = valeur de 'date de Fin', sinon 120 mois après la date du jour ("+120m"). On peut mettre aussi un objet Date ou un nombre
         changeMonth: true,
         changeYear: true,
         onClose: function (selectedDate) {
             /// Sur l'ev. OnClose de la 'Date de Départ', le minDate du champ 'Date de Fin' est égal au lendemain de la date du jour (+1) si pas de date ds 'Date de Départ', sinon date sélectionnée ds 'Date de Départ'
-            $("#DatepickerEnd").datepicker("option", "minDate", ($.trim($(this).val()) == "" ? +1 : DatePlusOneDay(selectedDate)));
+            DatepickerEnd.datepicker("option", "minDate", ($.trim($(this).val()) == "" ? +1 : DatePlusOneDay(selectedDate)));
             /// Mets la liste déroulante en disabled ou non
-            $("#HelpDateFilter").prop('disabled', ($.trim($(this).val()) == "" ? 'disabled' : '' ));
+            HelpDateFilter.prop('disabled', ($.trim($(this).val()) == "" ? 'disabled' : '' ));
         }
     });
 
-    $("#DatepickerEnd").datepicker({
+    DatepickerEnd.datepicker({
         showAnim: "slideDown",
         dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
-        minDate: ($.trim($("#DatepickerStart").val()) != "" ? $("#DatepickerStart").val() : +1), /// La date minimum selectionnable : A number of days from today. Donc ici +1 = demain. On peut mettre aussi un objet Date ou un String
+        minDate: ($.trim(DatepickerStart.val()) != "" ? DatepickerStart.val() : +1), /// La date minimum selectionnable : A number of days from today. Donc ici +1 = demain. On peut mettre aussi un objet Date ou un String
         maxDate: "+120m", /// La date max. selectionnable : ici 120 mois après la date du jour. On peut mettre aussi un objet Date ou un nombre       
         changeMonth: true,
         changeYear: true,
         onClose: function (selectedDate) {
             /// Sur l'ev. OnClose de la 'Date de Fin', le maxDate du champ 'Date de Début' est égal à la date sélectionnée ds 'Date de Fin'
-            $("#DatepickerStart").datepicker("option", "maxDate", selectedDate);
+            DatepickerStart.datepicker("option", "maxDate", selectedDate);
         }
     });
 
@@ -41,18 +51,20 @@ $(function () {
     /// Pour vider le champ date ds la partie 'Filtres'
     $("#DeleteDatepickerStart").click(function() {
         $("#DatepickerStart, #DatepickerEnd").val('');
-        $("#HelpDateFilter").prop('disabled', 'disabled');
+        HelpDateFilter.prop('disabled', 'disabled');
         $("#HelpDateFilter option:eq(0)").prop('selected', true);
         $('#TxtSpanDates, #DatepickerEnd').addClass('Hidden');
     });
 
     /// Liste déroulante servant à afficher ou non le 2eme datePicker
-    $("#HelpDateFilter").change(function() {
+    HelpDateFilter.change(function() {
         if($("#HelpDateFilter option:selected").val() == 'between') {
             $('#TxtSpanDates, #DatepickerEnd').removeClass('Hidden');
         } else {
             $('#TxtSpanDates, #DatepickerEnd').addClass('Hidden');
-            $('#DatepickerEnd').val('');
+            DatepickerEnd.val('');
+
+            DatepickerStart.datepicker("option", "maxDate", "+120m"); // Ajouté le 18/01/18 suite à petit bug
         }
     });
 
@@ -104,8 +116,10 @@ $(function () {
 
             /* Sans parsing HTML : Fonctionne aussi !! */
             /// On récupère les données que l'on veut mettre à jour (le n° de page et la liste des données)
-            var NumPage = $(data).find('#NumPg');
-            var HistoGroupes = $(data).find('.HistoGroupes');
+            
+            var data = $(data);
+            var NumPage = data.find('#NumPg');
+            var HistoGroupes = data.find('.HistoGroupes');
             /// on remplace les données
             $('#NumPg').text(NumPage.text());
             $('.HistoGroupes').html(HistoGroupes.children());
@@ -116,19 +130,6 @@ $(function () {
             $(window).scrollTop(0);
 
             Highlight(); /// Pour surligner la recherche ds la liste
-
-
-            /*var participants = [];
-            $.each(data.d, function (key, val) {
-                var LgnParticipant = "<div id='Lgn_" + key + "_" + val.IDseminaire + "_" + val.IDparticipant + "' class='LgnParticipants'>";
-                LgnParticipant += "<span>" + (semDuJour == true ? "<input type='checkbox' class='ChbxPresence " + (val.Presence == 'PRESENT' ? " AlreadyChecked" : "") + "' />" : "") + "</span>";
-                LgnParticipant += "<span>" + val.Categorie + "</span><span>" + val.Civ + " <span class='Nom_Famille'>" + val.Nom_Famille + " " + val.Prenom + "</span></span><span>" + val.Fonct + "</span><span class='Ets'>" + val.Ets + "</span><span>" + val.Cp + "</span><span class='Ville'>" + val.Ville + "</span><!--<span>" + val.Statut + "</span><span>" + val.Activite + "</span>-->";
-                LgnParticipant += "<span>" + (semDuJour == true ? "<input type='text' class='ChpSaisieEmail' placeholder='Mail obligatoire' value='" + val.Email + "' " + (val.Presence == 'PRESENT' ? "" : "disabled='disabled'") + " />" : (val.Email != "" ? val.Email : "/") ) + "</span>";
-                LgnParticipant += "</div>";
-
-                participants.push(LgnParticipant);
-            });
-            $('#ListeParticipants').append(participants);*/
         })
         .fail(function (jqXHR) {
             /// Affichage erreur
