@@ -1,4 +1,5 @@
 const colors = require('colors'); // juste pour le développement
+const dateFormat = require('dateformat');
 var userRightsAccess = require('../app_modules/userRights.js'); /// Middleware pour gérer les accès en fonction des droits de l'utilisateur
 
 var NbLgnPerPg = 100;
@@ -77,7 +78,8 @@ function getData(callback, query) {
                 partSQLRequest = "DateEntree <= '" + queryDateDebut + "' ";
                 break;
             case 'between':
-                partSQLRequest = "DateEntree >= '" + queryDateDebut + "' and DateEntree <= '" + queryDateDebut + "' ";
+                //partSQLRequest = "DateEntree >= '" + queryDateDebut + "' and DateEntree <= '" + queryDateDebut + "' ";
+                partSQLRequest = "DateEntree >= '" + queryDateDebut + "' and DateEntree <= '" + queryDateFin + "' ";
         } 
         if(queryDateDebut != "") { partWhereRequete += (queryEtbl != "" || queryGrp != "" ? " AND " : " ") + partSQLRequest }
     }
