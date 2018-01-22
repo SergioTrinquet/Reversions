@@ -293,7 +293,7 @@ $(function () {
 
 
 
-    /// Pour fermeture encart d'erreur s'il existe
+    /// A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js' et 'CreationAccords.js') ==> Pour fermeture encart d'erreur s'il existe
     $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
         $('.ErreurRetourAjax').addClass('Hidden');
         $('.ErreurRetourAjax .Content').empty();
@@ -1090,7 +1090,7 @@ function DisplayScreenAccesRefuse(html) {
 }
 
 
-/// Pour affichage de l'erreur dans un encart suite à requete AJAX
+///A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
 function DisplayError(jqXHRresponseText) {
     $('.WrapLoader').addClass('Hidden'); /// Disparition loader
 

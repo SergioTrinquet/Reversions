@@ -83,6 +83,18 @@ $(function () {
     });
 
 
+    /// A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js' et 'RechercheAccords.js') ==> Pour fermeture encart d'erreur s'il existe
+    $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
+        $('.ErreurRetourAjax').addClass('Hidden');
+        $('.ErreurRetourAjax .Content').empty();
+        if($('.creationAccordReversion').length > 0) { 
+            Masque.removeClass('Hover'); 
+        } else {
+            Masque.addClass('Hidden');
+        }
+    });
+
+
 });
 
 /// pour déterminer à quelle étape de création d'un accord on est
@@ -356,9 +368,9 @@ function Validation_Etape1(Bt) {
 
                 GetDataAccordForHeaders();
             })
-            .fail(function () {
-                /// Affichage erreur dans l'encart en disant que pas possible de sélectionner des etb pour ce grpmt
-                //$('.Popin').removeClass('Hidden').addClass('Error').html("");
+            .fail(function (jqXHR) {
+                Masque.addClass('Hover');
+                DisplayError(jqXHR.responseText);
             })
             .always(function () {
                 /// Retrait masque
@@ -464,9 +476,9 @@ function Initialisation_Etape2() {
             }
 
         })
-        .fail(function () {
-            /// Affichage erreur dans l'encart en disant que pas possible de sélectionner des etb pour ce grpmt
-            //$('.Popin').removeClass('Hidden').addClass('Error').html("");
+        .fail(function (jqXHR) {
+            Masque.addClass('Hover');
+            DisplayError(jqXHR.responseText);
         })
         .always(function () {
             /// Retrait masque
@@ -794,9 +806,9 @@ function RecordDataBDD() {
             window.location = data.redirect;
         }
     })
-    .fail(function () {
-        /// Affichage erreur dans l'encart en disant que pas possible de sélectionner des etb pour ce grpmt
-        //$('.Popin').removeClass('Hidden').addClass('Error').html("");
+    .fail(function (jqXHR) {
+        Masque.addClass('Hover');
+        DisplayError(jqXHR.responseText);
     })
     .always(function () {
         /// Retrait masque
@@ -812,5 +824,20 @@ function Init_DataEtape2() {
         Etablissement: "",
         MultiAccord: null,
         MultiAccordListeEtablissements: []
+    }
+}
+
+
+
+/// A FACTORISER (existe aussi ds RechercheAccords.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
+function DisplayError(jqXHRresponseText) {
+    var Thehtml = $.parseHTML(jqXHRresponseText);
+    var html_PgErreur = $(Thehtml).find("#Encart");
+    if($('.ErreurRetourAjax').length > 0) {
+        $('.ErreurRetourAjax .Content').html(html_PgErreur);
+        $('.ErreurRetourAjax').removeClass('Hidden');
+    } else {
+        $("<div class='ErreurRetourAjax'><i class='fa fa-times ClosePopin'></i><div class='Content'></div></div>").appendTo("body");
+        $(".ErreurRetourAjax .Content").html(html_PgErreur);
     }
 }

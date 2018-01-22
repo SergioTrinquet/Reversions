@@ -6,7 +6,7 @@ var NbLgnPerPg = 100;
 
 module.exports = function(app) {
 
-      app.get('/HistoGrp', userRightsAccess, function(req, res) {
+      app.get('/HistoGrp', userRightsAccess, function(req, res, next) {
 
         //if(req.xhr) {  console.log('Ajax'); } else { console.log('Pas ajax'); } //TEST
 
@@ -25,7 +25,8 @@ module.exports = function(app) {
             
             res.render('ListeHistoriqueGroupements', {dataGrp: recordsets[0], numpg: pg, numtotalpg: NbPgs });
         }, 
-        req.query
+        req.query, 
+        next
         );
 
     });
@@ -35,7 +36,7 @@ module.exports = function(app) {
 
 
 
-function getData(callback, query) {
+function getData(callback, query, next) {
     var sql = require('mssql');
     var config = JSON.parse(JSON.stringify(require('config').get('dbConfig'))); // Nvelle version avec module 'config'
 
@@ -113,10 +114,10 @@ function getData(callback, query) {
             callback(recordsets);
         })
         .catch(function(err) {
-            console.log('Erreur au niveau du Request : ' + err);
+            next(new Error("Chargement de la liste de l'historique des groupes => " + err));
         });
 
     }).catch(function(err) {
-        console.log('Erreur au niveau de la connection : ' + err);
+        next(new Error("Chargement de la liste de l'historique des groupes => " + err));
     });
 }
