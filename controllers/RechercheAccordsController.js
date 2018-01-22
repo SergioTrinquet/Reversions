@@ -73,7 +73,7 @@ module.exports = function(app) {
 
     /// Lorsque clic sur bouton 'Afficher les fnrs exclus' (existe seulement en mode lecture sur la page de recherche des accords) : Affichage des fournisseurs exclus
     app.get('/RechercheAccords/FnrsExclus/:idAccord/:EtbId', userRightsAccess, function(req, res, next) {
-        GetFnrsExclusEtablissement(function(recordset) {
+        GetFnrsExclusEtablissement(function(recordset) {    //console.log(colors.bgMagenta.yellow(JSON.stringify(recordset[0]))); //TEST
             res.send({FnrsExclus: recordset[0]});
         }, req.params, next);
     });
@@ -110,9 +110,11 @@ module.exports = function(app) {
                 if(limitationAcces) {
 
                     res.render('RechercheAccords', { 
-                        dataAccords: newRecordset,
-                        etbId: req.params.EtbId
-                    });
+                        dataAccords: newRecordset, 
+                        listeTypeTaux: [], 
+                        etbId: req.params.EtbId, 
+                        isBtAddEtbActive: 0
+                    });       
 
                 } else {
 
@@ -128,8 +130,8 @@ module.exports = function(app) {
                                 var ListeFnrs = recordset[0];
 
                                 /// ...Et requete pour savoir si on active ou pas le bouton d'ajout d'établissement sur la ligne Accord dans la vue
-                                activateButtonAddEtablissements(function(recordset){ ///
-                                    btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet; ///  
+                                activateButtonAddEtablissements(function(recordset){
+                                    btAddEtbActivation = recordset[0][0].AccordGroupementEstComplet;
                                     
                                     res.render('RechercheAccords', { 
                                         dataAccords: newRecordset, 
@@ -137,10 +139,10 @@ module.exports = function(app) {
                                         etbId: req.params.EtbId, 
                                         listeCatalogues: ListeCats, 
                                         listeFournisseurs: ListeFnrs,
-                                        isBtAddEtbActive: btAddEtbActivation ///
+                                        isBtAddEtbActive: btAddEtbActivation
                                     });       
                                     
-                                }, req.params.idAccord, next); ///
+                                }, req.params.idAccord, next);
                     
                             }, next);
 
@@ -717,7 +719,6 @@ function GetFnrsExclusEtablissement(callback, data, next) {
         .input('AccordReversionId', sql.Int, parseInt(data.idAccord))
         .execute('ReversionApp.ps_getListeFournisseurEtablissement')
         .then(function(recordset) {
-            console.log(colors.bgBlue.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })
