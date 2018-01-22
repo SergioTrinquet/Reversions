@@ -16,7 +16,7 @@ $(function () {
     DatepickerStart = $("#DatepickerStart");
     DatepickerEnd = $("#DatepickerEnd");
     HelpDateFilter = $("#HelpDateFilter");
-    Masque = $("#Masque");
+    Masque = $(".Masque");
 
     /// Gestion des datePicker
     DatepickerStart.datepicker({
@@ -107,7 +107,7 @@ $(function () {
             //dataType: "json",
             dataType: "html",
             beforeSend: function () {
-                //$('.masque').removeClass('Hidden');
+                Masque.removeClass('Hidden');
             }
         })
         .done(function (data) {
@@ -134,10 +134,7 @@ $(function () {
         .fail(function (jqXHR) {
             /// Affichage erreur
             //$('.Popin').removeClass('Hidden').addClass('Error').html("<b>" +  + " " + jqXHR.statusText + "</b><br /><b>Message</b> : " + jqXHR.responseJSON.Message + "<br /><b>StackTrace</b> : " + jqXHR.responseJSON.StackTrace);
-        })
-        .always(function () {
-            /// Retrait masque
-            //$('.masque').addClass('Hidden');
+            DisplayError(jqXHR.responseText);
         });
         
 
@@ -168,7 +165,7 @@ $(function () {
         var strParams = $('#FiltresHistoGrp').serialize();
 
 saisiesChampsFiltre = strParams; //ESSAI
-console.log('saisiesChampsFiltre : ' + saisiesChampsFiltre);
+console.log('saisiesChampsFiltre : ' + saisiesChampsFiltre); //TEST
         
         $.ajax({
             method: "GET",
@@ -176,7 +173,7 @@ console.log('saisiesChampsFiltre : ' + saisiesChampsFiltre);
             data: strParams + "&page=1",
             dataType: "html",
             beforeSend: function () {
-                //$('.masque').removeClass('Hidden');
+                Masque.removeClass('Hidden');
             }
         })
         .done(function (data) {
@@ -199,15 +196,21 @@ console.log('saisiesChampsFiltre : ' + saisiesChampsFiltre);
 
             Highlight(); /// Pour surligner la recherche ds la liste
         })
-        .fail(function () {
-            /// Affichage erreur
-        })
-        .always(function () {
-            /// Retrait masque
-            //$('.masque').addClass('Hidden');
+        .fail(function (jqXHR) {
+            DisplayError(jqXHR.responseText); /// Affichage erreur
         });
 
         
+    });
+
+
+
+
+    /// A FACTORISER (existe aussi ds 'RechercheAccords.js' et 'CreationAccords.js') ==> Pour fermeture encart d'erreur s'il existe
+    $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
+        $('.ErreurRetourAjax').addClass('Hidden');
+        $('.ErreurRetourAjax .Content').empty();
+        Masque.addClass('Hidden');
     });
 
 
@@ -232,4 +235,19 @@ function Highlight() {
     if(valueChampEtbl != "") { $(".NomEtb").highlight(valueChampEtbl); }
     var valueChampGrp = $.trim($("#GrpFilter").val());
     if(valueChampGrp != "") {  $(".NomGrp").highlight(valueChampGrp); }
+}
+
+
+
+/// A FACTORISER (existe aussi ds RechercheAccords.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
+function DisplayError(jqXHRresponseText) {
+    var Thehtml = $.parseHTML(jqXHRresponseText);
+    var html_PgErreur = $(Thehtml).find("#Encart");
+    if($('.ErreurRetourAjax').length > 0) {
+        $('.ErreurRetourAjax .Content').html(html_PgErreur);
+        $('.ErreurRetourAjax').removeClass('Hidden');
+    } else {
+        $("<div class='ErreurRetourAjax'><i class='fa fa-times ClosePopin'></i><div class='Content'></div></div>").appendTo("body");
+        $(".ErreurRetourAjax .Content").html(html_PgErreur);
+    }
 }
