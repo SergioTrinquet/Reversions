@@ -10,7 +10,7 @@ var destination = "./public/assets/dist";
 ///--- Taches CSS ---///
 gulp.task('minifyMainCSS', function(cb) {
     return pump([
-        gulp.src([source + '/styles/style_reversion.css', source + '/styles/sidenav.css']),
+        gulp.src([source + '/styles/style_reversion.css', source + '/styles/sidenav.css',  source + '/styles/erreur.css']),
         plugins.sourcemaps.init(), /// Interessant pour débugger -> Donne l'emplacement du code ds fichiers non transformés (minifiés, concaténés,...) à partir des fichiers transformés 
         plugins.concat('global_reversion.css'),
         plugins.csso(), /// Plugin pour minifier
