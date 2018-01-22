@@ -81,7 +81,7 @@ app.use(function (err, req, res, next) {
         email(err.message, err.stack);
     }
     console.log(colors.bgRed.white(err.stack));
-    logger.log('error', err.stack); 
+    logger.log('error', err.stack, {login: req.app.get('userName')}); 
     res.status(err.status || 500);
     res.render('Erreur', {erreur_msg: err.message, erreur_stack: err.stack});
 })
