@@ -37,6 +37,7 @@ console.log('TEST sur module CONFIG: ' + config.get('env') + " | " + config.get(
 const env = app.get('env'); /// Pour détecter si on est en mode 'development' ou 'production', ou autre
 app.locals.ENV = env; /// Pour être eccessible ds les .ejs
 app.use(express.static('./public/assets/' + (env === 'development' ? 'src' : 'dist')));
+app.use(express.static('./public/assets/docs'));
 
 
 /// Partie authentification après l'appel des static files car sinon ne trouve pas le chemin du .css pour 'AccesRefuse.ejs'
