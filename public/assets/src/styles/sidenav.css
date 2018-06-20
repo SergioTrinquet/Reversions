@@ -114,3 +114,11 @@
 .sidenav {
     z-index: 10002; /* Stay on top */
 }
+
+
+.sidenav div.NoMenu {
+    text-align: center;
+    font-style: italic;
+    color: #ffffff;
+    line-height: 25px;
+}
