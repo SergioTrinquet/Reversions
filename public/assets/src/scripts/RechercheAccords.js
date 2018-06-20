@@ -302,7 +302,7 @@ $(function () {
 
 
     /// Pour loader qd clic sur liens de l'autocomplete
-    $('#Autocomplete').click('.Lgn.AC a[href]', function() {
+    $('#Autocomplete .Lgn.AC a[href]').click(function() {
         MasqueEtLoader.removeClass('Hidden');
     });
 
@@ -432,7 +432,7 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
         DataLocation.empty();
         data.FnrsExclus.forEach(function(el) {
             if(el.ExclureFrs == 1) {
-                DataLocation.append('<div>' + el.CFR + '</div>');                
+                DataLocation.append('<div id="' + el.CFR + '">' + el.DesignationFr + ' <span class="Cat">(' + el.Catalogue + ')</span></div>');                
                 i++;
             }
         });
