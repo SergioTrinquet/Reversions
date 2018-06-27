@@ -13,9 +13,7 @@ var DataEtape1 = {};
     SaisieTauxEDI : ""
 };*/
 var DataEtape2 = Init_DataEtape2();
-
 var DataEtape3 = "";
-
 
 var DataGlobal = {
     Etape1: DataEtape1,
@@ -31,10 +29,22 @@ var Masque = null;
 
 var PrecedenteAnneeAccordSaisie = null; // 05/01/18
 
+var PopinCreationAccord_Etp1, 
+    PopinCreationAccord_Etp2, 
+    PopinCreationAccord_Etp3 = null;
+
+var DatePickerDebut,
+    DatePickerFin = null;
+
 $(function () {
 
     /// Affectation variable globale
     Masque = $('.Masque');
+    PopinCreationAccord_Etp1 = $('#PopinCreationAccord_Etp1');
+    PopinCreationAccord_Etp2 = $('#PopinCreationAccord_Etp2');
+    PopinCreationAccord_Etp3 = $('#PopinCreationAccord_Etp3');
+    DatePickerDebut = $("#SaisieDateDebutAccord");
+    DatePickerFin = $("#SaisieDateFinAccord");
 
     /// Fermeture popin
     $('.Popin .ClosePopin').click(function() {
@@ -44,7 +54,7 @@ $(function () {
     /// Apparition 1ere popin de saisie
     $('#BtCreationAccord').on('click', function() {
         Masque.removeClass('Hidden'); /// Apparition masque
-        $('#PopinCreationAccord_Etp1').addClass('Display');
+        PopinCreationAccord_Etp1.addClass('Display');
     });
 
 
@@ -140,46 +150,54 @@ function ClosePopin(Bt) {
         var IdPopin = $(Bt).closest('.Popin').attr('id');
         $('#' + IdPopin).removeClass('Display');
 
-        numEtapeActuel = GetEtapePopin(Bt); /// On détermine ds quel n° d'encart on est
-        //console.log('ClosePopin : ' + numEtapeActuel); //TEST
-        if(numEtapeActuel > 0) {
-            DataEtape1 = {}; /// On vide l'objet qui stocke les infos saisies
-            
-            /// On vide les champs et on supprime les indicateurs d'erreur
-            $('#PopinCreationAccord_Etp1 input[type="text"]').val('').removeClass('Error');
-            $('#SaisieTauxRev').prop('disabled', 'disabled').removeAttr('data-requis');
-            $('#SaisieTauxEDI').prop('disabled', 'disabled'); // Ajouté le 21/07/17
-            $('#PopinCreationAccord_Etp1 select').removeClass('Error');
-            $('#PopinCreationAccord_Etp1 select option:eq(0)').prop('selected', 'selected');
-            
-            $('#LgnError > div').html(""); /// Suppression dernier msg d'erreur s'il y en avait un
-            $('#LgnError').addClass('Hidden');
-        }
-        if(numEtapeActuel > 1) {
-            DataEtape2 = {
-                Groupe: [],
-                Etablissement: "",
-                MultiAccord: null,
-                MultiAccordListeEtablissements: []
-            };
+        //numEtapeActuel = GetEtapePopin(Bt); /// On détermine ds quel n° d'encart on est
+        //console.warn('ClosePopin : ' + numEtapeActuel); //TEST
 
-            /// On décoche ttes les checkboxs cochées
-            $('#PopinCreationAccord_Etp2 input[type="checkbox"]:checked').each(function() {
-                var elem = $(this);
-                elem.prop('checked', false).removeAttr('data-fromgrp').removeAttr('title').closest('span').removeClass('Selected');
-            });
-            // On réinitialise les variables globales et l'affichage des nbs de grpmts/etbs
-            NbGrpChecked = 0;
-            $('#NbGrpselected').text(NbGrpChecked);
-            $('.NbEtbselected').text('0');
-        }
-        if(numEtapeActuel > 2) {
-            DataEtape3 = ""; /// On vide l'objet qui stocke les infos saisies
-            $('#PopinCreationAccord_Etp3 input[type="radio"]:checked').prop('checked', false); /// On décoche le bouton radio
-        }
+        /// Réinitialisation de l'étape 1 ///
+        DataEtape1 = {}; /// On vide l'objet qui stocke les infos saisies
+        
+        /// On vide les champs et on supprime les indicateurs d'erreur
+        PopinCreationAccord_Etp1.find('input[type="text"]').val('').removeClass('Error');
+        $('#SaisieTauxRev').prop('disabled', 'disabled').removeAttr('data-requis');
+        $('#SaisieTauxEDI').prop('disabled', 'disabled');
+        PopinCreationAccord_Etp1.find('select').removeClass('Error');
+        PopinCreationAccord_Etp1.find('select option:eq(0)').prop('selected', 'selected');
+        
+        $('#LgnError > div').html(""); /// Suppression dernier msg d'erreur s'il y en avait un
+        $('#LgnError').addClass('Hidden');
 
+        /// Réinitialisation des datepicker, sinon garde les dates saisies avant
+        DatePickerDebut.datepicker( "option", "maxDate", "+24m" );
+        DatePickerFin.datepicker( "option", "minDate", +1 );
+
+
+        /// Réinitialisation de l'étape 2 ///
+        DataEtape2 = {
+            Groupe: [],
+            Etablissement: "",
+            MultiAccord: null,
+            MultiAccordListeEtablissements: []
+        };
+
+        /// On rend tous les etbs visibles (car sont cachés qd sélect° d'un Grp)
+        PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] span').removeClass('Hidden');
+
+        /// On décoche ttes les checkboxs cochées
+        $('#PopinCreationAccord_Etp2 input[type="checkbox"]:checked').each(function() {
+            var elem = $(this);
+            elem.prop('checked', false).removeAttr('data-fromgrp').removeAttr('title').closest('span').removeClass('Selected');
+        });
+        // On réinitialise les variables globales et l'affichage des nbs de grpmts/etbs
+        NbGrpChecked = 0;
+        $('#NbGrpselected').text(NbGrpChecked);
+        $('.NbEtbselected').text('0');
+    
+        /// réinitialisation sur Etape 3 (facultatif car cette partie est réinitialisé à chaque appel de cette étape) ///
+        PopinCreationAccord_Etp3.find('#ListeEtbsChoixDestinataires ul').empty();
+
+
+        numEtapeActuel = null; // Réinitialisation
     }
-
 }
 
 
@@ -196,7 +214,7 @@ function SelectionInput(ThisInput) {
 
 /// Pour activer ou non le bouton 'Suivant'
 function VerifSelection(Nb_EtbsChecked) {
-    var BtValid = $('#PopinCreationAccord_Etp2 .Validation_EtapeCreateAccord');
+    var BtValid = PopinCreationAccord_Etp2.find('.Validation_EtapeCreateAccord');
     Nb_EtbsChecked > 0 ? BtValid.removeAttr('disabled') : BtValid.prop('disabled', 'disabled');
 }
 
@@ -214,24 +232,24 @@ function GetDataAccordForHeaders() {
     var LibelleTypeTauxRev = $('#SaisieTypeTauxRev option[value="' + SaisieTypeTauxRev + '"]').text();
     var PopinCreaTauxRev = (SaisieTypeTauxRev == "1" ? " (" + (_.findWhere(DataEtape1, {name:"SaisieTauxRev"})).value + "%)" : "");
     */
-    var SaisieNomAccord = $('#PopinCreationAccord_Etp1 #SaisieNomAccord').val(); 
-    var SaisieAnneeAccord = $('#PopinCreationAccord_Etp1 #SaisieAnneeAccord').val();
-    var SaisieDateDebutAccord = $('#PopinCreationAccord_Etp1 #SaisieDateDebutAccord').val();
-    var SaisieDateFinAccord = $('#PopinCreationAccord_Etp1 #SaisieDateFinAccord').val();
-    var SaisieTauxEDI = $('#PopinCreationAccord_Etp1 #SaisieTauxEDI').val();
-    var SaisieTypeTauxRev = $('#PopinCreationAccord_Etp1 #SaisieTypeTauxRev').val();
+    var SaisieNomAccord = PopinCreationAccord_Etp1.find('#SaisieNomAccord').val(); 
+    var SaisieAnneeAccord = PopinCreationAccord_Etp1.find('#SaisieAnneeAccord').val();
+    var SaisieDateDebutAccord = PopinCreationAccord_Etp1.find('#SaisieDateDebutAccord').val();
+    var SaisieDateFinAccord = PopinCreationAccord_Etp1.find('#SaisieDateFinAccord').val();
+    var SaisieTauxEDI = PopinCreationAccord_Etp1.find('#SaisieTauxEDI').val();
+    var SaisieTypeTauxRev = PopinCreationAccord_Etp1.find('#SaisieTypeTauxRev').val();
     var LibelleTypeTauxRev = $('#SaisieTypeTauxRev option:selected').text();
     var PopinCreaTauxRev = (SaisieTypeTauxRev == "1" ? " (" + $("#SaisieTauxRev").val() + "%)" : "");
     var PopinCreaTauxEDI = (SaisieTypeTauxRev == "1" ? (SaisieTauxEDI == "" ? "-" : SaisieTauxEDI) : "-"); // Ajouté le 21/07/17
 
-    $('#PopinCreationAccord_Etp2 .PopinCreaNomAccord').text(SaisieNomAccord);
-    $('#PopinCreationAccord_Etp2 .PopinCreaAnneeAccord').text(SaisieAnneeAccord);
-    $('#PopinCreationAccord_Etp2 .PopinCreaDateDebut').text(SaisieDateDebutAccord);
-    $('#PopinCreationAccord_Etp2 .PopinCreaDateFin').text(SaisieDateFinAccord);
-    $('#PopinCreationAccord_Etp2 .PopinCreaTypeTauxRev').text(LibelleTypeTauxRev);    
-    $('#PopinCreationAccord_Etp2 .PopinCreaTauxRev').text(PopinCreaTauxRev);
-    //$('#PopinCreationAccord_Etp2 .PopinCreaTauxEDI').text((SaisieTauxEDI == "" ? "-" : SaisieTauxEDI)); // Mis en comm. le 21/07/17
-    $('#PopinCreationAccord_Etp2 .PopinCreaTauxEDI').text(PopinCreaTauxEDI); // Ajouté le 21/07/17
+    PopinCreationAccord_Etp2.find('.PopinCreaNomAccord').text(SaisieNomAccord);
+    PopinCreationAccord_Etp2.find('.PopinCreaAnneeAccord').text(SaisieAnneeAccord);
+    PopinCreationAccord_Etp2.find('.PopinCreaDateDebut').text(SaisieDateDebutAccord);
+    PopinCreationAccord_Etp2.find('.PopinCreaDateFin').text(SaisieDateFinAccord);
+    PopinCreationAccord_Etp2.find('.PopinCreaTypeTauxRev').text(LibelleTypeTauxRev);    
+    PopinCreationAccord_Etp2.find('.PopinCreaTauxRev').text(PopinCreaTauxRev);
+    //PopinCreationAccord_Etp2.find('.PopinCreaTauxEDI').text((SaisieTauxEDI == "" ? "-" : SaisieTauxEDI)); // Mis en comm. le 21/07/17
+    PopinCreationAccord_Etp2.find('.PopinCreaTauxEDI').text(PopinCreaTauxEDI); // Ajouté le 21/07/17
 
     /// Clonage de l'entete de la 2eme popin dans la 3eme
     $('#PopinCreationAccord_Etp3 .DataSaisiesEtp1').remove();
@@ -247,8 +265,6 @@ function Initialisation_Etape1() {
     });
     
     /// Gestion des datePicker
-    var DatePickerDebut = $("#SaisieDateDebutAccord");
-    var DatePickerFin = $("#SaisieDateFinAccord");
     ParamsDatePickers(DatePickerDebut, DatePickerFin, "-24m", "+24m");
 
     /// Qd sélection avec liste déroulante du Taux de réversion
@@ -300,7 +316,7 @@ function Validation_Etape1(Bt) {
     });
 
     /// Controle sur la liste déroulante
-    var Select = $('#PopinCreationAccord_Etp1 select');
+    var Select = PopinCreationAccord_Etp1.find('select');
     if($.trim($('#PopinCreationAccord_Etp1 select > option:selected').val()) == '') {
         ValidateForm_part1 = false;
         Select.addClass('Error');
@@ -347,7 +363,6 @@ function Validation_Etape1(Bt) {
         if(PrecedenteAnneeAccordSaisie !== SaisieAnneeAccord) {
             DataEtape2 = Init_DataEtape2(); /// Réinitialisation de l'étape 2     
         /// FIN 05/01/18
-
 
 
             /// Appel AJAX pour charger la liste des groupes et etablissements en fonction de l'année saisie dans l'étape 1
@@ -407,7 +422,7 @@ function Validation_Etape1(Bt) {
 function Initialisation_Etape2() {
 
     /// Quand sélection d'un groupement, sélection automatique de tous les établissements de ce groupement
-    $('#PopinCreationAccord_Etp2').on('click', '.Cln[data-type="Grps"] input[type="checkbox"]', function() {
+    PopinCreationAccord_Etp2.on('click', '.Cln[data-type="Grps"] input[type="checkbox"]', function() {
         var chkbx = $(this);
         var GroupId = chkbx.attr('id').replace('Grp_', '');
         var NomGrp = chkbx.next('label').text(); 
@@ -419,7 +434,7 @@ function Initialisation_Etape2() {
 
 
         /// Controles de saisie sur les checkboxs Groupement pour interdire des cas de figure invraisemblables (1 grp + 1 etb avec accord individuel)
-        var NbEtbsNotFromGrpChecked = $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]:checked:not([data-fromgrp])').length;
+        var NbEtbsNotFromGrpChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked:not([data-fromgrp])').length;
         if(NbEtbsNotFromGrpChecked > 0) {
             alert("Vous ne pouvez pas ajouter un groupement à un accord individuel (accord comprenant un établissement à titre individuel et non pas comme faisant partie d'un groupement) !");
             return false;
@@ -441,7 +456,7 @@ function Initialisation_Etape2() {
         .done(function (data) {
             //console.log("La data est : " + JSON.stringify(data)); //TEST
             if(data.length != 0) {
-                var Etbs_checkboxes = $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]');
+                var Etbs_checkboxes = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]');
             
                 data.forEach(function(el) {
                     //console.log(el.EtablissementId); //TEST
@@ -452,21 +467,40 @@ function Initialisation_Etape2() {
                         GoodCheckbox.prop('checked', true).attr('data-fromgrp', GroupId).attr('title', "Sétectionné comme faisant partie du groupement '" + NomGrp + "'").closest('span').addClass('Selected');
                         GoodCheckbox.next('label').attr('title', "Sétectionné comme faisant partie du groupement '" + NomGrp + "'");
                     } else { ///... sinon si désélection
-                        GoodCheckbox.prop('checked', false).removeAttr('data-fromgrp').removeAttr('title').closest('span').removeClass('Selected');
+                        //GoodCheckbox.prop('checked', false).removeAttr('data-fromgrp').removeAttr('title').closest('span').removeClass('Selected'); // 1ere version avant version avec affichage EXCLUSIF des etbs sélectionnés
+                        GoodCheckbox.prop('checked', false).removeAttr('title').closest('span').removeClass('Selected');
                         GoodCheckbox.next('label').removeAttr('title');
                     }
                 });
-
                 
+
                 /// Enregistrement data
                 RecordData(data, selectionne, 'Grp');
 
                 
                 /// Affectation du nb de groupemements et établissements cochés dans entetes des colonnes de checkbox
-                NbGrpChecked = $('#PopinCreationAccord_Etp2 .Cln[data-type="Grps"] input[type="checkbox"]:checked').length;
-                NbEtbChecked = $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]:checked').length;
+                NbGrpChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Grps"] input[type="checkbox"]:checked').length;
+                NbEtbChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked').length;
                 $('#NbGrpselected').text(NbGrpChecked);
                 $('.NbEtbselected').text(NbEtbChecked);
+
+
+                /// Pour n'afficher que les établissements des groupes sélectionnés 
+                var AllEtbsNotSelected = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] span:not(.Selected)');
+                var AllEtbsSelected = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] span.Selected');
+                var EtbsFromThisGrp = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[data-fromgrp="' + GroupId + '"]');
+                //console.warn('/////////////////// NbGrpChecked : ' + NbGrpChecked + ' | selectionne : ' + selectionne + ' | GroupId : ' + GroupId + ' //////////////////////');//TEST
+                if(selectionne) {   // Si sélection...
+                    AllEtbsNotSelected.addClass('Hidden'); 
+                    AllEtbsSelected.removeClass('Hidden');
+                } else { // ...sinon...
+                    if(NbGrpChecked == 0) {
+                        AllEtbsNotSelected.removeClass('Hidden'); 
+                    } else {
+                        EtbsFromThisGrp.removeAttr('data-fromgrp').closest('span').addClass('Hidden')
+                    }
+                }
+
 
                 /// Enable ou pas bt 'Suivant' en vérifiant si au moins 1 Etb de coché
                 VerifSelection(NbEtbChecked); 
@@ -488,13 +522,13 @@ function Initialisation_Etape2() {
 
 
     /// Quand sélection d'un établissement
-    $('#PopinCreationAccord_Etp2').on('click', '.Cln[data-type="Etbs"] input[type="checkbox"]', function() {
+    PopinCreationAccord_Etp2.on('click', '.Cln[data-type="Etbs"] input[type="checkbox"]', function() {
         var chkbx = $(this);
         var selectionne = null;
         selectionne = IsChecked(chkbx);
         
         /// Controles de saisie sur les checkboxs Etablissements pour interdire des cas de figure invraisemblables (1 grp + 1 etb, plusieurs etbs n'appartenant pas à un grp,...)
-        NbEtbChecked = $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]:checked').length;
+        NbEtbChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked').length;
         console.log('click sur chbx Etb : NbGrpChecked --> ' + NbGrpChecked + ' | NbEtbChecked : ' + NbEtbChecked); //TEST
         
         if(selectionne) { /// Si etb checké...
@@ -610,51 +644,7 @@ function Validation_Etape2(Bt) {
 
     DataEtape2.MultiAccord = false; /// Valeur par défaut
 
-/************* V1 ************/
-/*
     /// Choix entre un accord de groupement, ou autant d'accords que d'établissements et donc pas un accord de groupement
-    if(NbGrpChecked > 0) {
-        var r = confirm("Voulez-vous créer un accord de groupement,\nou bien autant d'accords que d'établissements dans le(s) groupement(s) sélectionné(s) ?");
-        if(!r) {  /// Si on veut autant d'accords individuels que d'établissements...
-        
-            DataEtape2.MultiAccord = true;
-            /// Transfert des idEtablissements de la propriété 'Groupe' vers la propriété 'MultiAccordListeEtablissements' 
-            $.each(DataEtape2.Groupe, function(i, el) { /// pour chacun des groupes...
-                $.each(el.ListeEtbsGroupe, function(j, elmt) { ///...on parcourt chacun des établissements...
-                    DataEtape2.MultiAccordListeEtablissements.push(elmt);
-                });
-            });
-            /// On vide la propriété 'Groupe'
-            DataEtape2.Groupe = [];
-
-            /// On désélectionne le(s) groupement(s) et tout ce qui va avec
-            $('#PopinCreationAccord_Etp2 .Cln[data-type="Grps"] input[type="checkbox"]:checked').prop('checked', false).closest('span').removeClass('Selected'); /// Désélection du/des groupemement(s)
-            NbGrpChecked = 0;/// Variable 'NbGrpChecked' réinitialisée
-            $('#NbGrpselected').text(NbGrpChecked);
-            $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]:checked').removeAttr('data-fromgrp').removeAttr('title'); /// Retrait propriété [data-fromgrp] sur ttes des checkboxs Etb
-        
-        } 
-    }
-
-    /// Si accord de groupement (--> prendre aussi le cas d'un groupement avec 1 seul etb !!!)
-    if (DataEtape2.Groupe.length > 0 && DataEtape2.Etablissement == "" && DataEtape2.MultiAccordListeEtablissements.length == 0) {    
-        /// Passage au prochain popin
-        switchPopins(Bt, true);
-        Initialisation_Etape3();
-    } else { ///...Si pas accord de groupement, c'e-a-d. accord individuel(s) --> pas besoin de l'étape 3
-        /// Enregistrement ds la bdd
-        RecordDataBDD(); /// <-- EN COURS
-
-        /// redirection vers pg de recherche/modification d'un accord sur le(s) accords créés
-        alert('On est censé enregistrer les données\net arriver dans la page de recherche/modification d un accord'); //TEST --> A VIRER
-    }
-    */
-/************ Fin V1 ************/
-
-
-
-/************* V2 ***************/
-/// Choix entre un accord de groupement, ou autant d'accords que d'établissements et donc pas un accord de groupement
     if(NbGrpChecked > 0) {
 
         Masque.addClass('Hover');
@@ -676,10 +666,10 @@ function Validation_Etape2(Bt) {
                 DataEtape2.Groupe = [];
 
                 /// On désélectionne le(s) groupement(s) et tout ce qui va avec
-                $('#PopinCreationAccord_Etp2 .Cln[data-type="Grps"] input[type="checkbox"]:checked').prop('checked', false).closest('span').removeClass('Selected'); /// Désélection du/des groupemement(s)
+                PopinCreationAccord_Etp2.find('.Cln[data-type="Grps"] input[type="checkbox"]:checked').prop('checked', false).closest('span').removeClass('Selected'); /// Désélection du/des groupemement(s)
                 NbGrpChecked = 0;/// Variable 'NbGrpChecked' réinitialisée
                 $('#NbGrpselected').text(NbGrpChecked);
-                $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"]:checked').removeAttr('data-fromgrp').removeAttr('title'); /// Retrait propriété [data-fromgrp] sur ttes des checkboxs Etb
+                PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked').removeAttr('data-fromgrp').removeAttr('title'); /// Retrait propriété [data-fromgrp] sur ttes des checkboxs Etb
             
                 /// Enregistrement ds la bdd
                 RecordDataBDD(); /// <-- EN COURS
@@ -703,7 +693,6 @@ function Validation_Etape2(Bt) {
         RecordDataBDD(); /// <-- EN COURS
         location.href = '/RechercheAccords'; /// A VIRER, JUSTE PENDANT DEV.
     }
-/************* Fin V2 **************/
 
 } 
 
@@ -723,7 +712,7 @@ function Initialisation_Etape3() {
         ListeGroupement.forEach(function(el) {
             el.ListeEtbsGroupe.forEach(function(elmt) {
                 /// On créé les boutons radio dans la 3eme popin
-                var NomEtb = $('#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] input[type="checkbox"][value="' + elmt + '"]:checked').next('label').html();
+                var NomEtb = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"][value="' + elmt + '"]:checked').next('label').html();
                 $("<span><input id='ChxDest_" + elmt + "' name='ChoixDestinataire' value='" + elmt + "' type='radio'><label for='ChxDest_" + elmt + "'>" + NomEtb + "</label></span>").appendTo('#ListeEtbsChoixDestinataires ul').wrap("<li></li>");
             });
         });
