@@ -181,8 +181,8 @@ function ClosePopin(Bt) {
 
         /// On rend tous les etbs visibles (car sont cachés qd sélect° d'un Grp)
         PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] span').removeClass('Hidden');
-
-        /// On décoche ttes les checkboxs cochées
+        
+        /// On décoche ttes les checkboxs cochées + retraits attributs
         $('#PopinCreationAccord_Etp2 input[type="checkbox"]:checked').each(function() {
             var elem = $(this);
             elem.prop('checked', false).removeAttr('data-fromgrp').removeAttr('title').closest('span').removeClass('Selected');
@@ -474,32 +474,36 @@ function Initialisation_Etape2() {
                 });
                 
 
-                /// Enregistrement data
-                RecordData(data, selectionne, 'Grp');
-
                 
                 /// Affectation du nb de groupemements et établissements cochés dans entetes des colonnes de checkbox
                 NbGrpChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Grps"] input[type="checkbox"]:checked').length;
                 NbEtbChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked').length;
                 $('#NbGrpselected').text(NbGrpChecked);
                 $('.NbEtbselected').text(NbEtbChecked);
-
-
+                
+                
                 /// Pour n'afficher que les établissements des groupes sélectionnés 
-                var AllEtbsNotSelected = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] span:not(.Selected)');
-                var AllEtbsSelected = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] span.Selected');
+                var AllEtbsNotSelected = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] li > span:not(.Selected)');
+                var AllEtbsSelected = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] li > span.Selected');
                 var EtbsFromThisGrp = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[data-fromgrp="' + GroupId + '"]');
                 //console.warn('/////////////////// NbGrpChecked : ' + NbGrpChecked + ' | selectionne : ' + selectionne + ' | GroupId : ' + GroupId + ' //////////////////////');//TEST
                 if(selectionne) {   // Si sélection...
                     AllEtbsNotSelected.addClass('Hidden'); 
                     AllEtbsSelected.removeClass('Hidden');
                 } else { // ...sinon...
+                    EtbsFromThisGrp.removeAttr('data-fromgrp');
                     if(NbGrpChecked == 0) {
                         AllEtbsNotSelected.removeClass('Hidden'); 
                     } else {
-                        EtbsFromThisGrp.removeAttr('data-fromgrp').closest('span').addClass('Hidden')
+                        EtbsFromThisGrp.closest('span').addClass('Hidden')
                     }
                 }
+
+                /// Enregistrement data
+                RecordData(data, selectionne, 'Grp');
+
+                
+
 
 
                 /// Enable ou pas bt 'Suivant' en vérifiant si au moins 1 Etb de coché
@@ -691,7 +695,7 @@ function Validation_Etape2(Bt) {
     } else { /// Si pas de groupe(s) sélectionné(s), donc pas accord de groupement mais accord individuel --> pas besoin de l'étape 3
         /// Enregistrement ds la bdd
         RecordDataBDD(); /// <-- EN COURS
-        location.href = '/RechercheAccords'; /// A VIRER, JUSTE PENDANT DEV.
+        //location.href = '/RechercheAccords'; /// A VIRER, JUSTE PENDANT DEV.
     }
 
 } 
