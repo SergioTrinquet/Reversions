@@ -1317,7 +1317,7 @@ button.ValidSearch:hover {
 .WrapLoader.Hidden,
 #LstAjoutEtbs li.Hidden, #BtFiltreEtbsDispos [data-label].Hidden, #BtFiltreEtbsDispos i.NoFilter.Hidden,
 #TextNoResults.Hidden, #TxtTooShort.Hidden,
-#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] span.Hidden {
+#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] li > span.Hidden {
         display: none;
 }
 /*================ Fin Pg Création / consultation des réversions ==============*/
