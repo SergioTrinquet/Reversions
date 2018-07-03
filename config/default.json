@@ -37,6 +37,7 @@
     "pages": [
         { "nom": "HistoGrp", "role": [], "intitule": "Historique des groupes" },
         { "nom": "CreationAccord", "role": ["ReversionsCreationAccord"], "intitule": "Créer un accord" }, 
+        { "nom": "ListeAccords", "role": [], "intitule": "Liste des accords" },
         { "nom": "RechercheAccords", "role": ["ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture"], "intitule": "Rechercher/ modifier un accord" }
     ]
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Liste des accords de réversion</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <% include partials/bundleCSS.ejs %>
+
+        <% include partials/bundleJS_ListeAccords.ejs %>
+    </head>
+    <body>
+
+        <% include partials/menu.ejs %>
+        <% include partials/help.ejs %>
+        <% include partials/userInfo.ejs %>
+
+        <div id="main" class="listeDesAccords">
+        
+            <div class="bandeauHaut">
+                <div>Liste des accords de réversion</div>
+                <div>
+                    
+                    <div>
+                        <i class="fa fa-filter IconSearch"></i>
+                        <input type="text" class="SearchFieldBandeau" id="SearchEtabl" name="" value="" placeholder="Filtrer sur un nom d'accord" autocomplete="off" />
+                        <select id="" autocomplete="off">
+                            <option>Tous les accords</option>
+                            <option>Accords avec réversion pas validée</option>
+                            <option>Accords avec réversion validée mais pas réglée</option>
+                            <option>Accords avec réversion réglée</option>
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+            <div class="blocContenu">
+
+                <div id="CommentMoteurRecherche">
+                    <span id="TextNoResults" class="Hidden"><i class="fa fa-exclamation-circle"></i> Pas de résultat(s) pour '<span></span>'</span>
+                    <span id="TxtTooShort" class="Hidden"><i class="fa fa-exclamation-circle"></i> Votre recherche doit compter <span></span> caractères minimum</span>
+                </div>
+
+                <div class="MskTopListe"></div>
+
+                <div class="FdListe ListeEtbl">
+                    <div class="Enteteliste Lgn">
+                        <div>Nom de l'accord</div>
+                        <div>Infos sur l'accord</div>
+                        <div>Réversion validée</div>
+                        <div>Réversion réglée</div>
+                        <div>Somme versée</div>
+                    </div>
+
+                    <div class="ContenuListe">
+                        <div class="Lgn">
+                            <div><a href="/RechercheAccords/XXX" class="Lien">VIVALTO</a><i class="fa fa-chevron-right"></i></div>
+                            <div>Accord pour groupe VIVALTO SANTE</div>
+                            <div><span class="RevValidee non">Non</span></div>
+                            <div><span class="RevReglee non">Non</span></div>
+                            <div>-</div>
+                        </div>
+                        <div class="Lgn">
+                            <div><a href="/RechercheAccords/XXX" class="Lien">SOS</a><i class="fa fa-chevron-right"></i></div>
+                            <div>Accord pour groupe(s) SOS1 - SOS2 - SOS3 - SOS4</div>
+                            <div><span class="RevValidee oui">12/07/18</span></div>
+                            <div><span class="RevReglee oui">15/07/18</span></div>
+                            <div>166 022,33€</div>
+                        </div>
+                        <div class="Lgn">
+                            <div><a href="/RechercheAccords/XXX" class="Lien">MAISON DES OLIVIERS</a><i class="fa fa-chevron-right"></i></div>
+                            <div>Accord pour étbl. n'appartenant à aucun groupe</div>
+                            <div><span class="RevValidee oui">15/06/18</span></div>
+                            <div><span class="RevReglee non">Non</span></div>
+                            <div>-</div>
+                        </div>
+                    </div>
+                <div>
+
+
+
+            
+            </div>
+
+
+        </div>
+
+    </body>
+</html>

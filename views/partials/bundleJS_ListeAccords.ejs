@@ -1,0 +1,12 @@
+<% include ./bundleJS_CDN.ejs %>
+
+<% if(ENV === 'development') { %>
+
+    <script src="/scripts/sidenav.js"></script>
+    <script src="/scripts/ListeAccords.js"></script>
+
+<% } else { %>
+
+    <!--<script src="/scripts/global_CreationAccord.js"></script>--> <!-- A FAIRE !! -->
+
+<% } %>

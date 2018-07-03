@@ -6,6 +6,7 @@ var logger = require('./log/logConfig.js').logger;
 const listHistoGrpController = require('./controllers/ListeHistoriqueGroupementsController'); // Custom module
 const CreateAccordController = require('./controllers/CreationAccordController'); // Custom module
 const RechAccordsController = require('./controllers/RechercheAccordsController'); // Custom module
+const ListeAccordsController = require('./controllers/ListeAccordsController'); // Custom module
 const ListeFacturesEtblController = require('./controllers/ListeFacturesEtblController'); // Custom module
 var session = require('./app_modules/session.js');
 var authentification = require('./app_modules/authentification.js');
@@ -66,6 +67,7 @@ listHistoGrpController(app); /// Pour la page 'Historique des groupes'
 RechAccordsController(app); /// Pour la page de recherche des accords
 ListeFacturesEtblController(app); /// Pour la page de liste des factures pour un établissements
 CreateAccordController(app); /// Pour la page de création d'un accord
+ListeAccordsController(app); /// Pour la page de liste des accords
 
 
 // Middleware pour gérer les erreurs qui sont remontées
