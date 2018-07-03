@@ -1348,24 +1348,26 @@ button.ValidSearch:hover {
   font-style: initial;
 }
 
-.listeAccordsReversions .Enteteliste {
+.detailsAccordReversion .Enteteliste {
     padding: 10px 20px;
 }
-.listeAccordsReversions .Enteteliste.clone {
+.detailsAccordReversion .Enteteliste.clone {
     max-width: calc(100% - 50px);
 }
-.listeAccordsReversions .Enteteliste > div {
+.detailsAccordReversion .Enteteliste > div,
+.listeDesAccords .Enteteliste > div {
     font-size: 13px;
     font-weight: bold;
 }
-.listeAccordsReversions .Enteteliste a { color:#ffffff; text-decoration:none; }
-.listeAccordsReversions .Enteteliste a:hover { text-decoration:underline; }
-.listeAccordsReversions .Enteteliste i.fa {
+.detailsAccordReversion .Enteteliste a { color:#ffffff; text-decoration:none; }
+.detailsAccordReversion .Enteteliste a:hover { text-decoration:underline; }
+.detailsAccordReversion .Enteteliste i.fa {
     font-size: 15px;
     margin: 0 0 0 7px;
 }
-.listeAccordsReversions .Enteteliste,
-.Lgn .LgnAccordSection {
+.detailsAccordReversion .Enteteliste,
+.Lgn .LgnAccordSection,
+.listeDesAccords .Enteteliste {
     font-size: 13px;
     padding: 12px 20px;
 }
@@ -1420,27 +1422,27 @@ button.ValidSearch:hover {
     border-bottom: dashed 1px #6D6D6D;
 }
 
-.listeAccordsReversions .Enteteliste > div:first-child,
+.detailsAccordReversion .Enteteliste > div:first-child,
 .LgnAccordSection > div:first-child,
 .LgnEtbSection > div:first-child  {
     width: 21%;
     min-width: 250px;
 }
-.listeAccordsReversions .Enteteliste > div:nth-child(2),
+.detailsAccordReversion .Enteteliste > div:nth-child(2),
 .LgnAccordSection > div:nth-child(2),
 .LgnEtbSection > div:nth-child(2) {
     min-width: 200px;
     width: 20%;
 }
 .LgnEtbSection > div:nth-child(2) { font-style: italic; }
-.listeAccordsReversions .Enteteliste > div:nth-child(3),
+.detailsAccordReversion .Enteteliste > div:nth-child(3),
 .LgnAccordSection > div:nth-child(3),
 .LgnEtbSection > div:nth-child(3) {
     min-width: 130px;
     text-align: center;
     width: 10%;
 }
-.listeAccordsReversions .Enteteliste > div:nth-child(4),
+.detailsAccordReversion .Enteteliste > div:nth-child(4),
 .LgnAccordSection > div:nth-child(4),
 .LgnEtbSection > div:nth-child(4) {
     min-width: 85px;
@@ -1448,7 +1450,7 @@ button.ValidSearch:hover {
     width: 5%;
     line-height: 13px;
 }
-.listeAccordsReversions .Enteteliste > div:nth-child(5),
+.detailsAccordReversion .Enteteliste > div:nth-child(5),
 .LgnAccordSection > div:nth-child(5),
 .LgnEtbSection > div:nth-child(5) {
     min-width: 85px;
@@ -1456,7 +1458,7 @@ button.ValidSearch:hover {
     width: 6%;
     line-height: 13px;
 }
-.listeAccordsReversions .Enteteliste > div:nth-child(6),
+.detailsAccordReversion .Enteteliste > div:nth-child(6),
 .LgnAccordSection > div:nth-child(6),
 .LgnEtbSection > div:nth-child(6) {
     min-width: 90px;
@@ -1467,19 +1469,19 @@ button.ValidSearch:hover {
 }
 .LgnEtbSection > div:nth-child(5) { font-style: italic; }
 .LgnEtbSection > div:nth-child(6) { cursor: none; }
-.listeAccordsReversions .Enteteliste > div:nth-child(6) { line-height: 13px; }
+.detailsAccordReversion .Enteteliste > div:nth-child(6) { line-height: 13px; }
 
-.listeAccordsReversions .Enteteliste > div:nth-child(7),
+.detailsAccordReversion .Enteteliste > div:nth-child(7),
 .LgnAccordSection > div:nth-child(7),
 .LgnEtbSection > div:nth-child(7) {
     text-align: right;
     width: auto;
     min-width: 115px;
 }
-.listeAccordsReversions .Enteteliste > div:nth-child(8),
-.listeAccordsReversions .Enteteliste > div:nth-child(9),
-.listeAccordsReversions .Enteteliste > div:nth-child(10),
-.listeAccordsReversions .Enteteliste > div:nth-child(11),
+.detailsAccordReversion .Enteteliste > div:nth-child(8),
+.detailsAccordReversion .Enteteliste > div:nth-child(9),
+.detailsAccordReversion .Enteteliste > div:nth-child(10),
+.detailsAccordReversion .Enteteliste > div:nth-child(11),
 .LgnAccordSection > div:nth-child(8),
 .LgnAccordSection > div:nth-child(9),
 .LgnAccordSection > div:nth-child(10),
@@ -1672,15 +1674,25 @@ button.ValidSearch:hover {
     color: #ff8599;
 }
 
-.LstAdh_RevValidee {
+
+.LstAdh_RevValidee,
+.RevValidee,
+.RevReglee {
     color: #ffffff;
     font-weight: bold;
-    font-size: 11px;
     padding: 2px 4px;
     border-radius: 2px;
 }
-.LstAdh_RevValidee.oui { background-color: #00b916 ; }
-.LstAdh_RevValidee.non { background-color: #ff0000; }
+.LstAdh_RevValidee { font-size: 11px; }
+.RevValidee,
+.RevReglee { font-size: 12px; }
+
+.LstAdh_RevValidee.oui,
+.RevValidee.oui,
+.RevReglee.oui { background-color: #00b916 ; }
+.LstAdh_RevValidee.non,
+.RevValidee.non,
+.RevReglee.non { background-color: #ff0000; }
 
 
 .Popin {
@@ -2031,9 +2043,61 @@ button.ValidSearch:hover {
 }
 /*=== FIN popin sur page de liste des factures ===*/
 
-
-
 /*================ Fin Liste des adhérents présents dans une réversion ==============*/
+
+
+/*================ Page Liste des accords ==============*/
+.listeDesAccords .Enteteliste > div:first-child,
+.listeDesAccords .ContenuListe .Lgn > div:first-child {
+    width: 33%;
+    min-width: 350px;
+}
+.listeDesAccords .ContenuListe .Lgn > div:first-child a {
+    color: #232D36;
+    text-decoration: none;
+}
+.listeDesAccords .ContenuListe .Lgn > div:first-child a:hover {
+    text-decoration: underline;
+    color: #427FB9;
+}
+.listeDesAccords .ContenuListe .Lgn > div:first-child .fa {
+    color: #ff6600;
+    margin-left: 4px;
+    font-size: 12px;
+    transition: margin 0.2s ease-in-out;
+}
+.listeDesAccords .ContenuListe .Lgn > div:first-child a:hover + .fa {
+    margin-left: 6px;
+}
+.listeDesAccords .Enteteliste > div:nth-child(2),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) {
+    width: 33%;
+    min-width: 350px;
+}
+.listeDesAccords .Enteteliste > div:nth-child(3),
+.listeDesAccords .Enteteliste > div:nth-child(4),
+.listeDesAccords .Enteteliste > div:nth-child(5),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(3),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(4),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(5) {
+    width: 12%;
+    min-width: 100px;
+    text-align: center;
+}
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(5) {
+    font-weight: bold;
+}
+.listeDesAccords .ContenuListe > .Lgn {
+    display: table;
+    font-size: 13px;
+    width: 100%;
+    padding: 10px 20px;
+    border-bottom: 2px dotted #dadada;
+}
+.listeDesAccords .ContenuListe > .Lgn:last-child {
+    border-width: 0;
+}
+/*================ FIN Page Liste des accords ==============*/
 
 
 /*================ Historique des groupements ==============*/
@@ -2310,7 +2374,7 @@ i#DeleteDatepickerStart:hover {
 
 
 
-.listeAccordsReversions + #ui-datepicker-div {
+.detailsAccordReversion + #ui-datepicker-div {
     background-color: #7683a5;
     font-size: 13px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
@@ -2318,15 +2382,15 @@ i#DeleteDatepickerStart:hover {
     margin-top: 1px;
 }
 
-.listeAccordsReversions + #ui-datepicker-div .ui-state-default, 
-.listeAccordsReversions + #ui-datepicker-div .ui-widget-content .ui-state-default, 
-.listeAccordsReversions + #ui-datepicker-div .ui-widget-header .ui-state-default, 
-.listeAccordsReversions + #ui-datepicker-div .ui-button, 
-.listeAccordsReversions + #ui-datepicker-div .ui-button.ui-state-disabled:hover, 
-.listeAccordsReversions + #ui-datepicker-div .ui-button.ui-state-disabled:active {
+.detailsAccordReversion + #ui-datepicker-div .ui-state-default, 
+.detailsAccordReversion + #ui-datepicker-div .ui-widget-content .ui-state-default, 
+.detailsAccordReversion + #ui-datepicker-div .ui-widget-header .ui-state-default, 
+.detailsAccordReversion + #ui-datepicker-div .ui-button, 
+.detailsAccordReversion + #ui-datepicker-div .ui-button.ui-state-disabled:hover, 
+.detailsAccordReversion + #ui-datepicker-div .ui-button.ui-state-disabled:active {
    background-color: #485577;
 }
-.listeAccordsReversions + #ui-datepicker-div .ui-widget-header {
+.detailsAccordReversion + #ui-datepicker-div .ui-widget-header {
     border-width: 0;
     background-color: #485577;
 }
