@@ -130,6 +130,7 @@ $(function () {
             $(window).scrollTop(0);
 
             Highlight(); /// Pour surligner la recherche ds la liste
+            Masque.addClass('Hidden');
         })
         .fail(function (jqXHR) {
             /// Affichage erreur
@@ -195,6 +196,7 @@ console.log('saisiesChampsFiltre : ' + saisiesChampsFiltre); //TEST
             $(window).scrollTop(0);
 
             Highlight(); /// Pour surligner la recherche ds la liste
+            Masque.addClass('Hidden');
         })
         .fail(function (jqXHR) {
             DisplayError(jqXHR.responseText); /// Affichage erreur
