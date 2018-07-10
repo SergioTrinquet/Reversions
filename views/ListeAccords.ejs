@@ -24,12 +24,13 @@
                     
                     <div>
                         <i class="fa fa-filter IconSearch"></i>
-                        <input type="text" class="SearchFieldBandeau" id="SearchEtabl" name="" value="" placeholder="Filtrer sur un nom d'accord" autocomplete="off" />
-                        <select id="" autocomplete="off">
-                            <option>Tous les accords</option>
-                            <option>Accords avec réversion pas validée</option>
-                            <option>Accords avec réversion validée mais pas réglée</option>
-                            <option>Accords avec réversion réglée</option>
+                        <input type="text" class="SearchFieldBandeau" id="SearchNomAccord" name="" value="" placeholder="Filtrer sur un nom d'accord, ou de groupe" autocomplete="off" />
+                        <i class="fa fa-times-circle" id="DeleteValueSearchNomAccord"></i>
+                        <select class="SearchFieldBandeau" id="SelectTypeAccord" autocomplete="off">
+                            <option value="All">Tous les accords</option>
+                            <option value="PasValid">Accords avec réversion pas validée</option>
+                            <option value="PasReglee">Accords avec réversion validée mais pas réglée</option>
+                            <option value="Reglee">Accords avec réversion réglée</option>
                         </select>
                     </div>
                     
@@ -40,6 +41,8 @@
             <div class="blocContenu">
 
                 <div id="CommentMoteurRecherche">
+                    <!--<div id="NbAccords"><span><%= ListeAccords.length %></span> accord(s) créé(s)</div>-->
+                    <div id="NbAccords"><span></span> accord(s) affiché(s)</div>
                     <span id="TextNoResults" class="Hidden"><i class="fa fa-exclamation-circle"></i> Pas de résultat(s) pour '<span></span>'</span>
                     <span id="TxtTooShort" class="Hidden"><i class="fa fa-exclamation-circle"></i> Votre recherche doit compter <span></span> caractères minimum</span>
                 </div>
@@ -48,6 +51,12 @@
 
                 <div class="FdListe ListeEtbl">
                     <div class="Enteteliste Lgn">
+                        <!--<div id="ClnNomAccord" class="ColonneOrdonnee">Nom de l'accord<i class="IconeClassmt fa fa-sort-alpha-asc"></i></div>
+                        <div>Infos sur l'accord</div>
+                        <div id="ClnRevValidee">Réversion validée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
+                        <div id="ClnRevReglee">Réversion réglée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
+                        <div>Somme versée</div>-->
+
                         <div>Nom de l'accord</div>
                         <div>Infos sur l'accord</div>
                         <div>Réversion validée</div>
@@ -56,27 +65,43 @@
                     </div>
 
                     <div class="ContenuListe">
+                    <!-- A VIRER -->
                         <div class="Lgn">
-                            <div><a href="/RechercheAccords/XXX" class="Lien">VIVALTO</a><i class="fa fa-chevron-right"></i></div>
-                            <div>Accord pour groupe VIVALTO SANTE</div>
-                            <div><span class="RevValidee non">Non</span></div>
-                            <div><span class="RevReglee non">Non</span></div>
-                            <div>-</div>
-                        </div>
-                        <div class="Lgn">
-                            <div><a href="/RechercheAccords/XXX" class="Lien">SOS</a><i class="fa fa-chevron-right"></i></div>
+                            <div><a href="/RechercheAccords/XXX" class="LienAccord">SOS</a><i class="fa fa-chevron-right"></i></div>
                             <div>Accord pour groupe(s) SOS1 - SOS2 - SOS3 - SOS4</div>
                             <div><span class="RevValidee oui">12/07/18</span></div>
                             <div><span class="RevReglee oui">15/07/18</span></div>
                             <div>166 022,33€</div>
                         </div>
                         <div class="Lgn">
-                            <div><a href="/RechercheAccords/XXX" class="Lien">MAISON DES OLIVIERS</a><i class="fa fa-chevron-right"></i></div>
+                            <div><a href="/RechercheAccords/XXX" class="LienAccord">MAISON DES OLIVIERS</a><i class="fa fa-chevron-right"></i></div>
                             <div>Accord pour étbl. n'appartenant à aucun groupe</div>
                             <div><span class="RevValidee oui">15/06/18</span></div>
                             <div><span class="RevReglee non">Non</span></div>
                             <div>-</div>
                         </div>
+                        <!-- FIN : A VIRER -->
+
+                        <% ListeAccords.forEach(function(accord) { %>
+                            <div class="Lgn">
+                                <div><a href="/RechercheAccords/<%= accord.AccordReversionId %>" class="LienAccord"><%= accord.NomAccordReversion %></a><i class="fa fa-chevron-right"></i></div>
+                                <div>     
+                                    <!--<span style="font-size: 10px;color:#ff0000;"><%= accord.InfoComplAccord %></span><br/><!-- Pour Test : A VIRER ! -->
+
+                                    Accord pour <%= (accord.AccordGroupe == 0 ? "établ." : "groupe") + " " %> 
+                                    <% if(accord.GroupementId == 96) { %>
+                                        n'appartenant à aucun groupe
+                                    <% } else { %>
+                                        <% if(accord.AccordGroupe == 0) { %> appartenant au groupe <% } %><span class="Nom_Grp"><%= accord.Groupe %></span>
+                                    <% } %>
+                                </div>
+
+                                <div><span class="RevValidee <%= accord.ReversionValidee %>"><%= accord.ValidationReversionDate %></span></div>
+                                <div><span class="RevReglee <%= accord.ReversionReglee %>"><%= accord.AvisReglement %></span></div>
+                                <div>-</div>
+                            </div>
+                        <% }); %>
+
                     </div>
                 <div>
 
