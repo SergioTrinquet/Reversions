@@ -1317,7 +1317,8 @@ button.ValidSearch:hover {
 .WrapLoader.Hidden,
 #LstAjoutEtbs li.Hidden, #BtFiltreEtbsDispos [data-label].Hidden, #BtFiltreEtbsDispos i.NoFilter.Hidden,
 #TextNoResults.Hidden, #TxtTooShort.Hidden,
-#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] li > span.Hidden {
+#PopinCreationAccord_Etp2 .Cln[data-type="Etbs"] li > span.Hidden,
+.listeDesAccords .ContenuListe .Lgn.Hidden {
         display: none;
 }
 /*================ Fin Pg Création / consultation des réversions ==============*/
@@ -1351,7 +1352,8 @@ button.ValidSearch:hover {
 .detailsAccordReversion .Enteteliste {
     padding: 10px 20px;
 }
-.detailsAccordReversion .Enteteliste.clone {
+.detailsAccordReversion .Enteteliste.clone,
+.listeDesAccords .Enteteliste.clone {
     max-width: calc(100% - 50px);
 }
 .detailsAccordReversion .Enteteliste > div,
@@ -1372,25 +1374,12 @@ button.ValidSearch:hover {
     padding: 12px 20px;
 }
 
-/*TEST au 16/03/17*/
 .Lgn .LgnAccordSection.clone {
     position: fixed;
     z-index: 2;
     width: calc(100% - 50px); /*50px car 2* le padding de 25px du conteneur '.ListeEtbl' */
     background-color: rgba(255,255,255,0.9);
 }
-/*Juste pour dev. !!!*/
-/*.LgnEtbSection.clone {
-    position: fixed;
-    opacity: 1;
-    z-index: 2;
-    width: calc(100% - 50px);
-    background-color: pink;
-}
-.LgnEtbSection.Hidden {
-    display: none;
-}*/
-/*Fin TEST*/
 
 .Lgn_Accord > div { 
     display: table; 
@@ -2094,9 +2083,42 @@ button.ValidSearch:hover {
     padding: 10px 20px;
     border-bottom: 2px dotted #dadada;
 }
-.listeDesAccords .ContenuListe > .Lgn:last-child {
+.listeDesAccords .ContenuListe > .Lgn:last-child,
+.listeDesAccords .ContenuListe > .Lgn.lastLgn {
     border-width: 0;
 }
+#NbAccords {
+    text-align: left;
+    margin: 0 25px;
+    position: absolute;
+}
+#NbAccords span { font-weight: bold; }
+#SearchNomAccord {
+    width: 30%;
+    min-width: 340px;
+    padding: 0 32px;
+}
+i#DeleteValueSearchNomAccord {
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: -29px;
+    opacity: .7;
+}
+i#DeleteDatepickerStart:hover { opacity: 1; }
+#SelectTypeAccord { margin: 0 0 0 15px; }
+
+/*EN TEST : A VIRER !*/.listeDesAccords .ContenuListe > .Lgn.Hidden2 { display: none; }
+
+/*.IconeClassmt {
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 8px;
+    background-color: rgba(255,255,255, 0.5);
+    border-radius: 50%;
+    color: #ED6579;
+    padding: 5px;
+}
+.ColonneOrdonnee .IconeClassmt { background-color: rgba(255,255,255, 1); }*/
 /*================ FIN Page Liste des accords ==============*/
 
 
