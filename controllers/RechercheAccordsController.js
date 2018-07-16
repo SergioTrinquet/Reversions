@@ -104,7 +104,9 @@ module.exports = function(app) {
             /// Récupération de l'accord...
             getAccords(function(recordset) {
                 var newRecordset = [];
-                newRecordset = FormatData(recordset); /// Fonction pour formater les données comme on veut pour affichage ds vue
+                /// Fonction pour formater les données comme on veut pour affichage ds vue
+                //newRecordset = FormatData(recordset); // Version avec la requete en dur ds code 'getAccords'
+                newRecordset = FormatData(recordset[0]); // Version avec proc. stock. ds code 'getAccords'
                 //console.log(colors.bgWhite.blue(JSON.stringify(newRecordset))); //TEST
 
                 if(limitationAcces) {
@@ -351,7 +353,6 @@ module.exports = function(app) {
 function FormatData(recordset) {
 
     try {
-        /* Pour TEST */
         //fs.writeFile('TEST_A_VIRER/TEST2.json', JSON.stringify(recordset), function (err) { if (err) return console.log(err); }); //TEST
 
         var tabData = [];
@@ -592,8 +593,8 @@ function getDataPropositionsRecherche(callback, saisieRecherche, next) {
 
 ///--- Récupération de la data pour afficher l'accord sélectionné ---///
 function getAccords(callback, AccRevID, next) {
+    /*
     config.parseJSON = true; // Pour que le recordset soit au format JSON
-
     var requete = "" +
     "SELECT " +        
         "AcRv.AccordReversionId, Rv.ReversionId, AcRv.AnneeReversion, AcRv.DestinataireReversementEtablissementId, AcRv.AccordGroupe, AcRv.PeriodeDebut, AcRv.PeriodeFin, AcRv.Taux, AcRv.TauxAvecEDI, AcRv.DestinataireRaisonSociale, " +
@@ -608,8 +609,27 @@ function getAccords(callback, AccRevID, next) {
     "WHERE " +       
         "AcRv.AccordReversionId = " + AccRevID + " " +
         "and (AcRv.Desactive is NULL or AcRv.Desactive = 0) " +
-        /*"--and Rv.ValidationReversionDate IS NULL " + */
     "ORDER BY ARvE.RaisonSociale;"
+
+        var conn = new sql.Connection(config);   
+    conn.connect().then(function() {
+       
+        var request = new sql.Request(conn);
+
+        request
+        .query(requete)
+        .then(function(recordset) {
+            callback(recordset);
+            conn.close();
+        })
+        .catch(function(err) {
+            next(new Error("Récupération des données pour affichage de l'accord sélectionné => " + err));
+        });
+
+    }).catch(function(err) {
+        next(new Error("Récupération des données pour affichage de l'accord sélectionné => " + err));
+    });
+    */
 
 
     var conn = new sql.Connection(config);   
@@ -618,7 +638,8 @@ function getAccords(callback, AccRevID, next) {
         var request = new sql.Request(conn);
 
         request
-        .query(requete)
+        .input('AccordReversionId', sql.Int, parseInt(AccRevID))
+        .execute('ReversionApp.ps_getInfoAccordReversion')
         .then(function(recordset) {
             callback(recordset);
             conn.close();
