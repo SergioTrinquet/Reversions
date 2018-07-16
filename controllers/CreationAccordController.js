@@ -17,7 +17,7 @@ module.exports = function(app) {
     });
 
 
-    /// Pour récupérer les groupes et établissements après validation de l'étape 1 de la saisie d'un accord
+    /// Pour récupérer les groupes et établissements + le fait qu'ils fassent déjà l'objet d'un accord après validation de l'étape 1 de la saisie d'un accord
     app.get('/CreationAccord/:Annee', userRightsAccess, function(req, res, next) {
         var AnneeSaisie = parseInt(req.params.Annee);     //console.log('req.params : ' + req.params + ' | AnneeSaisie : ' + AnneeSaisie); //TEST
 
@@ -35,7 +35,7 @@ module.exports = function(app) {
 
 
     /// Multi-usage :   1 - Pour récupérer liste des étbs correspondant au Groupe coché ds l'étape 2, 
-    ///                 2 - Pour enregistrer l'accord créé à la fin de l'étape 3 (lors de la validation finale)
+    ///                 2 - Pour enregistrer l'accord créé à la fin de l'étape 2 ou 3 (lors de la validation finale)
     app.post('/CreationAccord', userRightsAccess, function(req, res, next) {
         if (!req.body) return res.sendStatus(400);
 
@@ -92,7 +92,9 @@ module.exports = function(app) {
 
                 Record_MultiAccords(function(recordset) {
                     logger.log('info',  "Enregistrement de nouveaux accords (accords établ. d'un groupe)", {Login: req.app.get('userName'), Details: dataGoodFormat });
-                    res.send({ redirect: '/RechercheAccords' });
+                    //res.send({ redirect: '/RechercheAccords' });
+                    res.send({ redirect: '/ListeAccords' });
+                    
                 }, dataGoodFormat, next);
                 
             } else { /// Sinon autres cas (accord Etb, accord de Groupe, accord multi-groupes)...
@@ -100,7 +102,8 @@ module.exports = function(app) {
                 Record_SingleAccord(function(recordset) {
                     logger.log('info',  "Enregistrement d'un nouvel accord", {Login: req.app.get('userName'), Details: dataGoodFormat });
                     var IdAccordNouvellementCree = recordset[0][0].AccordReversionID;
-                    res.send({ redirect: '/RechercheAccords/' + IdAccordNouvellementCree });
+                    //res.send({ redirect: '/RechercheAccords/' + IdAccordNouvellementCree });
+                    res.send({ redirect: '/ListeAccords' });
                 }, dataGoodFormat, next);
 
             }
@@ -207,7 +210,6 @@ function getListeGroupements(callback, data, next) {
     }).catch(function(err) {
         next(new Error("Récupération de la liste des groupements dans l'encart n°2 => " + err));
     });
-
 }
 
 
