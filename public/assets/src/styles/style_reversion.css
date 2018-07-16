@@ -2038,42 +2038,49 @@ button.ValidSearch:hover {
 /*================ Page Liste des accords ==============*/
 .listeDesAccords .Enteteliste > div:first-child,
 .listeDesAccords .ContenuListe .Lgn > div:first-child {
-    width: 33%;
-    min-width: 350px;
+    width: 12%;
+    min-width: 100px;
 }
-.listeDesAccords .ContenuListe .Lgn > div:first-child a {
+.listeDesAccords .ContenuListe .Lgn > div:first-child { font-size: 12px; }
+
+.listeDesAccords .Enteteliste > div:nth-child(2),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) {
+    width: 30%;
+    min-width: 340px;
+}
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) a {
     color: #232D36;
     text-decoration: none;
 }
-.listeDesAccords .ContenuListe .Lgn > div:first-child a:hover {
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) a:hover {
     text-decoration: underline;
     color: #427FB9;
 }
-.listeDesAccords .ContenuListe .Lgn > div:first-child .fa {
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) .fa {
     color: #ff6600;
     margin-left: 4px;
     font-size: 12px;
     transition: margin 0.2s ease-in-out;
 }
-.listeDesAccords .ContenuListe .Lgn > div:first-child a:hover + .fa {
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) a:hover + .fa {
     margin-left: 6px;
 }
-.listeDesAccords .Enteteliste > div:nth-child(2),
-.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) {
-    width: 33%;
-    min-width: 350px;
-}
 .listeDesAccords .Enteteliste > div:nth-child(3),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(3) {
+    width: 28%;
+    min-width: 340px;
+}
 .listeDesAccords .Enteteliste > div:nth-child(4),
 .listeDesAccords .Enteteliste > div:nth-child(5),
-.listeDesAccords .ContenuListe .Lgn > div:nth-child(3),
+.listeDesAccords .Enteteliste > div:nth-child(6),
 .listeDesAccords .ContenuListe .Lgn > div:nth-child(4),
-.listeDesAccords .ContenuListe .Lgn > div:nth-child(5) {
-    width: 12%;
-    min-width: 100px;
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(5),
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(6) {
+    width: 11%;
+    min-width: 90px;
     text-align: center;
 }
-.listeDesAccords .ContenuListe .Lgn > div:nth-child(5) {
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(6) {
     font-weight: bold;
 }
 .listeDesAccords .ContenuListe > .Lgn {
@@ -2097,6 +2104,10 @@ button.ValidSearch:hover {
     width: 30%;
     min-width: 340px;
     padding: 0 32px;
+
+}
+#SearchNomAccord::-ms-clear {
+    display: none;
 }
 i#DeleteValueSearchNomAccord {
     cursor: pointer;
@@ -2107,18 +2118,19 @@ i#DeleteValueSearchNomAccord {
 i#DeleteDatepickerStart:hover { opacity: 1; }
 #SelectTypeAccord { margin: 0 0 0 15px; }
 
-/*EN TEST : A VIRER !*/.listeDesAccords .ContenuListe > .Lgn.Hidden2 { display: none; }
+.listeDesAccords .ContenuListe > .Lgn.Hidden2 { display: none; }
 
-/*.IconeClassmt {
+.IconeClassmt {
     font-size: 12px;
     cursor: pointer;
-    margin-left: 8px;
+    margin-left: 6px;
     background-color: rgba(255,255,255, 0.5);
     border-radius: 50%;
     color: #ED6579;
     padding: 5px;
 }
-.ColonneOrdonnee .IconeClassmt { background-color: rgba(255,255,255, 1); }*/
+.ColonneOrdonnee { text-decoration: underline; }
+.ColonneOrdonnee .IconeClassmt { background-color: rgba(255,255,255, 1); }
 /*================ FIN Page Liste des accords ==============*/
 
 
