@@ -34,55 +34,36 @@ module.exports = function(app) {
     });
 
 
-    /// Multi-usage :   1 - Pour récupérer liste des étbs correspondant au Groupe coché ds l'étape 2, 
-    ///                 2 - Pour enregistrer l'accord créé à la fin de l'étape 2 ou 3 (lors de la validation finale)
+
+
+
+    /// Pour récupérer liste des étbs correspondant au Groupe coché ds l'étape 2
+    app.post('/CreationAccord/GetLstEtbs', userRightsAccess, function(req, res, next) {
+        if (!req.body) return res.sendStatus(400);
+
+        var reqBody = req.body;
+
+        if(reqBody.IdGrp) {
+            getListeEtbsOfSelectedGroupement(function(recordset) {
+                res.send(recordset[0]);
+            }, reqBody.IdGrp, next);
+        }
+        //console.log(colors.bgYellow.black(JSON.stringify(reqBody))); //TEST
+    });
+
+
+
+
+    /// Pour enregistrer l'accord créé à la fin de l'étape 2 ou 3 (lors de la validation finale)
     app.post('/CreationAccord', userRightsAccess, function(req, res, next) {
         if (!req.body) return res.sendStatus(400);
 
         var reqBody = req.body;
 
-        //console.log(reqBody.IdGrp); //TEST
-        if(reqBody.IdGrp) {
-        
-            getListeEtbsOfSelectedGroupement(function(recordset) {
-                res.send(recordset[0]);
-            }, reqBody.IdGrp, next);
-
-        }
-
         /// Partie enregistrement des données de l'accord
         console.log(colors.bgMagenta.yellow(JSON.stringify(reqBody))); //TEST
         console.log(reqBody); //TEST
 
-        /// version V1 avec l'envoi de data sous forme d'URL
-        /*
-        if(typeof reqBody.RecordNewAccord !== 'undefined') {
-
-            /// TEST ///
-            for(var key in reqBody) { // <-- Fonctionne !!!
-                if(reqBody.hasOwnProperty(key)){
-                    console.log(key + " | " + reqBody[key]);
-                    if(key == 'InfosCreationAccord[Etape1][1][value]'){
-                        console.log('==> ' + reqBody[key]);
-                    }
-                }
-            }   
-            //console.log(Object.keys(reqBody)); // <-- Fonctionne !!!
-            console.log(reqBody["InfosCreationAccord[Etape2][MultiAccord]"]); // <-- Fonctionne !!!
-            //console.log(reqBody["RecordNewAccord"]); // <-- Fonctionne !!!
-            /// FIN TEST ///
-
-            console.log(colors.bgYellow.black(JSON.stringify(reqBody))); //TEST
-            res.end();    
-
-            /// EN COURS
-            //Record_SingleAccord(function(recordset) {
-            //    res.end();
-            //},reqBody, next);
-        }
-        */
-
-        /// version V2 avec l'envoi de data sous forme de JSON <-- Version retenue !!
         if(typeof reqBody.Etape1 !== 'undefined') {
             
             var dataGoodFormat = formatageData(reqBody);
@@ -94,15 +75,14 @@ module.exports = function(app) {
                     logger.log('info',  "Enregistrement de nouveaux accords (accords établ. d'un groupe)", {Login: req.app.get('userName'), Details: dataGoodFormat });
                     //res.send({ redirect: '/RechercheAccords' });
                     res.send({ redirect: '/ListeAccords' });
-                    
                 }, dataGoodFormat, next);
                 
             } else { /// Sinon autres cas (accord Etb, accord de Groupe, accord multi-groupes)...
 
                 Record_SingleAccord(function(recordset) {
                     logger.log('info',  "Enregistrement d'un nouvel accord", {Login: req.app.get('userName'), Details: dataGoodFormat });
-                    var IdAccordNouvellementCree = recordset[0][0].AccordReversionID;
-                    //res.send({ redirect: '/RechercheAccords/' + IdAccordNouvellementCree });
+                    /*var IdAccordNouvellementCree = recordset[0][0].AccordReversionID;
+                    res.send({ redirect: '/RechercheAccords/' + IdAccordNouvellementCree });*/
                     res.send({ redirect: '/ListeAccords' });
                 }, dataGoodFormat, next);
 
@@ -199,7 +179,7 @@ function getListeGroupements(callback, data, next) {
         .input('AnneeReversion', sql.Int, data)
         .execute('ReversionApp.ps_getListeGroupementReversion')
         .then(function(recordset) {
-            console.log(colors.bgGreen.white(JSON.stringify(recordset))); //TEST
+            //console.log(colors.bgGreen.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })
@@ -224,7 +204,7 @@ function getListeEtablissements(callback, data, next) {
         .input('AnneeReversion', sql.Int, data)
         .execute('ReversionApp.ps_getListeEtablissementReversion')
         .then(function(recordset) {
-            console.log(colors.bgCyan.white(JSON.stringify(recordset))); //TEST
+            //console.log(colors.bgCyan.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })
@@ -326,15 +306,15 @@ function Record_MultiAccords(callback, data, next) {
         .input('FinPeriode', sql.Date, data.FinPeriode)
         .execute('ReversionApp.Ps_CreationMultiAccordReversion')
         .then(function(recordset) {
-            console.log(colors.bgGreen.white(JSON.stringify(recordset))); //TEST
+            console.log(colors.bgBlue.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })
         .catch(function(err) {
-            next(new Error("Enregistrement d'un accord nouvellement créé => " + err));
+            next(new Error("Enregistrement multi-accords => " + err));
         });
         
     }).catch(function(err) {
-        next(new Error("Enregistrement d'un accord nouvellement créé => " + err));
+        next(new Error("Enregistrement multi-accords => " + err));
     });
 }
