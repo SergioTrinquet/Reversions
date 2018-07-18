@@ -27,7 +27,7 @@ var NbEtbChecked = 0;
 
 var Masque = null;
 
-var PrecedenteAnneeAccordSaisie = null; // 05/01/18
+var PrecedenteAnneeAccordSaisie = null;
 
 var PopinCreationAccord_Etp1, 
     PopinCreationAccord_Etp2, 
@@ -121,7 +121,6 @@ function switchPopins(Bt, Suivant) {
     Popin.removeClass('Display');
 
     // Identification de l'étape à faire apparaitre
-    //var numEtapeActuel = parseInt(Popin.data('numetape'));
     var numEtape = (Suivant == true ? numEtapeActuel + 1 : numEtapeActuel - 1);     
     // Apparition de la popin précédente/suivante
     if((Suivant == false && numEtape > 0) || (Suivant == true && numEtape <= 3)) {
@@ -133,10 +132,6 @@ function switchPopins(Bt, Suivant) {
         });
         $('#' + IdPrevOrNextPopin).addClass('Display');
     }
-
-    /*if(Suivant == false && numEtape == 0) {
-        Masque.addClass('Hidden'); /// Disparition masque
-    }*/
 }
 
 
@@ -149,9 +144,6 @@ function ClosePopin(Bt) {
         Masque.addClass('Hidden');
         var IdPopin = $(Bt).closest('.Popin').attr('id');
         $('#' + IdPopin).removeClass('Display');
-
-        //numEtapeActuel = GetEtapePopin(Bt); /// On détermine ds quel n° d'encart on est
-        //console.warn('ClosePopin : ' + numEtapeActuel); //TEST
 
         /// Réinitialisation de l'étape 1 ///
         DataEtape1 = {}; /// On vide l'objet qui stocke les infos saisies
@@ -220,18 +212,6 @@ function VerifSelection(Nb_EtbsChecked) {
 
 
 function GetDataAccordForHeaders() {
-/*function GetDataAccordForHeaders(DataEtape1) {
-    /// Affectation des données dans l'entete de la popin suivante (étape 2)
-    var SaisieNomAccord = (_.findWhere(DataEtape1, {name:"SaisieNomAccord"})).value;        
-    var SaisieAnneeAccord = (_.findWhere(DataEtape1, {name:"SaisieAnneeAccord"})).value;
-    var SaisieDateDebutAccord = (_.findWhere(DataEtape1, {name:"SaisieDateDebutAccord"})).value;
-    var SaisieDateFinAccord = (_.findWhere(DataEtape1, {name:"SaisieDateFinAccord"})).value;  
-    var SaisieTauxEDI = (_.findWhere(DataEtape1, {name:"SaisieTauxEDI"})).value;
-    var SaisieTypeTauxRev = (_.findWhere(DataEtape1, {name:"SaisieTypeTauxRev"})).value;       
-    //var LibelleTypeTauxRev = $('#SaisieTypeTauxRev option:selected').text(); // --> Fonctionne aussi !!           
-    var LibelleTypeTauxRev = $('#SaisieTypeTauxRev option[value="' + SaisieTypeTauxRev + '"]').text();
-    var PopinCreaTauxRev = (SaisieTypeTauxRev == "1" ? " (" + (_.findWhere(DataEtape1, {name:"SaisieTauxRev"})).value + "%)" : "");
-    */
     var SaisieNomAccord = PopinCreationAccord_Etp1.find('#SaisieNomAccord').val(); 
     var SaisieAnneeAccord = PopinCreationAccord_Etp1.find('#SaisieAnneeAccord').val();
     var SaisieDateDebutAccord = PopinCreationAccord_Etp1.find('#SaisieDateDebutAccord').val();
@@ -445,7 +425,7 @@ function Initialisation_Etape2() {
         /// Appel pour avoir la liste des id Etablissements pour le groupe sélectionné
         $.ajax({
             method: "POST",
-            url: "/CreationAccord",
+            url: "/CreationAccord/GetLstEtbs",
             data: {IdGrp: GroupId},
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             ifModified: true,
@@ -676,9 +656,8 @@ function Validation_Etape2(Bt) {
                 PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked').removeAttr('data-fromgrp').removeAttr('title'); /// Retrait propriété [data-fromgrp] sur ttes des checkboxs Etb
             
                 /// Enregistrement ds la bdd
-                RecordDataBDD(); /// <-- EN COURS
-                location.href = '/RechercheAccords'; /// A VIRER, JUSTE PENDANT DEV.
-
+                RecordDataBDD();
+                
             } else if ($(this).attr('id') == 'Bt_CreaAccGrp') { /// Click sur bt 'Accord groupement'
 
                 /// Passage au prochain popin
@@ -694,8 +673,7 @@ function Validation_Etape2(Bt) {
     
     } else { /// Si pas de groupe(s) sélectionné(s), donc pas accord de groupement mais accord individuel --> pas besoin de l'étape 3
         /// Enregistrement ds la bdd
-        RecordDataBDD(); /// <-- EN COURS
-        //location.href = '/RechercheAccords'; /// A VIRER, JUSTE PENDANT DEV.
+        RecordDataBDD();
     }
 
 } 
@@ -773,21 +751,15 @@ function RecordDataBDD() {
     DataGlobal.Etape2 = DataEtape2;
     DataGlobal.Etape3 = DataEtape3;
 
-
     console.log(DataGlobal); //TEST
 
     /// Enregistrement dans bdd de ttes les infos saisies
     $.ajax({
         method: "POST",
         url: "/CreationAccord",
-        /* V1 : Envoie la data sous forme d'URL */
-        /*data: {RecordNewAccord: true, InfosCreationAccord: DataGlobal},
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8",*/
-        
-        /* V2 : Envoie la data sous forme de JSON --> Le content-type doit être en 'application/json' ET le data impérativement en JSON.stringify() + coté node le Middleware dans app.js avec 'app.use(bodyParser.json())' pour interpréter le JSON */
+        /* Envoie la data sous forme de JSON --> Le content-type doit être en 'application/json' ET le data impérativement en JSON.stringify() + coté node le Middleware dans app.js avec 'app.use(bodyParser.json())' pour interpréter le JSON */
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(DataGlobal),
-
         dataType: "json",
         beforeSend: function () {
             $('.creationAccordReversion .MaskPopin').removeClass('Hidden');
@@ -795,8 +767,10 @@ function RecordDataBDD() {
     })
     .done(function (data) {
         /// Si succès au niveau de l'enregistrement des données, redirection vers la pg de modif d'un accord 
-        if (typeof data.redirect == 'string') {
+        if (typeof data.redirect == 'string') {     //console.warn('data.redirect' + data.redirect); //TEST
             window.location = data.redirect;
+        } else {
+            console.warn('Problème lors de la redirection !');
         }
     })
     .fail(function (jqXHR) {
