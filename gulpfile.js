@@ -58,6 +58,12 @@ gulp.task('optimisationJS_LHG', function(cb) {
     optimisationJS(lstJS, 'global_ListeHistoriqueGroupements', cb);
 });
 
+/// Fichiers propres à page 'ListeAccords.js'
+gulp.task('optimisationJS_LA', function(cb) {
+    var lstJS = ['sidenav', 'highlight', 'ListeAccords'];
+    optimisationJS(lstJS, 'global_ListeAccords', cb);
+});
+
 
 function optimisationJS(listeJS, FinalFileName, cb) {
     /// Ajout chemin pour fichiers JS à traiter
@@ -98,7 +104,7 @@ gulp.task('autresJS', function() {
 
 
 
-gulp.task('js', ['optimisationJS_RA', 'optimisationJS_CA', 'optimisationJS_LHG', 'autresJS']);
+gulp.task('js', ['optimisationJS_RA', 'optimisationJS_CA', 'optimisationJS_LHG', 'optimisationJS_LA', 'autresJS']);
 
 
 /// Pour mise en prod.
