@@ -22,10 +22,6 @@ const async = require('async');
 module.exports = function(app) {
     //console.log('Mode : ' + process.env.NODE_ENV)
 
-    /// Page 'RechercheAccords' est la page par défaut
-    app.get('/', function(req, res, next) {
-        res.redirect('/RechercheAccords');
-    });
 
     /// Lorsque clic sur bouton 'Définir les marchés', affichage des catalogues et fournisseurs auquel l'établissement a droit + les fournisseurs exclus
     app.get('/RechercheAccords/Marches/:idAccord/:EtbId', userRightsAccess, function(req, res, next) {
@@ -99,6 +95,12 @@ module.exports = function(app) {
         /// Affichage Accord
         if(typeof req.params.idAccord !== 'undefined') {
 
+            
+            /// Tests faits pour vérifier si les variables passées dans l'URL sont au bon format (chiffres)
+            var reg = new RegExp("^[0-9]*$", "g");
+            if(reg.test(req.params.idAccord) == false) { 
+                return res.status(400).send("L'identifiant de la réversion recherchée qui est passé en paramètre dans l'URL est incorrect : Seuls les chiffres sont acceptés !");
+            }
 
 
             /// Récupération de l'accord...

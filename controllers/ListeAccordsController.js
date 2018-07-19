@@ -8,6 +8,13 @@ var userRightsAccess = require('../app_modules/userRights.js'); /// Middleware p
 
 module.exports = function(app) {
 
+    
+    /// Page 'ListeAccords' est la page par défaut
+    app.get('/', function(req, res, next) {
+        res.redirect('/ListeAccords');
+    });
+
+
     app.get('/ListeAccords', userRightsAccess, function(req, res, next) {
 
         getlisteAccords(function(recordset) {
