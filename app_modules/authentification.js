@@ -28,7 +28,6 @@ module.exports = function(req, res, next) {
     /// Fin TEST
 
     /// Si pas de session, on en créé une où l'on y stocke le role
-    /*if(!req.session.rights) {  */
     if( (!req.session.rights) || (req.session.rights && req.session.userName !== nomUtilisateur) ) {  /// Nvelle version au 28/07/2017 /// Si pas de session, ou bien si session mais que l'utilisateur est différent de celui enregistré dans la session
 
         /// On va voir pour cet utilisateur s'il a des droits
@@ -84,7 +83,7 @@ function getRole(callback, data, next) {
         "RIGHT OUTER JOIN Appli.[User] ON Appli.UserInApplicationRole.UserID = Appli.[User].UserID " +
     "WHERE (Appli.[User].Login = '" + data + "') AND Appli.ApplicationRole.RoleName in(" + tempTab.join(", ") + ")";
 
-    console.log(colors.bgCyan.yellow(requete)); //TEST
+    //console.log(colors.bgCyan.yellow(requete)); //TEST
     
     var conn = new sql.Connection(dbConfig); 
     conn.connect().then(function() {

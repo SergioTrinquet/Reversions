@@ -60,10 +60,9 @@ module.exports = function(app) {
 
         var reqBody = req.body;
 
+        console.log(colors.bgMagenta.yellow(JSON.stringify(reqBody))); console.log(reqBody); //TEST
+        
         /// Partie enregistrement des données de l'accord
-        console.log(colors.bgMagenta.yellow(JSON.stringify(reqBody))); //TEST
-        console.log(reqBody); //TEST
-
         if(typeof reqBody.Etape1 !== 'undefined') {
             
             var dataGoodFormat = formatageData(reqBody);
