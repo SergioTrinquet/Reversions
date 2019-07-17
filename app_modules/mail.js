@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require("config");
+var logger = require('../log/logConfig.js').logger;
 
 module.exports = function(errMsg, errStack) {
 
