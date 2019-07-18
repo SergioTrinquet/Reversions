@@ -4,8 +4,11 @@ log/*.log
 # Dependency directories
 node_modules/
 
+.vscode/
+
 # Fichier de config
-#config/production.json
+config/development.json
+config/production.json
 
 # Fichiers .css et .js coté client générés avec Gulp pour la prod.
 public/assets/dist/
