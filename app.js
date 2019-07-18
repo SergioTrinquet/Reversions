@@ -11,6 +11,7 @@ const ListeFacturesEtblController = require('./controllers/ListeFacturesEtblCont
 var session = require('./app_modules/session.js');
 var authentification = require('./app_modules/authentification.js');
 var email = require('./app_modules/mail.js');
+const config = require("config");
 
 const colors = require('colors'); // juste pour le développement
 
@@ -25,14 +26,10 @@ app.set('view engine', 'ejs');
 app.use(helmet()); /// Helmet helps you secure your Express apps 
 
 
-/*==== Partie récupération de l'environnement ====*/
-//app.set('env', 'development'); //TEST au 20/06/17
-//app.locals.ENV = app.get('env');//TEST au 20/06/17
-console.log('Mode : ' + app.get('env')); //TEST le 20/06/17
-/***** Avec 'config' *****/
-const config = require("config"); //En TEST LE 21/06/17
-console.log('TEST sur module CONFIG: ' + config.get('env') + " | " + config.get('dbConfig.server') + " | " + config.get('dbConfig.database')); //TEST le 21/06/17
-/*==== Fin Partie récupération de l'environnement ====*/
+//app.locals.ENV = app.get('env');//TEST
+console.log('Mode : ' + app.get('env')); //TEST
+console.log('TEST sur module CONFIG: ' + config.get('env') + " | " + config.get('dbConfig.server') + " | " + config.get('dbConfig.database')); //TEST
+
 
 /// Static files
 const env = app.get('env'); /// Pour détecter si on est en mode 'development' ou 'production', ou autre
@@ -72,17 +69,10 @@ ListeAccordsController(app); /// Pour la page de liste des accords
 
 // Middleware pour gérer les erreurs qui sont remontées
 app.use(function (err, req, res, next) {
-    /*if(app.get('env') === 'development') {
-        console.error('Mode Développement : ' + err.stack);
-        res.status(err.status || 500).send(err.stack);
-    } else {
-        console.error('Mode Production : ' + err.message);
-        res.status(err.status || 500).send(err.message);
-    }*/
-
     if(env === 'production') {
         email(err.message, err.stack);
     }
+    
     console.log(colors.bgRed.white(err.stack));
     logger.log('error', err.stack, {login: req.app.get('userName')}); 
     res.status(err.status || 500);
