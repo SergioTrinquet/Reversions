@@ -4,7 +4,8 @@
   "description": "Projet des réversions",
   "main": "app.js",
   "scripts": {    
-    "depart": "nodemon app",
+    "dev": "set NODE_ENV=development&& nodemon app",
+    "prod": "set NODE_ENV=production&& nodemon app",
     "debug": "nodemon --inspect app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
