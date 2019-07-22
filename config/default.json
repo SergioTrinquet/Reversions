@@ -1,15 +1,17 @@
 {
     "dbConfig": {
         //"driver": "tedious",
-        "user": "bcl",
-        "password": "fwadmin",
-        "database": "GestionCahpp"
+        "user": "XXXX",
+        "password": "XXXX",
+        "database": "GestionCahpp",
+        "connectionTimeout": 30000
     },
     "dbConfig_CRM": {
         //"driver": "tedious",
-        "user": "bcl",
-        "password": "fwadmin",
-        "database": "CRM"
+        "user": "XXXX",
+        "password": "XXXX",
+        "database": "CRM",
+        "connectionTimeout": 30000
     },
 
     "infosMail": {
@@ -17,12 +19,13 @@
             "host": "smtp.office365.com",
             "port": 587,
             "secure": false,
-            "user": "No_reply@cahpp.fr",
-            "pass": "@Noreply75!"
+            "requireTLS": true,
+            "user": "XXXX",
+            "pass": "XXXX"
         },
         "mailMessage": {
             "from": "No_reply@cahpp.fr",
-            "to": "strinquet@cahpp.fr"
+            "to": "XXXX"
         }
     },
 
