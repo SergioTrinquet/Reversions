@@ -1,11 +1,24 @@
 {
     "env": "production",
     "dbConfig": {
+        "user": "bcl",
+        "password": "fwadmin",
         //"server": "SERVSQL\\CAHPPSQL"
         "server": "SERVDEVSQL\\SERVSQL2012"    /* Version de dev. par sécurité pdt dev., mais il faut mettre la version de prod.  */
     },
     "dbConfig_CRM": {
+        "user": "bcl",
+        "password": "fwadmin",
         //"server": "SERVSQL\\CAHPPSQL"
         "server": "SERVDEVSQL\\SERVSQL2012"    /* Version de dev. par sécurité pdt dev., mais il faut mettre la version de prod.  */
+    },
+    "infosMail": {
+        "mailTransporter": {
+            "user": "No_reply@cahpp.fr",
+            "pass": "@Nocahpp75009!"
+        },
+        "mailMessage": {
+            "to": "strinquet@cahpp.fr"
+        }
     }
 }
