@@ -2,8 +2,8 @@ const colors = require('colors'); // juste pour le développement
 
 const sql = require('mssql');
 const _ = require('underscore');
-var config = JSON.parse(JSON.stringify(require('config').get('dbConfig'))); // Nvelle version avec module 'config'
-var logger = require('../log/logConfig.js').logger; // Pour les logs
+var config = JSON.parse(JSON.stringify(require('config').get('dbConfig')));
+var logger = require('../log/logConfig.js').logger;
 var userRightsAccess = require('../app_modules/userRights.js'); /// Middleware pour gérer les accès en fonction des droits de l'utilisateur
 
 
@@ -19,7 +19,7 @@ module.exports = function(app) {
 
     /// Pour récupérer les groupes et établissements + le fait qu'ils fassent déjà l'objet d'un accord après validation de l'étape 1 de la saisie d'un accord
     app.get('/CreationAccord/:Annee', userRightsAccess, function(req, res, next) {
-        var AnneeSaisie = parseInt(req.params.Annee);     //console.log('req.params : ' + req.params + ' | AnneeSaisie : ' + AnneeSaisie); //TEST
+        var AnneeSaisie = parseInt(req.params.Annee);
 
         getListeGroupements(function(recordset) {
             var ListeGrpmts = recordset[0];
@@ -32,8 +32,6 @@ module.exports = function(app) {
             }, AnneeSaisie, next);
         }, AnneeSaisie, next);
     });
-
-
 
 
 
@@ -52,8 +50,7 @@ module.exports = function(app) {
     });
 
 
-
-
+    
     /// Pour enregistrer l'accord créé à la fin de l'étape 2 ou 3 (lors de la validation finale)
     app.post('/CreationAccord', userRightsAccess, function(req, res, next) {
         if (!req.body) return res.sendStatus(400);
