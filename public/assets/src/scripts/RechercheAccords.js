@@ -22,20 +22,17 @@ var Masque = null;
 var MasqueEtLoader = null;
 var Id_Accord = "";
 var SaisieMinLength = 3;
-
 var AC_content = null;
-
 var FlagActivePopin = false;
 
-
+var WrapLoader = null;
 
 var Pool_xhr = [];
 var Pool_rech = [];
+
 ///--- Pour gérer éxecution de la recherche ou pas en fonction de la saisie + l'affichage des textes d'infos ---///
 function SearchAccord(SaisieAddAccord) {
     if(SaisieAddAccord.length >= SaisieMinLength) {
-        
-        //console.log('SaisieAddAccord : ' + SaisieAddAccord + ' | lastSaisie : ' + lastSaisie); //TEST
         if(SaisieAddAccord != lastSaisie) { /// pour éviter appel ajax inutile
             SearchAccordQuery(SaisieAddAccord);
         } else if(SaisieAddAccord == lastSaisie && AC_content.html() != '') {
@@ -43,19 +40,16 @@ function SearchAccord(SaisieAddAccord) {
         }
         lastSaisie = SaisieAddAccord;
 
-        $('#TxtTooShort').addClass('Hidden'); // Nouvelle version au 03/01/18
-
+        $('#TxtTooShort').addClass('Hidden');
     } else {
-        //$('#Autocomplete').addClass('Hidden'); // Ancienne version au 03/01/18
-        $('#Autocomplete, #TextNoResults').addClass('Hidden'); // Nouvelle version au 03/01/18
-        $('#TxtTooShort').toggleClass('Hidden', (SaisieAddAccord.length == 0)); // Nouvelle version au 03/01/18
+        $('#Autocomplete, #TextNoResults').addClass('Hidden');
+        $('#TxtTooShort').toggleClass('Hidden', (SaisieAddAccord.length == 0));
     }
 }
 
 
 
-$(function () {         
-
+$(function () {    
     ///--- Récupération des droits sur cette page ---///
     InterdictionEcriture = ($('#EncartInfoUser #Role').text() == 'ReversionsRechercheAccordLecture' ? true : false);
 
@@ -71,6 +65,7 @@ $(function () {
 
     ///--- Affectation variables globales ---///
     Masque = $('.Masque');
+    WrapLoader = $('.WrapLoader');
     MasqueEtLoader = $('.Masque, .WrapLoader');
     Id_Accord = $('.Lgn_Accord').data('numaccord');
     AC_content = $('#AC_content');
@@ -183,16 +178,6 @@ $(function () {
     $('#AnnulationSelectionFnrs, .Popin_ExclusionFnrs .ClosePopin').click(function() {
         var r = confirm("En cas de confirmation, toutes vos saisies dans cet encart\ndepuis le début de la phase de modification de la ligne établissement\nseront perdues.");
         if(r) {
-            /* VO : Ancienne version au 19/12/17 */
-            /*fnrsSelected = [];
-            /// On alimente l'objet InfosLgnModifiee
-            InfosLgnModifiee.ExclusionFnrs = fnrsSelected;
-            InfosLgnModifiee.ModificationExclusionFnrs = false;
-            UnselectCheckboxes('.Popin_ExclusionFnrs');
-            ClosePopin('.Popin_ExclusionFnrs');
-            */
-
-            /* V1 */
             InfosLgnModifiee.ExclusionFnrs = [];
             InfosLgnModifiee.ModificationExclusionFnrs = false;
             
@@ -214,7 +199,6 @@ $(function () {
             $('.Popin_ExclusionFnrs #LstFnrs input[data-tempFnrsSelected]').removeAttr('data-tempFnrsSelected'); /// On supprime le marqueur qui ne servait qu'à créer la variable 'chbxs' ci-dessus
             
             ClosePopin('.Popin_ExclusionFnrs');
-            /* Fin V1 */
         }
     });
 
@@ -223,8 +207,7 @@ $(function () {
         /// On alimente l'objet InfosLgnModifiee
         InfosLgnModifiee.ExclusionFnrs = fnrsSelected;
         InfosLgnModifiee.ModificationExclusionFnrs = true;
-        /// Fermeture popin
-        ClosePopin('.Popin_ExclusionFnrs');
+        ClosePopin('.Popin_ExclusionFnrs'); /// Fermeture popin
     });
     ///--- Fin partie Popin 'Définir les marchés' ---///
 
@@ -386,8 +369,6 @@ function GetDataPopinFnrsAexclure(IdAccord, IdEtb) {
         }
     })
     .done(function (data) {
-        //console.warn(data.FnrsExclus); //TEST
-
         /// Ici, on met en disabled les cats et les fournisseurs auxquels l'étbl. n'a pas droit...
         data.CatsInterdits.forEach(function(el) {       //console.log(el.CatalogueId + ' | ' + el.CatalogueDispo); //TEST
             if(el.CatalogueDispo == true) {
@@ -404,7 +385,7 @@ function GetDataPopinFnrsAexclure(IdAccord, IdEtb) {
         SelectionFnrsPopin(chbxsFnrsCoches);
 
         /// Apparition encart exclusion des fnrs
-        $('.WrapLoader').addClass('Hidden');
+        WrapLoader.addClass('Hidden');
         $('.Popin_ExclusionFnrs').addClass('Display');
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -441,7 +422,7 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
         }
 
         /// Apparition encart exclusion des fnrs
-        $('.WrapLoader').addClass('Hidden');
+        WrapLoader.addClass('Hidden');
         $('.Popin_FnrsExclus').addClass('Display');
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -475,7 +456,7 @@ function GetDataPopinAddEtablissement(IdAccord) {
         DataLocation.append(htmlListeEtbs);
 
         /// Apparition encart exclusion des fnrs
-        $('.WrapLoader').addClass('Hidden');
+        WrapLoader.addClass('Hidden');
         $('.Popin_AjoutEtablissement').addClass('Display');
 
     })
@@ -1092,7 +1073,7 @@ function DisplayScreenAccesRefuse(html) {
 
 ///A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
 function DisplayError(jqXHRresponseText) {
-    $('.WrapLoader').addClass('Hidden'); /// Disparition loader
+    WrapLoader.addClass('Hidden');
 
     var Thehtml = $.parseHTML(jqXHRresponseText);
     var html_PgErreur = $(Thehtml).find("#Encart");
