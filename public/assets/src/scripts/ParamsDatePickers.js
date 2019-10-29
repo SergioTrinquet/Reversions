@@ -35,3 +35,41 @@ function DatePlusOneDay(dt) {
     result.setDate(result.getDate() + 1);
     return result;
 }
+
+
+
+function ParamsDatePickerSolo(input, champRevReglee, dateAutreChamp, minDateDebut, maxDateFin) {   
+    
+    console.log(input); console.log(champRevReglee); console.log(dateAutreChamp); //TEST
+
+    input.datepicker({
+        showAnim: "slideDown",
+        dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+        minDate: minDateDebut, /// La date minimum selectionnable : 24 mois avant la date d'aujourd'hui, donc ici "-24m". On peut mettre aussi un objet Date ou un String. Si la promotion est obsolète, date min. est = à la date déjà inscrite ds ce champ (sinon bug), sinon date du jour. 
+        maxDate: maxDateFin, /// La date max. selectionnable
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "dd/mm/yy",
+        onClose: function (selectedDate) {
+            if(selectedDate !== "") {
+                var r = confirm("Confirmez votre choix");
+                if(r) {
+                    if(champRevReglee === true) {
+                        var tab_dt = (input.val().split(/[- //]/));
+                        var dateGoodFormat = tab_dt[2].toString() + tab_dt[0].toString() + tab_dt[1].toString();
+                        if(dateGoodFormat <= dateAutreChamp) { // Check sur cohérence des dates saisies
+                            // Erreur
+                            input.val('');
+                            alert("Vous ne pouvez pas saisir une date antérieure\n à la date de validation de la réversion."); 
+                            return false;
+                        }
+                    } 
+                    
+                    closeDatePicker(input, champRevReglee, selectedDate);
+                } else {
+                    input.val('');
+                }
+            }
+        }
+    });
+}

@@ -1,11 +1,11 @@
-var listeDeroulanteTypeAccord,
+var listeDeroulanteTypeAccord = null,
     champRechercheAccord = null;
-var TxtTooShort,
-    TextNoResults,
+var TxtTooShort = null,
+    TextNoResults = null,
     NbAccords = null;
-var ClnsEnteteliste,
-    enteteListe,
-    contenuListe,
+var ClnsEnteteliste = null,
+    enteteListe = null,
+    contenuListe = null,
     lgns = null;
 var listeVariables = [];
 var Saisie = null;
@@ -14,8 +14,10 @@ var SaisieMinLength = 3;
 var DataLgns = []; // Pas nécessairement en variable globale : Juste pour phase de dev.
 var temp_NomColonne = null;
 var toggleOrderDirection = false;
-var suffixe_asc, 
+var suffixe_asc = null, 
     suffixe_desc = null;
+var MasqueEtLoader = null;
+var rgx = null;
 
 $(function () {  
 
@@ -30,6 +32,8 @@ $(function () {
     TxtTooShort = $('#TxtTooShort');
     TextNoResults = $('#TextNoResults');
     NbAccords = $('#NbAccords');
+    MasqueEtLoader = $('.Masque, .WrapLoader');
+    rgx = /(^\d+[.,]?\d+$)|(^\d+$)/;
 
     var lgnsRevNonValidee = lgns.find('.RevValidee.non').closest('.Lgn'); 
     var lgnsRevValidee = lgns.find('.RevValidee.oui').closest('.Lgn');
@@ -88,12 +92,13 @@ $(function () {
 
 
 
-    champRechercheAccord.on('keyup paste cut dragend focus', function() {
+    //champRechercheAccord.on('keyup paste cut dragend focus', function() {
+    champRechercheAccord.on('input', function() {
         Saisie = $.trim($(this).val());
 
         /// faire en sorte qu'il y ait une latence avant de lancer la recherche
         if(Saisie.length >= SaisieMinLength) {
-            //console.warn("Length : " + Saisie.length + " | Saisie : " + Saisie); //TEST
+            console.warn("Length : " + Saisie.length + " | Saisie : " + Saisie); //TEST
             RemoveFilterOnInput();
             AddFilterOnInput(Saisie);
         } else {
@@ -122,7 +127,139 @@ $(function () {
         TriColonne($(this).closest('.Enteteliste > div').attr('id'));
     });
 
+
+
+    // Pour entrer une date de validation de réversion, 
+    // et de réglement de réversion
+    $(".listeDesAccords .ContenuListe").on("click", ".Bt_Change.Date:not(.Disabled)", function() {
+        if(!$('.CellRev input[type="text"]').length >= 1) { // 1 saisie possible à la fois...
+            try {
+                var el = $(this);
+
+                var typeInfoRev = el.siblings().attr("data-cln");
+                var champRevReglee = null;
+                if(typeInfoRev === "ClnRevValidee") {  champRevReglee = false;  } 
+                else if(typeInfoRev === "ClnRevReglee") { champRevReglee = true; } 
+                else { throw "Erreur!"; }
+
+                el
+                .parent()
+                .addClass('Hidden')
+                .after("\
+                    <span>\
+                        <input type='text' placeholder='Date de " + (champRevReglee === false ? "validation" : "règlement")  + "' readonly='readonly' />\
+                        <i class='fa fa-times Close'></i>\
+                    </span>\
+                ");
+
+                // Appel fct° de génération de calendrier
+                var newInput = el.closest('.CellRev').find('input[type="text"]');
+                var dateAutreChamp = el.closest('.CellRev').siblings('.CellRev').find("[data-datetoorder]").attr("data-datetoorder");
+                ParamsDatePickerSolo(newInput, champRevReglee, dateAutreChamp, "-24m", "+24m");
+                
+                $(".Bt_Change").addClass('Disabled'); // Désactivation des icones
+
+            } catch (error) {
+                alert(error); //TEST
+            }   
+        } 
+    });
+    // Pour fermer le champ de saisie de date de validation de réversion
+    $(".listeDesAccords .ContenuListe").on("click", ".CellRev input[type='text'] ~ i.Close", function() {
+        $(this).closest('.CellRev').find('.DefaultDisplay').removeClass('Hidden').siblings().remove();
+        $(".Bt_Change").removeClass('Disabled'); // Activation des icones
+    });
+    // Pour modifier la somme versée
+    $(".listeDesAccords .ContenuListe").on("click", ".Bt_Change.MontantRevCA:not(.Disabled)", function() {
+        var el = $(this);
+        var somme = el.siblings().text();
+        el
+        .parent()
+        .addClass('Hidden')
+        .after("\
+            <span class='sumField'>\
+                <input type='text' data-inputsum='true' placeholder='" + somme + "' /><span class='BtValidSomme' data-active='false'><i class='fa fa-check'></i></span>\
+                <i class='fa fa-times Close'></i>\
+            </span>\
+        ");
+
+        $(".Bt_Change").addClass('Disabled'); // Désactivation des icones
+    });
+
+    // Controle de saisie sur saisie somme versée
+    //$(".listeDesAccords .ContenuListe").on("keyup paste cut dragend focus", "input[data-inputsum]", function() {
+    $(".listeDesAccords .ContenuListe").on("input", "input[data-inputsum]", function() {
+        MskInputOnlyDigits($(this));
+    });
+
+    // Validation de la somme versée
+    $(".listeDesAccords .ContenuListe").on("click", ".BtValidSomme[data-active='true']", function() {
+        var r = confirm("Confirmez le nouveau montant saisi svp.");
+        if(r) {
+            var el = $(this);
+            var idAccordReversion = el.closest("[data-accordreversionid]").attr("data-accordreversionid"); ;
+            var somme = $('input[data-inputsum]').val().replace(',', '.').trim();
+
+            if(rgx.test(somme)) {
+                $.ajax({
+                    method: "POST",
+                    url: "/ListeAccords/changeAmount/" + idAccordReversion,
+                    dataType: "html", // Retourne du html
+                    data: {"somme": somme},
+                    beforeSend: function() { MasqueEtLoader.removeClass('Hidden'); }
+                }).done(function(data) {
+                    //console.log(data); //TEST
+                    el.closest('[data-accordreversionid="' + idAccordReversion + '"]').replaceWith(data);
+                    $(".Bt_Change").removeClass('Disabled'); // Activation des icones
+                    
+                }).fail(function(err) {
+                    console.error(err);
+                    DisplayError_NEW(err.responseText);
+                }).always(function() {
+                    MasqueEtLoader.addClass('Hidden');
+                });
+            } else {
+                console.error("La valeur entrée dans le champ 'somme versée' n'est pas un numérique (entier ou décimal) !!");
+            }
+        }
+    });
+
+
 });
+
+
+// Check si valeur saisie ds l'input est correcte : Seulement des chiffres (décimales acceptées)
+function MskInputOnlyDigits(tagInput) {
+    var BtValidSomme = $('.BtValidSomme');
+    if(rgx.test(tagInput.val())) { // Seulement chiffres avec un point ou une virgule mais pas en début ni en fin    
+        tagInput.removeClass('erreur').addClass('valid');
+        BtValidSomme.attr('data-active', 'true');
+    } else {
+        tagInput.removeClass('valid').addClass('erreur');
+        BtValidSomme.attr('data-active', 'false');
+    }
+}
+
+
+// Qd saisie date ds calendrier : Ecriture dans bdd et rafraichissement de l'affichage sur ligne accord concernée
+function closeDatePicker(el, isReglement, selectedDate) {
+    var idAccordReversion = el.closest("[data-accordreversionid]").attr("data-accordreversionid");
+    $.ajax({
+        method: "POST",
+        url: "/ListeAccords/setDate/" + (isReglement === false ? "validation" : "reglement") + "/" + idAccordReversion,
+        dataType: "html", // Retourne du html
+        data: {"date": selectedDate},
+        beforeSend: function () { MasqueEtLoader.removeClass('Hidden'); }
+    }).done(function(data) {
+        el.closest('[data-accordreversionid="' + idAccordReversion + '"]').replaceWith(data);
+        $(".Bt_Change").removeClass('Disabled'); // Activation des icones
+    }).fail(function(err) {
+        console.error(err);
+        DisplayError_NEW(err.responseText);
+    }).always(function() {
+        MasqueEtLoader.addClass('Hidden');
+    });
+}
 
 
 
@@ -132,7 +269,8 @@ function RemoveFilterOnInput() {
         .removeAttr('data-visible')
         .removeClass('Hidden2')
         .find(ChpsCiblesRecherche.join(', '))
-        .removeHighlight();
+        //.removeHighlight(); // Version originale mise en commentaire car bug juste avec IE
+        .removeHighlight_V2(); // Version locale
 }
 
 function AddFilterOnInput(Saisie) {
@@ -161,7 +299,7 @@ function TriColonne(NomColonne) {
     DataLgns = [];
     var DataClnToOrder = "";
     
-    // ..On classe dans tous les cas par nom d'accord que l'on ait cliqué sur l'icone de la colonne 'Nom d'accord' ou pas, car quand ordonnancement d'un champ de type 'date', comme plusieurs dates sont en similaires, on classe par la Date en question puis par ordre alphabétique sur le champ 'Nom de l'accord'...
+    // ..On classe dans tous les cas par nom d'accord que l'on ait cliqué sur l'icone de la colonne 'Nom d'accord' ou pas, car quand ordonnancement d'un champ de type 'date', comme plusieurs dates sont similaires, on classe par la Date en question puis par ordre alphabétique sur le champ 'Nom de l'accord'...
     $.each(lgns, function () {
         var ThisLgn = $(this);
         DataClnToOrder = $.trim(ThisLgn.find('[data-cln="ClnNomAccord"]').text()).toUpperCase();
@@ -169,15 +307,22 @@ function TriColonne(NomColonne) {
         DataClnToOrder = "";
     });
 
+    // ..On classe d'abord par nom d'accord...
+    DataLgns.sort(function (a, b) { return (a.Data_ClnToOrder > b.Data_ClnToOrder) ? 1 : ((b.Data_ClnToOrder > a.Data_ClnToOrder) ? -1 : 0); }); /// Classement du premier au dernier
+
     // Si classement par date...
     if(NomColonne !== 'ClnNomAccord') {
-        // ..On classe d'abord par nom d'accord...
-        DataLgns.sort(function (a, b) { return (a.Data_ClnToOrder > b.Data_ClnToOrder) ? 1 : ((b.Data_ClnToOrder > a.Data_ClnToOrder) ? -1 : 0); }); /// Classement du premier au dernier
+
+        var data = ($('#' + NomColonne).is("[data-isdate]") ? "date" : "num");
 
         // ...Puis par la date en question
         var DataLgns_TEMPO = [];
         $.each(DataLgns, function (i, el) {
-            DataClnToOrder = $(el.DOM_Lgn).find('[data-cln="' + NomColonne + '"]').attr('data-datetoorder');
+            if(data === "num") { 
+                DataClnToOrder = parseFloat($.trim($(el.DOM_Lgn).find('[data-cln="' + NomColonne + '"]').text())); }
+            else if(data === "date") {
+                DataClnToOrder = $(el.DOM_Lgn).find('[data-cln="' + NomColonne + '"]').attr('data-datetoorder');
+            }
             DataLgns_TEMPO.push({ Data_ClnToOrder: DataClnToOrder, DOM_Lgn: el.DOM_Lgn });
             DataClnToOrder = "";
             //console.log(ThisLgn.find('[data-cln="ClnNomAccord"]').text() + " | " + ThisLgn.find('[data-cln="' + NomColonne + '"]').attr('data-datetoorder'));
@@ -204,7 +349,7 @@ function TriColonne(NomColonne) {
         contenuListe.append(val.DOM_Lgn);
     });
 
-    ClassLastLgn(contenuListe.find('.Lgn'));//
+    ClassLastLgn(contenuListe.find('.Lgn'));
 }
 
 
@@ -233,7 +378,11 @@ function ToggleLgns(lgnsToHide, lgnsToDisplay) {
 }
 
 function ClassLastLgn(lignes) {
-    lignes.removeClass('lastLgn').not('.Hidden, .Hidden2').last().addClass('lastLgn');
+    lignes
+        .removeClass('lastLgn')
+        .not('.Hidden, .Hidden2')
+        .last()
+        .addClass('lastLgn');
 }
 
 function GetCountTypeAccords() {
@@ -273,3 +422,14 @@ function GestionMsgsInfo(Saisie) {
         if(Saisie.length > 0) { TxtTooShort.removeClass('Hidden'); }
     }
 }
+
+
+
+// Fonction créée pour palier à fct° 'removeHighlight' de 'highlight.js' qui ne fonctionne qu'au 1er appel avec IE.
+// De nouveaux noeuds sont créés à l'appel de cette fct° sous IE contrairement aux autres navigateurs, donc ne fonctionne plus aux appels suivants.
+jQuery.fn.removeHighlight_V2 = function() {
+    return this.find("span.highlight").each(function() {
+        var PN = $(this).parent();
+        $(PN).text(PN.text());
+    }).end();
+};
