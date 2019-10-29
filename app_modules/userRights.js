@@ -1,84 +1,98 @@
 const _ = require('underscore');
-var configPages = JSON.parse(JSON.stringify(require('config').get('pages')));
+const configPages = JSON.parse(JSON.stringify(require('config').get('pages')));
 
 const colors = require('colors'); // juste pour le dév.
 
 module.exports = function (req, res, next) {
+
     console.log(colors.bgYellow.black('Middleware \'userRightsAccess\' => UserName : ' + req.app.get('userName') + ' | Rights : ' + req.Rights + ' | req.originalUrl : ' + req.originalUrl)); //TEST
     
     /// 1. On isole le nom de la page sur laquelle a lieu la requête
-    var pg = req.originalUrl;
+    let pg = req.originalUrl;
     pg = pg.substring(pg.indexOf('/') + 1);
     if(pg.indexOf('/') != -1) { pg = pg.substring(0, pg.indexOf('/')); }
     if(pg.indexOf('?') != -1) { pg = pg.substring(0, pg.indexOf('?')); }
     
 
     /// 2. On détermine les accès au menu
-    // V1
-    /*req.app.locals.menu = [
-        { pg: "HistoGrp", acces: true, intitule: "Historique des groupements" }, // Pas de droits dessus : Ouvert à tous le monde
-        { pg: "CreationAccord", acces: (_.contains(req.Rights, "ReversionsCreationAccord") ? true : false), intitule: "Créer un accord" },
-        { pg: "RechercheAccords", acces: (_.contains(req.Rights, "ReversionsRechercheAccordLecture") || _.contains(req.Rights, "ReversionsRechercheAccordLectureEcriture") ? true : false), intitule: "Rechercher un accord" }
-    ];*/
-    // V2
-    var tabMenu = [];
+    let tabMenu = [];
     configPages.forEach(function(pg) {
-        var access = null;
+        let access = null;
         
         if(pg.role.length === 0) { // Si pas de role, page ouverte à tout le monde
             access = true;
         } else if(pg.role.length === 1) { // Si un role
-            access = _.contains(req.Rights, pg.role[0]);
-        } else if(pg.role.length > 1) { /// Si plus d'un role
+            access = hasRole(pg.role[0]);
+        } else if(pg.role.length > 1) { // Si plus d'un role
             access = pg.role.some(function(role) {
-                return _.contains(req.Rights, role) === true;
+                return hasRole(role) === true;
             });
         }
         
-        /// cas spécifique du rôle 'Administrateur' => Accède à ttes les pages du menu
-        if(_.contains(req.Rights, "ReversionsAdministrateur") === true) { access = true; }
+        // Cas spécifique du rôle 'Administrateur' => Accède à toutes les pages du menu
+        if(hasRole("ReversionsAdministrateur") === true) { access = true; }
         
-        console.log("{pg: " + pg.nom + ", acces: " + access + ", intitule: " + pg.intitule + "}"); //TEST
+        console.log("{pg: " + pg.nom + ", intitule: " + pg.intitule + ", access: " + access + "}"); //TEST
+        
         tabMenu.push({pg: pg.nom, acces: access, intitule: pg.intitule});
     });
     req.app.locals.menu = tabMenu;
 
 
     /// 3. Gestion des accès aux pages ou fonctionnalités dans les pages
-    //console.log(req.Rights); //TEST
-    if(_.contains(req.Rights, "ReversionsAdministrateur")) {    
+    if(hasRole("ReversionsAdministrateur")) {    
         req.app.locals.limitationAcces = false; /// Variable coté vue : On ne limite pas l'accès
         next();
     } else {
         switch(pg) {        
             case "CreationAccord":
-                if(_.contains(req.Rights, "ReversionsCreationAccord")) {
+
+                if(hasRole("ReversionsCreationAccord")) {
                     next();
                 } else {
                     res.render('AccesRefuse', {msgAccesRefuse: 'Vous n\'avez pas les droits pour accéder à cette page (rôle : ' + req.Rights + ').'});               
                 }
                 break;
+
             case "RechercheAccords":
-                if(_.contains(req.Rights, "ReversionsRechercheAccordLectureEcriture")) {
-                    req.app.locals.limitationAcces = false; /// Variable coté vue : On ne limite pas l'accès/
+
+                if(hasRole("ReversionsRechercheAccordLectureEcriture")) {
+                    req.app.locals.limitationAcces = false; // Variable coté vue : On ne limite pas l'accès
                     next();
-                } else if(_.contains(req.Rights, "ReversionsRechercheAccordLecture")) {
+                } else if(hasRole("ReversionsRechercheAccordLecture")) {
                     console.log('typeof req.body.NumeroAccord : ' + typeof req.body.NumeroAccord + ' | req.xhr : ' + req.xhr); //TEST
                     if((req.method == 'POST' && typeof req.body.NumeroAccord !== 'undefined') || req.method == 'DELETE') {
-                        res.render('AccesRefuse', {msgAccesRefuse: 'Vous n\'avez pas les droits pour utiliser cette fonctionnalité (rôle : ' + req.Rights + ').'}); //Envoi coté client car POST fait en AJAX      
+                        res.render('AccesRefuse', {msgAccesRefuse: 'Vous n\'avez pas les droits pour utiliser cette fonctionnalité (rôle : ' + req.Rights + ').'});     
                     } else {
-                        req.app.locals.limitationAcces = true; /// Pour limiter l'accès côté client (menu et boutons désactivés par ex.)
+                        req.app.locals.limitationAcces = true; // Pour limiter l'accès au niveau de l'interface (menu et boutons désactivés par ex.)
                         next();
                     }
                 } else {
                     res.render('AccesRefuse', {msgAccesRefuse: 'Vous n\'avez pas les droits pour accéder à cette page (rôle : ' + req.Rights + ').'});               
                 }
-                        
                 break;
+
+            case "ListeAccords":
+
+                if(hasRole("ReversionsListeAccordLectureEcriture")) {
+                    req.app.locals.limitationAcces = false; // L'utilisateur peut modifier des données
+                    next();
+                } else if(hasRole("ReversionsListeAccordLecture")) {
+                    req.app.locals.limitationAcces = true; // L'utilisateur est limité à la lecture (pas de modif. d'infos possibles)
+                    next();
+                } else {
+                    res.render('AccesRefuse', {msgAccesRefuse: 'Vous n\'avez pas les droits pour accéder à cette page (rôle : ' + req.Rights + ').'});
+                }
+                break;
+
             default: // pg 'ListeHistoriqueGroupements'
+
                 next();
         }
     }
-    
+
+    function hasRole(nomRole) {
+        return _.contains(req.Rights, nomRole);
+    }
 }
 
