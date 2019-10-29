@@ -7,14 +7,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <% include partials/bundleCSS.ejs %>
-
         <% include partials/bundleJS_ListeAccords.ejs %>
     </head>
     <body>
-
         <% include partials/menu.ejs %>
         <% include partials/help.ejs %>
         <% include partials/userInfo.ejs %>
+
+        <div class="Masque Hidden"></div>
+        <div class="WrapLoader Hidden"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
 
         <div id="main" class="listeDesAccords">
         
@@ -24,7 +25,7 @@
                     
                     <div>
                         <i class="fa fa-filter IconSearch"></i>
-                        <input type="text" class="SearchFieldBandeau" id="SearchNomAccord" name="" value="" placeholder="Filtrer sur un nom d'accord, ou de groupe" autocomplete="off" />
+                        <input type="text" class="SearchFieldBandeau" id="SearchNomAccord" name="" value="" placeholder="Filtrer sur un CC, un nom d'accord, ou de groupe" autocomplete="off" />
                         <i class="fa fa-times-circle" id="DeleteValueSearchNomAccord"></i>
                         <select class="SearchFieldBandeau" id="SelectTypeAccord" autocomplete="off">
                             <option value="All">Tous les accords</option>
@@ -51,64 +52,23 @@
 
                 <div class="FdListe ListeEtbl">
                     <div class="Enteteliste Lgn">
-                        <div id="ClnDateCreation" class="ColonneOrdonnee">Date de création<i class="IconeClassmt fa fa-sort-amount-desc"></i></div>
+                        <div id="ClnDateCreation" class="ColonneOrdonnee" data-isdate="true">Date de création<i class="IconeClassmt fa fa-sort-amount-desc"></i></div>
                         <div id="ClnNomAccord">Nom de l'accord<i class="IconeClassmt fa fa-sort-alpha-asc"></i></div>
                         <div>Infos sur l'accord</div>
-                        <div id="ClnRevValidee">Réversion validée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
-                        <div id="ClnRevReglee">Réversion réglée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
-                        <div>Somme versée</div>
+                        <div id="ClnRevValidee" data-isdate="true">Réversion validée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
+                        <div id="ClnRevReglee" data-isdate="true">Réversion réglée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
+                        <div id="ClnSommeVersee">Somme versée<i class="IconeClassmt fa fa-sort-amount-asc"></i></div>
                     </div>
 
                     <div class="ContenuListe">
-                    <!-- A VIRER : Code pour tests --><!--
-                        <div class="Lgn">
-                            <div data-cln="ClnDateCreation" data-datetoorder="20180718200228">18/07/2018 20:02:28</div>
-                            <div><a href="/RechercheAccords/XXX" class="LienAccord" data-cln="ClnNomAccord">SOS</a><i class="fa fa-chevron-right"></i></div>
-                            <div>Accord pour groupe(s) SOS1 - SOS2 - SOS3 - SOS4</div>
-                            <div><span class="RevValidee oui" data-cln="ClnRevValidee" data-datetoorder="20180712">12/07/18</span></div>
-                            <div><span class="RevReglee oui" data-cln="ClnRevReglee" data-datetoorder="20180715">15/07/18</span></div>
-                            <div>166 022,33€</div>
-                        </div>
-                        <div class="Lgn">
-                            <div data-cln="ClnDateCreation" data-datetoorder="20180718200228">18/07/2018 20:02:28</div>
-                            <div><a href="/RechercheAccords/XXX" class="LienAccord" data-cln="ClnNomAccord">MAISON DES OLIVIERS</a><i class="fa fa-chevron-right"></i></div>
-                            <div>Accord pour étbl. n'appartenant à aucun groupe</div>
-                            <div><span class="RevValidee oui" data-cln="ClnRevValidee" data-datetoorder="20180618">15/06/18</span></div>
-                            <div><span class="RevReglee non" data-cln="ClnRevReglee" data-datetoorder="-">Non</span></div>
-                            <div>-</div>
-                        </div>
-                        --><!-- FIN : A VIRER -->
-
                         <% ListeAccords.forEach(function(accord) { %>
-                            <div class="Lgn">
-                                <div data-cln="ClnDateCreation" data-datetoorder="<%= accord.dataAttr_CreatedDate %>"><%= accord.CreatedDate %></div>
-                                <div><a href="/RechercheAccords/<%= accord.AccordReversionId %>" class="LienAccord" data-cln="ClnNomAccord" title="Consulter/Modifier l'accord"><%= accord.NomAccordReversion %></a><i class="fa fa-chevron-right"></i></div>
-                                <div>     
-                                    <!--<span style="font-size: 10px;color:#ff0000;"><%= accord.InfoComplAccord %></span><br/><!-- Pour Test : A VIRER ! -->
-                                    Accord pour <%= (accord.AccordGroupe == 0 ? "établ." : "groupe" + (accord.MultiGroupes ? "s" : "")) + " " %> 
-                                    <% if(accord.GroupementId == 96) { %>
-                                        n'appartenant à aucun groupe
-                                    <% } else { %>
-                                        <% if(accord.AccordGroupe == 0) { %> appartenant au groupe <% } %><span class="Nom_Grp"><%= accord.Groupe %></span>
-                                    <% } %>
-                                </div>
-
-                                <div><span class="RevValidee <%= accord.ReversionValidee %>" data-cln="ClnRevValidee" data-datetoorder="<%= accord.dataAttr_ValidationReversionDate %>"><%= accord.ValidationReversionDate %></span></div>
-                                <div><span class="RevReglee <%= accord.ReversionReglee %>" data-cln="ClnRevReglee" data-datetoorder="<%= accord.dataAttr_AvisReglement %>"><%= accord.AvisReglement %></span></div>
-                                <div>-</div>
-                            </div>
+                            <% include templates/ligneListeAccords %>
                         <% }); %>
-
                     </div>
                 <div>
 
-
-
-            
             </div>
 
-
         </div>
-
     </body>
 </html>

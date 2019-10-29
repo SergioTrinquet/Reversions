@@ -1,0 +1,44 @@
+
+    <div class="Lgn" data-accordreversionid="<%= accord.AccordReversionId %>" >
+        <div data-cln="ClnDateCreation" data-datetoorder="<%= accord.dataAttr_CreatedDate %>"><%= accord.CreatedDate %></div>
+        <div><a href="/RechercheAccords/<%= accord.AccordReversionId %>" class="LienAccord" data-cln="ClnNomAccord" title="Consulter/Modifier l'accord"><%= accord.NomAccordReversion %> <% if(accord.Cc !== null) { %>(<%= accord.Cc %>)<% } %></a><i class="fa fa-chevron-right"></i></div>
+        <div>     
+            Accord pour <%= (accord.AccordGroupe == 0 ? "établ." : "groupe" + (accord.MultiGroupes ? "s" : "")) + " " %> 
+            <% if(accord.GroupementId == 96) { %>
+                n'appartenant à aucun groupe
+            <% } else { %>
+                <% if(accord.AccordGroupe == 0) { %> appartenant au groupe <% } %><span class="Nom_Grp"><%= accord.Groupe %></span>
+            <% } %>
+        </div>
+
+        <% if(limitationAcces == false) { %>
+
+        <div class="CellRev">
+            <span class="DefaultDisplay">
+                <span class="RevValidee <%= accord.ReversionValidee %>" data-revdate="true" data-cln="ClnRevValidee" data-datetoorder="<%= accord.dataAttr_ValidationReversionDate %>"><%= accord.ValidationReversionDate %></span>
+                <% if(accord.ReversionValidee === "non") { %><i class="fa fa-pencil Bt_Change Date"></i><% } %>
+            </span>
+        </div>
+        <div class="CellRev">
+            <span class="DefaultDisplay">
+                <span class="RevReglee <%= accord.ReversionReglee %>" data-revdate="true" data-cln="ClnRevReglee" data-datetoorder="<%= accord.dataAttr_AvisReglement %>"><%= accord.AvisReglement %></span>
+                <% if(accord.ReversionReglee === "non" && accord.ReversionValidee !== "non") { %><i class="fa fa-pencil Bt_Change Date"></i><% } %>
+            </span>
+        </div>
+        <div class="CellRev">
+            <span class="DefaultDisplay">
+                <span data-cln="ClnSommeVersee"><%= accord.MontantReversionCA %></span>
+                <% if(accord.ReversionReglee !== "non" && accord.ReversionValidee !== "non") { %><i class="fa fa-pencil Bt_Change MontantRevCA"></i><% } %>
+            </span>
+        </div>
+
+        <% } else { %>
+
+        <div><span class="RevValidee <%= accord.ReversionValidee %>" data-cln="ClnRevValidee" data-datetoorder="<%= accord.dataAttr_ValidationReversionDate %>"><%= accord.ValidationReversionDate %></span></div>
+        <div><span class="RevReglee <%= accord.ReversionReglee %>" data-cln="ClnRevReglee" data-datetoorder="<%= accord.dataAttr_AvisReglement %>"><%= accord.AvisReglement %></span></div>
+        <div><span data-cln="ClnSommeVersee"><%= accord.MontantReversionCA %></span></div>
+
+        <% } %>
+
+    </div>
+

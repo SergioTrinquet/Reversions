@@ -318,10 +318,7 @@ body {
     border-width: 0;
     padding: 3px 5px;
     color:#ffffff;
-
-    background-color: #FF99A6; /*V1*/
-    background-color: #fc8d9c; /*V1 bis*/
-
+    background-color: #fc8d9c;
     border:solid 1px #ed6579;
 }
 .Enteteliste,
@@ -1157,7 +1154,8 @@ button.ValidSearch:hover {
 .Bt_Modif:after,
 .Bt_Add:after,
 .Bt_Details:after,
-.Pourcentage.Xsmall:after {
+.Pourcentage.Xsmall:after,
+.listeDesAccords .Bt_Change:after {
     content: " ";
     position: absolute;
     z-index: 1;
@@ -1183,7 +1181,8 @@ button.ValidSearch:hover {
 .Bt_Modif:not(.Disabled):hover:after,
 .Bt_Add:not(.Disabled):hover:after,
 .Bt_Details:hover:after,
-.Pourcentage.Xsmall:hover:after {
+.Pourcentage.Xsmall:hover:after,
+.listeDesAccords .Bt_Change:hover:after {
     display: block;
 }
 
@@ -1616,9 +1615,6 @@ button.ValidSearch:hover {
     text-align: center !important;
     margin-left: 5px;
 }
-/*.ListeEtbl .Lgn .LstAdh_SaisieTx > input[type="text"].Error {
-    background-color: #FFC0CB;
-}*/
 
 .ListeEtbl .Lgn .LstAdh_SaisiePeriode > input[type="text"] {
     width: 90px;
@@ -2038,14 +2034,14 @@ button.ValidSearch:hover {
 /*================ Page Liste des accords ==============*/
 .listeDesAccords .Enteteliste > div:first-child,
 .listeDesAccords .ContenuListe .Lgn > div:first-child {
-    width: 12%;
-    min-width: 100px;
+    width: 10%;
+    min-width: 135px;
 }
 .listeDesAccords .ContenuListe .Lgn > div:first-child { font-size: 12px; }
 
 .listeDesAccords .Enteteliste > div:nth-child(2),
 .listeDesAccords .ContenuListe .Lgn > div:nth-child(2) {
-    width: 30%;
+    width: 29%;
     min-width: 340px;
 }
 .listeDesAccords .ContenuListe .Lgn > div:nth-child(2) a {
@@ -2056,6 +2052,7 @@ button.ValidSearch:hover {
     text-decoration: underline;
     color: #427FB9;
 }
+.listeDesAccords .ContenuListe .Lgn > div:nth-child(2) a > .cc { color: #9b9b9b; }
 .listeDesAccords .ContenuListe .Lgn > div:nth-child(2) .fa {
     color: #ff6600;
     margin-left: 4px;
@@ -2077,11 +2074,8 @@ button.ValidSearch:hover {
 .listeDesAccords .ContenuListe .Lgn > div:nth-child(5),
 .listeDesAccords .ContenuListe .Lgn > div:nth-child(6) {
     width: 11%;
-    min-width: 90px;
+    min-width: 120px;
     text-align: center;
-}
-.listeDesAccords .ContenuListe .Lgn > div:nth-child(6) {
-    font-weight: bold;
 }
 .listeDesAccords .ContenuListe > .Lgn {
     display: table;
@@ -2131,6 +2125,86 @@ i#DeleteDatepickerStart:hover { opacity: 1; }
 }
 .ColonneOrdonnee { text-decoration: underline; }
 .ColonneOrdonnee .IconeClassmt { background-color: rgba(255,255,255, 1); }
+
+.listeDesAccords .Bt_Change {
+    font-size: 15px;
+    color: rgba(85, 85, 85, 1);
+    position: absolute;
+    margin: 1px 0 0 8px;
+    cursor: pointer;
+    transition: all ease-in 0.1s;
+}
+.listeDesAccords .Bt_Change.Disabled {
+    color: rgba(85, 85, 85, 0.2);
+    cursor: not-allowed;
+}
+.listeDesAccords .Bt_Change:not(.Disabled):hover {
+    color: #1d1d1d;
+    font-size: 17px;
+    margin: 0 0 0 7px;
+}
+
+.listeDesAccords .Bt_Change:not(.Disabled):after {
+    content: "Modifier";
+    margin: -36px 0 0 -20px;
+    width: 50px;
+    color: #ffffff;
+    font-family: "Maven Pro",Verdana,Trebuchet MS,Arial,sans-serif;
+    padding: 2px 4px;
+    opacity: 0.8;
+    font-size: 11px;
+    z-index: 2;
+}
+.listeDesAccords .Hidden { display: none; }
+
+.listeDesAccords .sumField {
+    display: table;
+    width: 90%;
+}
+
+.listeDesAccords .Lgn > div input[type="text"] {
+    width: 80%;
+    min-width: 105px;
+    text-align: center;
+}
+.listeDesAccords .Lgn > div input[data-inputsum] { 
+    display: table-cell;
+    width: 100%; 
+    vertical-align: middle;
+}
+.listeDesAccords .Lgn > div input[data-inputsum].valid { box-shadow: 0 0 0 2px #00b916 inset; }
+.listeDesAccords .Lgn > div input[data-inputsum].erreur { box-shadow: 0 0 0 2px #ff0000 inset; }
+
+.listeDesAccords .Lgn > div input[type="text"]::-webkit-placeholder { color: rgba(0,0,0,0.7); font-size: 12px; text-align: center; }
+.listeDesAccords .Lgn > div input[type="text"]::-moz-placeholder { color: rgba(0,0,0,0.7); font-size: 12px; text-align: center; }
+.listeDesAccords .Lgn > div input[type="text"]:-ms-input-placeholder { color: rgba(0,0,0,0.7); font-size: 12px; text-align: center; }
+.listeDesAccords .Lgn > div input[type="text"]:-moz-placeholder { color: rgba(0,0,0,0.7); font-size: 12px; text-align: center; }
+.listeDesAccords .CellRev input[type="text"] ~ i.fa {
+    position: absolute;
+    margin: 1px 0 0 4px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #555555;
+}
+.listeDesAccords .CellRev input[data-inputsum] ~ i.fa { margin: -12px 0 0 5px; }
+.listeDesAccords .CellRev input[type="text"] + i.fa:hover { color: #1d1d1d; }
+
+.listeDesAccords .BtValidSomme {
+    display: table-cell;
+    background-color: #4d4d4d;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.listeDesAccords .BtValidSomme > i.fa { margin: auto 3px; }
+.listeDesAccords .BtValidSomme[data-active="false"] > i.fa {
+    color: rgba(255, 255, 255, 0.4);
+    cursor: not-allowed;
+}
+.listeDesAccords .BtValidSomme[data-active="true"] > i.fa {
+    color: #fff;
+}
+
+.listeDesAccords + #ui-datepicker-div { font-size: 0.7em; z-index: 2 !important }
 /*================ FIN Page Liste des accords ==============*/
 
 
@@ -2350,7 +2424,6 @@ i#DeleteDatepickerStart:hover {
 .blocBts button {
     border: 3px solid #485577;
     border-radius: 4px;
-    /*font-size: 18px;*/
     font-size: 16px;
     padding: 4px;
     width: 100%;

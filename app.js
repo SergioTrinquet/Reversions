@@ -75,8 +75,19 @@ app.use(function (err, req, res, next) {
     
     console.log(colors.bgRed.white(err.stack));
     logger.log('error', err.stack, {login: req.app.get('userName')}); 
-    res.status(err.status || 500);
-    res.render('Erreur', {erreur_msg: err.message, erreur_stack: err.stack});
+
+    if(req.xhr) { // Si erreur suite à appel ajax
+        res
+            .status(err.status || 500)
+            .render('templates/encartErreur', { titre: err.customMsg, message: err.message, stack: err.stack }); // Version en Html
+    
+    } else { // Autre
+
+        res
+            .status(err.status || 500)
+            .render('Erreur', {erreur_msg: err.message, erreur_stack: err.stack});
+
+    }
 })
 
 
