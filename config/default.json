@@ -30,7 +30,14 @@
     },
 
     /// Afficher ici tous les rôles possibles pour cette appli
-    "listeApplicationRole": ["ReversionsCreationAccord", "ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture", "ReversionsAdministrateur"],
+    "listeApplicationRole": [
+        "ReversionsCreationAccord", 
+        "ReversionsRechercheAccordLecture", 
+        "ReversionsRechercheAccordLectureEcriture",
+        "ReversionsListeAccordLecture",
+        "ReversionsListeAccordLectureEcriture",
+        "ReversionsAdministrateur"
+    ],
     //"listeApplicationRole": ["ReversionsCreationAccord", "ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture", "ReversionsAdministrateur", "BackOfficeCatalogueNutrition"], /// Afficher ici tous les rôles possibles pour cette appli
 
     /// Config des pages pour le menu
@@ -38,10 +45,26 @@
     /// NOTE : Pas besoin de mettre le rôle 'ReversionsAdministrateur' qui permet l'accès à ttes les pages
     /// NOTE : Si page ouverte à tt le monde : Pas besoin de rôle (mettre un tableau vide : [])
     "pages": [
-        { "nom": "HistoGrp", "role": [], "intitule": "Historique des groupes" },
-        { "nom": "CreationAccord", "role": ["ReversionsCreationAccord"], "intitule": "Créer un accord" }, 
-        { "nom": "ListeAccords", "role": [], "intitule": "Liste des accords" },
-        { "nom": "RechercheAccords", "role": ["ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture"], "intitule": "Rechercher/ modifier un accord" }
+        { 
+            "nom": "HistoGrp", 
+            "role": [], 
+            "intitule": "Historique des groupes" 
+        },
+        { 
+            "nom": "CreationAccord", 
+            "role": ["ReversionsCreationAccord"], 
+            "intitule": "Créer un accord" 
+        }, 
+        { 
+            "nom": "ListeAccords", 
+            "role": ["ReversionsListeAccordLecture", "ReversionsListeAccordLectureEcriture"], 
+            "intitule": "Liste des accords" 
+        },
+        { 
+            "nom": "RechercheAccords", 
+            "role": ["ReversionsRechercheAccordLecture", "ReversionsRechercheAccordLectureEcriture"], 
+            "intitule": "Rechercher/ modifier un accord" 
+        }
     ]
 
 }
