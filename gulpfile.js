@@ -60,7 +60,7 @@ gulp.task('optimisationJS_LHG', function(cb) {
 
 /// Fichiers propres à page 'ListeAccords.js'
 gulp.task('optimisationJS_LA', function(cb) {
-    var lstJS = ['datepicker-fr', 'sidenav', 'highlight', 'DisplayError', 'ListeAccords'];
+    var lstJS = ['datepicker-fr', 'sidenav', 'ParamsDatePickers', 'DisplayError', 'ListeAccords', 'highlight'];
     optimisationJS(lstJS, 'global_ListeAccords', cb);
 });
 
