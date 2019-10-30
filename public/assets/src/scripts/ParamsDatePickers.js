@@ -40,7 +40,7 @@ function DatePlusOneDay(dt) {
 
 function ParamsDatePickerSolo(input, champRevReglee, dateAutreChamp, minDateDebut, maxDateFin) {   
     
-    console.log(input); console.log(champRevReglee); console.log(dateAutreChamp); //TEST
+    console.error("-------------------------"); console.log(input); console.log(champRevReglee); console.log(dateAutreChamp); console.error("-------------------------"); //TEST
 
     input.datepicker({
         showAnim: "slideDown",
@@ -56,8 +56,8 @@ function ParamsDatePickerSolo(input, champRevReglee, dateAutreChamp, minDateDebu
                 if(r) {
                     if(champRevReglee === true) {
                         var tab_dt = (input.val().split(/[- //]/));
-                        var dateGoodFormat = tab_dt[2].toString() + tab_dt[0].toString() + tab_dt[1].toString();
-                        if(dateGoodFormat <= dateAutreChamp) { // Check sur cohérence des dates saisies
+                        var dateGoodFormat = tab_dt[2].toString() + tab_dt[1].toString() + tab_dt[0].toString();
+                        if(dateGoodFormat < dateAutreChamp) { // Check sur cohérence des dates saisies
                             // Erreur
                             input.val('');
                             alert("Vous ne pouvez pas saisir une date antérieure\n à la date de validation de la réversion."); 
