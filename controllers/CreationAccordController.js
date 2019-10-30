@@ -37,16 +37,22 @@ module.exports = function(app) {
 
     /// Pour récupérer liste des étbs correspondant au Groupe coché ds l'étape 2
     app.post('/CreationAccord/GetLstEtbs', userRightsAccess, function(req, res, next) {
-        if (!req.body) return res.sendStatus(400);
+        // try/catch ajouté ici car on veut juste ajouter une propriété personalisée ('customMsg') dans l'erreur s'il y en a une,
+        // mais le try/catch n'est pas nécessaire en soit : L'erreur est bien catchée par le Middleware de gestion des erreurs, il n'y aura juste pas de propriété personalisée
+        try {
 
-        var reqBody = req.body;
+            if (!req.body) return res.sendStatus(400);
+            var reqBody = req.body;
+            if(reqBody.IdGrp) {
+                getListeEtbsOfSelectedGroupement(function(recordset) {
+                    res.send(recordset[0]);
+                }, reqBody.IdGrp, next);
+            }
 
-        if(reqBody.IdGrp) {
-            getListeEtbsOfSelectedGroupement(function(recordset) {
-                res.send(recordset[0]);
-            }, reqBody.IdGrp, next);
+        } catch (error) {
+            if(!error.customMsg) { error.customMsg = "Création d'un accord : Phase de récupération de la liste des étbs correspondant au groupe coché ds l'étape 2"; }
+            next(error);  
         }
-        //console.log(colors.bgYellow.black(JSON.stringify(reqBody))); //TEST
     });
 
 

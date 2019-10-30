@@ -1,23 +1,13 @@
 var numEtapeActuel = null;
-var AnneeEnCours = null;
+//var AnneeEnCours = null; // Mis en commentaire car sert à une option qui a été validée à l'origine du dev. de cette appli. mais n'est plus d'actualité
 var ValidateForm_part1 = null;
 
 var DataEtape1 = {};
-/*var NEW_DataEtape1 = {
-    NomAccord: "",
-    AnneeAccord: "",
-    DateDebutAccord: "",
-    DateFinAccord: "",
-    SaisieTypeTauxRev : null,
-    SaisieTauxRev : "",
-    SaisieTauxEDI : ""
-};*/
 var DataEtape2 = Init_DataEtape2();
 var DataEtape3 = "";
 
 var DataGlobal = {
     Etape1: DataEtape1,
-    //Etape1: NEW_DataEtape1,
     Etape2: DataEtape2,
     Etape3: ""
 };
@@ -48,7 +38,7 @@ $(function () {
 
     /// Fermeture popin
     $('.Popin .ClosePopin').click(function() {
-        ClosePopin($(this));
+        ClosePopinCreationAccord($(this));
     });
 
     /// Apparition 1ere popin de saisie
@@ -76,34 +66,21 @@ $(function () {
         switch (numEtapeActuel) {
             case 1:
                 Validation_Etape1(this);
-                event.preventDefault(); /// Très important : Evite de recharger la page
+                event.preventDefault(); /// Evite de recharger la page!!
                 break;
             case 2:
                 Validation_Etape2(this);
-                event.preventDefault(); /// Très important : Evite de recharger la page
+                event.preventDefault(); /// Evite de recharger la page!!
                 break;
             case 3:
                 Validation_Etape3(this);
-                event.preventDefault(); /// Très important : Evite de recharger la page
+                event.preventDefault(); /// Evite de recharger la page!!
                 break;
             default:
                 console.log('Erreur !!');
         }
 
     });
-
-
-    /// A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js' et 'RechercheAccords.js') ==> Pour fermeture encart d'erreur s'il existe
-    $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
-        $('.ErreurRetourAjax').addClass('Hidden');
-        $('.ErreurRetourAjax .Content').empty();
-        if($('.creationAccordReversion').length > 0) { 
-            Masque.removeClass('Hover'); 
-        } else {
-            Masque.addClass('Hidden');
-        }
-    });
-
 
 });
 
@@ -136,7 +113,7 @@ function switchPopins(Bt, Suivant) {
 
 
 
-function ClosePopin(Bt) {
+function ClosePopinCreationAccord(Bt) {
     var r = confirm("En fermant cet encart, vous perdrez l'ensemble des données saisies pour la création de cet accord.\nConfirmez votre choix.");
     if(r) {
 
@@ -187,7 +164,6 @@ function ClosePopin(Bt) {
         /// réinitialisation sur Etape 3 (facultatif car cette partie est réinitialisé à chaque appel de cette étape) ///
         PopinCreationAccord_Etp3.find('#ListeEtbsChoixDestinataires ul').empty();
 
-
         numEtapeActuel = null; // Réinitialisation
     }
 }
@@ -220,7 +196,7 @@ function GetDataAccordForHeaders() {
     var SaisieTypeTauxRev = PopinCreationAccord_Etp1.find('#SaisieTypeTauxRev').val();
     var LibelleTypeTauxRev = $('#SaisieTypeTauxRev option:selected').text();
     var PopinCreaTauxRev = (SaisieTypeTauxRev == "1" ? " (" + $("#SaisieTauxRev").val() + "%)" : "");
-    var PopinCreaTauxEDI = (SaisieTypeTauxRev == "1" ? (SaisieTauxEDI == "" ? "-" : SaisieTauxEDI) : "-"); // Ajouté le 21/07/17
+    var PopinCreaTauxEDI = (SaisieTypeTauxRev == "1" ? (SaisieTauxEDI == "" ? "-" : SaisieTauxEDI) : "-");
 
     PopinCreationAccord_Etp2.find('.PopinCreaNomAccord').text(SaisieNomAccord);
     PopinCreationAccord_Etp2.find('.PopinCreaAnneeAccord').text(SaisieAnneeAccord);
@@ -228,8 +204,7 @@ function GetDataAccordForHeaders() {
     PopinCreationAccord_Etp2.find('.PopinCreaDateFin').text(SaisieDateFinAccord);
     PopinCreationAccord_Etp2.find('.PopinCreaTypeTauxRev').text(LibelleTypeTauxRev);    
     PopinCreationAccord_Etp2.find('.PopinCreaTauxRev').text(PopinCreaTauxRev);
-    //PopinCreationAccord_Etp2.find('.PopinCreaTauxEDI').text((SaisieTauxEDI == "" ? "-" : SaisieTauxEDI)); // Mis en comm. le 21/07/17
-    PopinCreationAccord_Etp2.find('.PopinCreaTauxEDI').text(PopinCreaTauxEDI); // Ajouté le 21/07/17
+    PopinCreationAccord_Etp2.find('.PopinCreaTauxEDI').text(PopinCreaTauxEDI);
 
     /// Clonage de l'entete de la 2eme popin dans la 3eme
     $('#PopinCreationAccord_Etp3 .DataSaisiesEtp1').remove();
@@ -251,13 +226,13 @@ function Initialisation_Etape1() {
     $('#SaisieTypeTauxRev').on('change', function() {
         var LstDer = $(this);
         var ChpTxRev = LstDer.next('#SaisieTauxRev');
-        var ChpTxEDI = $('#SaisieTauxEDI'); // Ajouté le 21/07/17
+        var ChpTxEDI = $('#SaisieTauxEDI');
         if(LstDer.val() == 1) { /// si sélection Tx fixe...
             ChpTxRev.removeAttr('disabled').attr('data-requis', 'true');   
-            ChpTxEDI.removeAttr('disabled'); // Ajouté le 21/07/17
+            ChpTxEDI.removeAttr('disabled');
         } else { /// si sélection Tx variable...
             ChpTxRev.prop('disabled', 'disabled').removeAttr('data-requis');   
-            ChpTxEDI.prop('disabled', 'disabled'); // Ajouté le 21/07/17 
+            ChpTxEDI.prop('disabled', 'disabled');
         }
     });
 
@@ -272,7 +247,6 @@ function Initialisation_Etape1() {
 
 /// Contrôles de saisie dans 1ere popin (event passé juste pour FireFox car sinon erreur)
 function Validation_Etape1(Bt) { 
-
     var msgErrorEmptyFields = "";
     var msgErrorYear = "";
 
@@ -280,16 +254,17 @@ function Validation_Etape1(Bt) {
     $('#PopinCreationAccord_Etp1 input').each(function(i, el) {
         var el = $(el);
         if(typeof el.attr('data-requis') !== 'undefined' && $.trim(el.val()) == '') {
-            //console.log($(this).attr('id') + " / data-requis: " + typeof $(this).data('requis') + " / $.trim($(this).val()): " + $.trim($(this).val())); //TEST
             ValidateForm_part1 = false;
             el.addClass('Error');
             msgErrorEmptyFields = "<p>Un ou des champs doivent être rempli(s).</p>";
-            
-        } else if(el.attr('id') == 'SaisieAnneeAccord' && parseInt(el.val()) < parseInt(AnneeEnCours)) { 
+        
+        // Saisie d'une année antérieure de 1an max. autorisée
+        //} else if(el.attr('id') == 'SaisieAnneeAccord' && parseInt(el.val()) < parseInt(AnneeEnCours)) { 
+        } else if(el.attr('id') == 'SaisieAnneeAccord' && parseInt(el.val()) + 1 < parseInt(AnneeEnCours)) { 
             ValidateForm_part1 = false; 
             el.addClass('Error'); 
-            msgErrorYear = "<p>Le champ 'Année' doit avoir une valeur égale ou postérieure à l'année en cours.</p>";
-            
+            //msgErrorYear = "<p>Le champ 'Année' doit avoir une valeur égale ou postérieure à l'année en cours.</p>";
+            msgErrorYear = "<p>Le champ 'Année' doit avoir une valeur postérieure ou égale à l'année précédent celle en cours ( => " + (parseInt(AnneeEnCours) - 1) + " ou après).</p>";
         } else {
             el.removeClass('Error');
         }
@@ -326,23 +301,15 @@ function Validation_Etape1(Bt) {
         }
         
 
-
-        /// 05/01/18 : Intégrer le fait que la date d'accord a pu être changé : Si oui => Appel AJAX,
+        /// Intégrer le fait que la date d'accord a pu être changé : Si oui => Appel AJAX,
         /// Si non : pas appel AJAX
         var SaisieAnneeAccord = $('#SaisieAnneeAccord').val();
-        /// Si année de l'accord rentrée dans l'étape 1 est différente de null (cas ou champ saisi pour la 1ere fois) et différent de l'anné 
-        /*if((PrecedenteAnneeAccordSaisie !== SaisieAnneeAccord) && (PrecedenteAnneeAccordSaisie !== null)) {
-            console.log("PrecedenteAnneeAccordSaisie : " + PrecedenteAnneeAccordSaisie + " | SaisieAnneeAccord : " + SaisieAnneeAccord + "\nLa date a été changée depuis la dernière fois !"); //TEST
-        } else {
-            console.warn("Mêmes années ou pas d'année avant");
-        };*/
 
         /// Si année de l'accord rentrée lors du dernier passage à l'étape 1 
         /// est différente de la date saisie antérieurement (cas ou au moins un aller-retour entre Etape 1 et Etape 2) 
         /// ou bien si 1er passage à l'étape 1, on recharge les listes des Grps et Etbs et du même coup on supprime les sélections faites par l'utilisateur antérieurement dans l'étape 2
         if(PrecedenteAnneeAccordSaisie !== SaisieAnneeAccord) {
             DataEtape2 = Init_DataEtape2(); /// Réinitialisation de l'étape 2     
-        /// FIN 05/01/18
 
 
             /// Appel AJAX pour charger la liste des groupes et etablissements en fonction de l'année saisie dans l'étape 1
@@ -350,7 +317,7 @@ function Validation_Etape1(Bt) {
                 method: "GET",
                 url: "/CreationAccord/" + SaisieAnneeAccord,
                 contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                /**/ifModified: true,/**/ /// Important car permet de ne pas déselectionner les checkboxs déjà cochées dans le cas de figure ou l'utilisateur est passé par l'étape 2 (et a coché) et revient sur l'étape 1 sans changer l'année puis revient sur l'étape 2
+                ifModified: true, // Important car permet de ne pas déselectionner les checkboxs déjà cochées dans le cas de figure ou l'utilisateur est passé par l'étape 2 (et a coché) et revient sur l'étape 1 sans changer l'année puis revient sur l'étape 2
                 beforeSend: function () {
                     $('.creationAccordReversion .MaskPopin').removeClass('Hidden');
                 }
@@ -363,9 +330,8 @@ function Validation_Etape1(Bt) {
 
                 GetDataAccordForHeaders();
             })
-            .fail(function (jqXHR) {
-                Masque.addClass('Hover');
-                DisplayError(jqXHR.responseText);
+            .fail(function (err) {
+                DisplayError_NEW(err.responseText);
             })
             .always(function () {
                 /// Retrait masque
@@ -373,16 +339,14 @@ function Validation_Etape1(Bt) {
             });
 
 
-        ///* 05/01/18 *///
         } else {
             switchPopins(Bt, true); /// Passage au prochain popin
             GetDataAccordForHeaders(); 
         }
         PrecedenteAnneeAccordSaisie = SaisieAnneeAccord;
-        ///* FIN 05/01/18 *///
         
 
-    /// ...Sinon...
+    /// ...Sinon si erreurs...
     } else {    
         /// Affichage msg d'erreur
         LgnErrDiv.html(msgErrorEmptyFields + msgErrorYear);
@@ -398,9 +362,7 @@ function Validation_Etape1(Bt) {
 
 
 
-
 function Initialisation_Etape2() {
-
     /// Quand sélection d'un groupement, sélection automatique de tous les établissements de ce groupement
     PopinCreationAccord_Etp2.on('click', '.Cln[data-type="Grps"] input[type="checkbox"]', function() {
         var chkbx = $(this);
@@ -410,8 +372,6 @@ function Initialisation_Etape2() {
         /// On détermine si on coche ou on décoche
         var selectionne = null;
         selectionne = IsChecked(chkbx);
-        //console.log(chkbx.attr('id') + ' --> ' + (selectionne ? 'coché ' : 'pas coché ' ) + NomGrp); //TEST
-
 
         /// Controles de saisie sur les checkboxs Groupement pour interdire des cas de figure invraisemblables (1 grp + 1 etb avec accord individuel)
         var NbEtbsNotFromGrpChecked = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]:checked:not([data-fromgrp])').length;
@@ -434,12 +394,10 @@ function Initialisation_Etape2() {
             }
         })
         .done(function (data) {
-            //console.log("La data est : " + JSON.stringify(data)); //TEST
             if(data.length != 0) {
                 var Etbs_checkboxes = PopinCreationAccord_Etp2.find('.Cln[data-type="Etbs"] input[type="checkbox"]');
             
                 data.forEach(function(el) {
-                    //console.log(el.EtablissementId); //TEST
                     var GoodCheckbox = Etbs_checkboxes.filter("[value='" + el.EtablissementId + "']");
                     
                     if(selectionne) {   /// Si sélection...
@@ -447,7 +405,6 @@ function Initialisation_Etape2() {
                         GoodCheckbox.prop('checked', true).attr('data-fromgrp', GroupId).attr('title', "Sétectionné comme faisant partie du groupement '" + NomGrp + "'").closest('span').addClass('Selected');
                         GoodCheckbox.next('label').attr('title', "Sétectionné comme faisant partie du groupement '" + NomGrp + "'");
                     } else { ///... sinon si désélection
-                        //GoodCheckbox.prop('checked', false).removeAttr('data-fromgrp').removeAttr('title').closest('span').removeClass('Selected'); // 1ere version avant version avec affichage EXCLUSIF des etbs sélectionnés
                         GoodCheckbox.prop('checked', false).removeAttr('title').closest('span').removeClass('Selected');
                         GoodCheckbox.next('label').removeAttr('title');
                     }
@@ -483,9 +440,6 @@ function Initialisation_Etape2() {
                 RecordData(data, selectionne, 'Grp');
 
                 
-
-
-
                 /// Enable ou pas bt 'Suivant' en vérifiant si au moins 1 Etb de coché
                 VerifSelection(NbEtbChecked); 
 
@@ -494,9 +448,8 @@ function Initialisation_Etape2() {
             }
 
         })
-        .fail(function (jqXHR) {
-            Masque.addClass('Hover');
-            DisplayError(jqXHR.responseText);
+        .fail(function (err) {
+            DisplayError_NEW(err.responseText);
         })
         .always(function () {
             /// Retrait masque
@@ -552,7 +505,6 @@ function Initialisation_Etape2() {
     
     $('#PopinCreationAccord_FormEtp2').on('mouseenter', '.Cln[data-type="Etbs"] input[type="checkbox"]:disabled + label', function() { MsgEtbPasDispo.removeClass('Hidden'); });
     $('#PopinCreationAccord_FormEtp2').on('mouseleave', '.Cln[data-type="Etbs"] input[type="checkbox"]:disabled + label', function() { MsgEtbPasDispo.addClass('Hidden'); });
-
 }
 
 
@@ -573,7 +525,7 @@ function RecordData(data, checked, TypeSelection) {     console.log('TypeSelecti
             $.each(DataEtape2.Groupe, function(i, el) {
                 if(el.IdGroupe == data[0].GroupementId) { j = i; return false; }
             });
-            //console.log("position de l'el. à suppr. : j --> " + j); //TEST
+            
             /// Retrait du groupe et de ses établissements
             DataEtape2.Groupe.splice(j, 1);
         }
@@ -625,7 +577,6 @@ function IsChecked(chbx) {
 
 
 function Validation_Etape2(Bt) {
-
     DataEtape2.MultiAccord = false; /// Valeur par défaut
 
     /// Choix entre un accord de groupement, ou autant d'accords que d'établissements et donc pas un accord de groupement
@@ -681,7 +632,6 @@ function Validation_Etape2(Bt) {
 
 
 function Initialisation_Etape3() {
-
     /// On récupère la liste des établissements
     var ListeGroupement = DataEtape2.Groupe;
     var ListeEtbsAccordIndividuel = DataEtape2.MultiAccordListeEtablissements;
@@ -729,8 +679,6 @@ function Initialisation_Etape3() {
     } else if(ListeGroupement.length > 0 && ListeEtbsAccordIndividuel.length > 0) {
         throw new Error("Une erreur s'est produite dans la construction le l'objet stockant les données saisies à l'étape précédente !");
     }
-
-
 }
 
 
@@ -746,7 +694,6 @@ function Validation_Etape3() {
 
 
 function RecordDataBDD() {
-
     DataGlobal.Etape1 = DataEtape1;
     DataGlobal.Etape2 = DataEtape2;
     DataGlobal.Etape3 = DataEtape3;
@@ -773,15 +720,13 @@ function RecordDataBDD() {
             console.warn('Problème lors de la redirection !');
         }
     })
-    .fail(function (jqXHR) {
-        Masque.addClass('Hover');
-        DisplayError(jqXHR.responseText);
+    .fail(function (err) {
+        DisplayError_NEW(err.responseText);
     })
     .always(function () {
         /// Retrait masque
         $('.creationAccordReversion .MaskPopin').addClass('Hidden');
     });
-
 }
 
 
@@ -791,20 +736,5 @@ function Init_DataEtape2() {
         Etablissement: "",
         MultiAccord: null,
         MultiAccordListeEtablissements: []
-    }
-}
-
-
-
-/// A FACTORISER (existe aussi ds RechercheAccords.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
-function DisplayError(jqXHRresponseText) {
-    var Thehtml = $.parseHTML(jqXHRresponseText);
-    var html_PgErreur = $(Thehtml).find("#Encart");
-    if($('.ErreurRetourAjax').length > 0) {
-        $('.ErreurRetourAjax .Content').html(html_PgErreur);
-        $('.ErreurRetourAjax').removeClass('Hidden');
-    } else {
-        $("<div class='ErreurRetourAjax'><i class='fa fa-times ClosePopin'></i><div class='Content'></div></div>").appendTo("body");
-        $(".ErreurRetourAjax .Content").html(html_PgErreur);
     }
 }
