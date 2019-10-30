@@ -20,8 +20,6 @@ const async = require('async');
 
 
 module.exports = function(app) {
-    //console.log('Mode : ' + process.env.NODE_ENV)
-
 
     /// Lorsque clic sur bouton 'Définir les marchés', affichage des catalogues et fournisseurs auquel l'établissement a droit + les fournisseurs exclus
     app.get('/RechercheAccords/Marches/:idAccord/:EtbId', userRightsAccess, function(req, res, next) {
@@ -44,14 +42,12 @@ module.exports = function(app) {
                 CataloguesInterdits : function (callback) {
                     GetListeCataloguesEtablissement(function(recordset) {
                         var CatsInterdits = recordset[0];
-                        //callback();
                         callback(null, CatsInterdits);
                     }, req.params, next);
                 },
                 FournisseursExclus : function (callback){
                     GetFnrsExclusEtablissement(function(recordset) {
                         var FnrsExclus = recordset[0];
-                        //callback();
                         callback(null, FnrsExclus);
                     }, req.params, next);
                 }
@@ -69,11 +65,10 @@ module.exports = function(app) {
 
     /// Lorsque clic sur bouton 'Afficher les fnrs exclus' (existe seulement en mode lecture sur la page de recherche des accords) : Affichage des fournisseurs exclus
     app.get('/RechercheAccords/FnrsExclus/:idAccord/:EtbId', userRightsAccess, function(req, res, next) {
-        GetFnrsExclusEtablissement(function(recordset) {    //console.log(colors.bgMagenta.yellow(JSON.stringify(recordset[0]))); //TEST
+        GetFnrsExclusEtablissement(function(recordset) {
             res.send({FnrsExclus: recordset[0]});
         }, req.params, next);
     });
-
 
 
     /// Lorsque clic sur ajout d'un établissement dans ligne Accord
@@ -84,18 +79,14 @@ module.exports = function(app) {
     });
 
 
-
     /// Lorsque clic sur un lien dans l'autocomplete qui apparait suite à une recherche dans le moteur en haut de page : Obtention de ttes les infos pour afficher l'accord et ses établissements
     app.get('/RechercheAccords/:idAccord?/:EtbId?', userRightsAccess, function(req, res, next) {
-        //console.log(req.params); //TEST
-
-        console.log('req.app.locals.limitationAcces => ' + req.app.locals.limitationAcces); //TEST
+        //console.log('req.app.locals.limitationAcces => ' + req.app.locals.limitationAcces); //TEST
         const limitationAcces = req.app.locals.limitationAcces;
         
         /// Affichage Accord
         if(typeof req.params.idAccord !== 'undefined') {
 
-            
             /// Tests faits pour vérifier si les variables passées dans l'URL sont au bon format (chiffres)
             var reg = new RegExp("^[0-9]*$", "g");
             if(reg.test(req.params.idAccord) == false) { 
@@ -107,7 +98,6 @@ module.exports = function(app) {
             getAccords(function(recordset) {
                 var newRecordset = [];
                 /// Fonction pour formater les données comme on veut pour affichage ds vue
-                //newRecordset = FormatData(recordset); // Version avec la requete en dur ds code 'getAccords'
                 newRecordset = FormatData(recordset[0]); // Version avec proc. stock. ds code 'getAccords'
                 //console.log(colors.bgWhite.blue(JSON.stringify(newRecordset))); //TEST
 
@@ -185,7 +175,6 @@ module.exports = function(app) {
             var SaisieRecherche = req.body.SaisieRecherche.replace(reg, "''");
 
             getDataPropositionsRecherche(function(recordsets) {
-                //console.log(colors.bgWhite.magenta(JSON.stringify(recordsets))); //TEST
                 /// On va remplir le template avec les données (recordsets), puis on renvoie le html final du template rempli
                 res.render('templates/autocompleteRecherche', { layout: false, propositionsRech_Accord: recordsets[0], propositionsRech_Grp: recordsets[1], propositionsRech_Etb: recordsets[2] }, function(err, html) {                
                     if(err) { return next(err); } 
@@ -419,11 +408,9 @@ function FormatData(recordset) {
         });
 
 
-        //console.log(colors.bgMagenta.black(JSON.stringify(tab_EtblInAccord))); //TEST
         /// 1. On regroupe par 'AccordReversionId' les données correspondant aux établissements au sein d'un groupement 
         var GroupBy_Accord = _.groupBy(tab_EtblInAccord, 'AccordReversionId'); // Fonctionne
-        //console.log(colors.bgYellow.black(JSON.stringify(GroupBy_Accord))); //TEST
-        
+ 
         /// 2. On boucle dessus...
         for(var i in GroupBy_Accord) {
             //console.log(i + " | " + GroupBy_Accord[i]); //TEST
@@ -595,45 +582,6 @@ function getDataPropositionsRecherche(callback, saisieRecherche, next) {
 
 ///--- Récupération de la data pour afficher l'accord sélectionné ---///
 function getAccords(callback, AccRevID, next) {
-    /*
-    config.parseJSON = true; // Pour que le recordset soit au format JSON
-    var requete = "" +
-    "SELECT " +        
-        "AcRv.AccordReversionId, Rv.ReversionId, AcRv.AnneeReversion, AcRv.DestinataireReversementEtablissementId, AcRv.AccordGroupe, AcRv.PeriodeDebut, AcRv.PeriodeFin, AcRv.Taux, AcRv.TauxAvecEDI, AcRv.DestinataireRaisonSociale, " +
-        "AcRv.DestinataireContact, AcRv.DestinataireAd1, AcRv.DestinataireAd2, AcRv.DestinataireAd3, AcRv.DestinataireCP, AcRv.DestinataireVille, AcRv.Desactive, TxRv.TypeTauxReversionId, TxRv.Libelle, ARvE.EtablissementId, " +
-        "ARvE.RaisonSociale, ARvE.CC, ARvE.Ad1, ARvE.Ad2, ARvE.Ad3, ARvE.CP, ARvE.Ville, ARvE.Contact, ARvE.AvecEDI, Gr.[LIBELLE GROUPEMENT] As LibelleGroupement, AcRv.NomAccordReversion, ARvE.AutreTaux, ARvE.AutreTauxAvecEDI, Rv.ValidationReversionDate  " +
-    "FROM " +
-        "Etablissement.dbo.GROUPEMENT AS Gr RIGHT OUTER JOIN " +
-        "Reversion.AccordReversion AS AcRv INNER JOIN " +
-        "Reversion.AccordReversionEtablissement AS ARvE ON AcRv.AccordReversionId = ARvE.AccordReversionId LEFT OUTER JOIN " +
-        "Reversion.Reversion AS Rv ON AcRv.AccordReversionId = Rv.AccordReversionId ON Gr.IDGroupement = ARvE.GroupementId LEFT OUTER JOIN " +
-        "Reversion.TypeTauxReversion AS TxRv ON AcRv.TypeTauxReversionId = TxRv.TypeTauxReversionId " +      
-    "WHERE " +       
-        "AcRv.AccordReversionId = " + AccRevID + " " +
-        "and (AcRv.Desactive is NULL or AcRv.Desactive = 0) " +
-    "ORDER BY ARvE.RaisonSociale;"
-
-        var conn = new sql.Connection(config);   
-    conn.connect().then(function() {
-       
-        var request = new sql.Request(conn);
-
-        request
-        .query(requete)
-        .then(function(recordset) {
-            callback(recordset);
-            conn.close();
-        })
-        .catch(function(err) {
-            next(new Error("Récupération des données pour affichage de l'accord sélectionné => " + err));
-        });
-
-    }).catch(function(err) {
-        next(new Error("Récupération des données pour affichage de l'accord sélectionné => " + err));
-    });
-    */
-
-
     var conn = new sql.Connection(config);   
     conn.connect().then(function() {
        
@@ -653,7 +601,6 @@ function getAccords(callback, AccRevID, next) {
     }).catch(function(err) {
         next(new Error("Récupération des données pour affichage de l'accord sélectionné => " + err));
     });
-
 }
 
 

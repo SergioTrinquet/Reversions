@@ -132,7 +132,7 @@ $(function () {
     // Pour entrer une date de validation de réversion, 
     // et de réglement de réversion
     $(".listeDesAccords .ContenuListe").on("click", ".Bt_Change.Date:not(.Disabled)", function() {
-        if(!$('.CellRev input[type="text"]').length >= 1) { // 1 saisie possible à la fois...
+        if(!$('.CellRev input[type="text"]').length >= 1) { // Une seule saisie possible à la fois...
             try {
                 var el = $(this);
 
