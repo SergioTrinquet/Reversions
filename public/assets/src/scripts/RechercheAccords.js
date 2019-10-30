@@ -27,6 +27,9 @@ var FlagActivePopin = false;
 
 var WrapLoader = null;
 
+var ValidationSelectionFnrs = null
+    ValidationAjoutEtbs = null;
+
 var Pool_xhr = [];
 var Pool_rech = [];
 
@@ -69,8 +72,12 @@ $(function () {
     MasqueEtLoader = $('.Masque, .WrapLoader');
     Id_Accord = $('.Lgn_Accord').data('numaccord');
     AC_content = $('#AC_content');
+    ValidationSelectionFnrs = $('#ValidationSelectionFnrs');
+    ValidationAjoutEtbs = $('#ValidationAjoutEtbs');
 
-    /// 
+    var body = $('body');
+    var ListeEtbl = $('.ListeEtbl');
+    
     $('#TxtTooShort > span').text(SaisieMinLength);
 
     ///--- Moteur de recherche ---///
@@ -85,7 +92,7 @@ $(function () {
     });
 
     /// Pour cacher l'autocomplete
-    $('body').click(function (event) {
+    body.click(function (event) {
         var $target = $(event.target);
         if (!($target.is($('#Autocomplete, #Autocomplete *, #SearchEtabl')))) {/// Si click sur un element de la pg autre que le menu déroulant et ses éléments descendants ET autre que la zone de click 'Survoler ici pour trouver une info' pour déplier le menu
             //$target.css("background-color", "red");//TEST
@@ -95,26 +102,24 @@ $(function () {
     ///--- Fin moteur de recherche ---///
 
 
-
+    
     ///--- Modification de la ligne Accord ou bien d'une ligne établissement de l'accord ---///
-    $('.ListeEtbl').on('click', '.Bt_Modif:not(.Disabled)', Mdf);
+    ListeEtbl.on('click', '.Bt_Modif:not(.Disabled)', Mdf);
 
     ///--- Suppression d'une ligne établissement d'un accord ou bien de l'accord lui-même ---///
-    $('.ListeEtbl').on('click', '.Bt_Suppr:not(.Disabled)', Suppr);
+    ListeEtbl.on('click', '.Bt_Suppr:not(.Disabled)', Suppr);
 
     ///--- Quand Validation des modif sur une ligne (ligne Accord ou Etablissement d'un accord) ---///
-    $('.ListeEtbl').on('click', '.Bt_Valid:not(.Disabled)', ValidModifs);
+    ListeEtbl.on('click', '.Bt_Valid:not(.Disabled)', ValidModifs);
 
     ///--- Quand Annulation des modif sur une ligne ---///
-    $('.ListeEtbl').on('click', '.Bt_Undo', Undo);
+    ListeEtbl.on('click', '.Bt_Undo', Undo);
     
     ///--- Pour ajouter un établissement à l'accord déjà créé ---///
-    $('.ListeEtbl').on('click', '.Bt_Add:not(.Disabled)', Add);    
-
-
+    ListeEtbl.on('click', '.Bt_Add:not(.Disabled)', Add);    
 
     /// Qd sélection avec liste déroulante du Taux de réversion
-    $('.ListeEtbl').on('change', '.LstAdh_saisieTypeTx', function() {
+    ListeEtbl.on('change', '.LstAdh_saisieTypeTx', function() {
         LstDer = $(this);
         if(LstDer.val() == 1) { /// si sélection Tx fixe...
             LstDer.next('.LstAdh_SaisieTx').removeClass('Hidden');   
@@ -137,7 +142,7 @@ $(function () {
 
     ///--- Partie Popin 'Définir les marchés' ---///
     /// Gestion bouton pour ouvrir et charger data popin d'exclusion des fournisseurs sur lignes Etablissement
-    $('.ListeEtbl').on('click', '.LgnEtbSection.ModifEnCours .Bt_gestionFnrs', function() {
+    ListeEtbl.on('click', '.LgnEtbSection.ModifEnCours .Bt_gestionFnrs', function() {
 
         if(FlagActivePopin == false) { /// Flag pour ne pas avoir à faire un appel AJAX si plusieurs clics de suite sur même ligne Etb
             FlagActivePopin = true;
@@ -157,7 +162,7 @@ $(function () {
     });
 
     /// Lorsque click sur une checkbox Catalogue
-    $('body').on('click', '.Popin_ExclusionFnrs #LstCats input[type="checkbox"]:not(:disabled)', function() {
+    body.on('click', '.Popin_ExclusionFnrs #LstCats input[type="checkbox"]:not(:disabled)', function() {
         var ThisChbx = $(this);
 
         /// Identification visuelle du cat. sélectionné
@@ -169,7 +174,7 @@ $(function () {
     });
 
     /// Lorsque click sur une checkbox Fnr
-    $('body').on('click', '.Popin_ExclusionFnrs #LstFnrs input[type="checkbox"]:not(:disabled)', function() {
+    body.on('click', '.Popin_ExclusionFnrs #LstFnrs input[type="checkbox"]:not(:disabled)', function() {
         var ThisChbx = $(this);
         SelectionFnrsPopin(ThisChbx, (ThisChbx.is(':checked') ? true : false));
     });
@@ -203,7 +208,7 @@ $(function () {
     });
 
     /// Boutons Validation du popin
-    $('#ValidationSelectionFnrs').click(function() {
+    ValidationSelectionFnrs.click(function() {
         /// On alimente l'objet InfosLgnModifiee
         InfosLgnModifiee.ExclusionFnrs = fnrsSelected;
         InfosLgnModifiee.ModificationExclusionFnrs = true;
@@ -215,7 +220,7 @@ $(function () {
 
     ///--- Partie Popin 'Ajout d'établissement' ---///
     /// lorsque click sur une checkbox Etablissement
-    $('body').on('click', '.Popin_AjoutEtablissement input[type="checkbox"]:not(:disabled)', function() {
+    body.on('click', '.Popin_AjoutEtablissement input[type="checkbox"]:not(:disabled)', function() {
         var ThisChbx = $(this);
         SelectionEtbsPopin(ThisChbx);
     });
@@ -232,8 +237,7 @@ $(function () {
     });
 
     /// Boutons Validation de la popin
-    $('#ValidationAjoutEtbs').click(function() {
-        
+    ValidationAjoutEtbs.click(function() {
         ClosePopin('.Popin_AjoutEtablissement'); /// Fermeture popin impérativement AVANT appel AJAX sinon risque de disparition du masque
         ReinitBtFiltresEtbsDispos(); /// Réinitialisation bouton de filtre sur etbs
         
@@ -253,7 +257,7 @@ $(function () {
 
     ///--- Partie Popin 'Fournisseurs exclus' (Uniquement accessible en mode lecture) ---///
     /// Gestion bouton pour ouvrir et charger data popin d'exclusion des fournisseurs sur lignes Etablissement
-    $('.ListeEtbl').on('click', '.LgnEtbSection .Bt_FnrsExclus:not(.Disabled)', function() {
+    ListeEtbl.on('click', '.LgnEtbSection .Bt_FnrsExclus:not(.Disabled)', function() {
         $('.LgnEtbSection .Bt_FnrsExclus').addClass('Disabled'); /// Désactivation de tous les boutons '.Bt_FnrsExclus'...
         $(this).removeClass('Disabled'); ///...sauf celui sur lequel l'utilisateur a cliqué
 
@@ -273,15 +277,6 @@ $(function () {
         $('.LgnEtbSection .Bt_FnrsExclus').removeClass('Disabled'); /// Réactivation de tous les boutons '.Bt_FnrsExclus'
     });
     ///--- Partie Popin 'Fournisseurs exclus' ---///
-
-
-
-    /// A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js' et 'CreationAccords.js') ==> Pour fermeture encart d'erreur s'il existe
-    $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
-        $('.ErreurRetourAjax').addClass('Hidden');
-        $('.ErreurRetourAjax .Content').empty();
-        Masque.addClass('Hidden');
-    });
 
 
     /// Pour loader qd clic sur liens de l'autocomplete
@@ -388,8 +383,9 @@ function GetDataPopinFnrsAexclure(IdAccord, IdEtb) {
         WrapLoader.addClass('Hidden');
         $('.Popin_ExclusionFnrs').addClass('Display');
     })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        DisplayError(jqXHR.responseText);
+    .fail(function(err) {
+        DisplayError_NEW(err.responseText);
+        ValidationSelectionFnrs.prop('disabled', true); // Bouton 'Valider' de l'encart rendu inactif 
     });
 }
 
@@ -425,8 +421,8 @@ function GetDataPopinFnrsExclus(IdAccord, IdEtb) {
         WrapLoader.addClass('Hidden');
         $('.Popin_FnrsExclus').addClass('Display');
     })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        DisplayError(jqXHR.responseText);
+    .fail(function(err) {
+        DisplayError_NEW(err.responseText);
     });
 }
 
@@ -460,8 +456,9 @@ function GetDataPopinAddEtablissement(IdAccord) {
         $('.Popin_AjoutEtablissement').addClass('Display');
 
     })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        DisplayError(jqXHR.responseText);
+    .fail(function(err) {
+        DisplayError_NEW(err.responseText);
+        ValidationAjoutEtbs.prop('disabled', true); // Bouton 'Valider' de l'encart rendu inactif 
     });
 }
 
@@ -795,7 +792,6 @@ function ValidModifs() {
         } 
     })
     .done(function (data) {
-
         // IMPERATIF : A faire avec 'datatype: html' au dessus !
         var html = $.parseHTML(data);
 
@@ -841,14 +837,14 @@ function ValidModifs() {
 
             Modif_LgnAccord_AccordSection = -1;
             Modif_LgnAccord_EtbSection = -1;
-
-            MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
-
         }///
     
     })
-    .fail(function (jqXHR, textStatus, errorThrown) {   
-        DisplayError(jqXHR.responseText);
+    .fail(function (err) {
+        DisplayError_NEW(err.responseText);
+    })
+    always(function() {
+        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
     });
     /////===== Fin requete =====////
 
@@ -907,7 +903,6 @@ function Undo() {
 }
 
 
-
 ///--- Quand click sur bouton Ajout d'établissement  ---///
 function Add() {
     var NomAccord = $('.LgnAccordSection .NomEtblGrp').text();
@@ -927,7 +922,6 @@ function RecordEtablissements(IdAccord) {
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",*/
         data: JSON.stringify(etbsSelected),
         contentType: "application/json; charset=utf-8",
-
         beforeSend: function (jqXHR) {
             MasqueEtLoader.removeClass('Hidden');
         }
@@ -943,14 +937,15 @@ function RecordEtablissements(IdAccord) {
         } else { /// Si pas de redirection vers page 'AccesRefuse'...
             var ContenuAccord = $html.find('.Lgn_Accord');
             $('.Lgn_Accord').replaceWith(ContenuAccord);
-        }        
-
-        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
+        }    
     })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-        if(jqXHR.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
-            DisplayError(jqXHR.responseText);
+    .fail(function (err) {
+        if(err.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
+            DisplayError_NEW(err.responseText);
         }
+    })
+    .always(function() {
+        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
     });
 }
 
@@ -961,12 +956,14 @@ function GetLgnID(Bt) {
 
 
 function CreateEnteteFlottante() {
-    $('.Enteteliste').clone(true).addClass('clone').prependTo('.ListeEtbl');  
+    $('.Enteteliste')
+        .clone(true)
+        .addClass('clone')
+        .prependTo('.ListeEtbl');  
 }
 
 
 function SearchAccordQuery(Saisie) {
-
     /// On supprime les requetes AJAX en cours
     $(Pool_xhr).each(function (idx, jqXHR) { jqXHR.abort(); });
     Pool_xhr = [];
@@ -983,34 +980,27 @@ function SearchAccordQuery(Saisie) {
         }
     })
     .done(function (data) {
-        
-        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
-
-        //console.log("La data est : " + data); //TEST
         if($.trim(data) != "") {
             $('#Autocomplete.Hidden').removeClass('Hidden');
             AC_content.html(data);
             $('#AC_content *[data-tohighlight]').highlight(Saisie);
-
-            /// Ajout avec nouvelle version au 03/01/18
             $('#TextNoResults > span').text('');
             $('#TextNoResults').addClass('Hidden');
-            /// FIN
         } else {
             $('#Autocomplete').addClass('Hidden');
             AC_content.html("");
-
-            /// Ajout avec nouvelle version au 03/01/18
             $('#TextNoResults > span').text(Saisie);
             $('#TextNoResults').removeClass('Hidden');
-            /// FIN
         }
-
     })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-        if(jqXHR.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
-            DisplayError(jqXHR.responseText);
+    .fail(function (err) {
+        if(err.responseText != null) { /// Comme les jqXHR avortés passent dans 'fail' alors qu'il ne s'agit pas d'erreur, je mets cette condition pour les filtrer
+            DisplayError_NEW(err.responseText);
+            $("#SearchEtabl").blur(); // perte du focus sur champ de saisie, sinon encart d'erreur qui se multiplie à chaque frappe
         }
+    })
+    .always(function() {
+        MasqueEtLoader.addClass('Hidden'); /// Retrait masque et loader
     });
 }
 
@@ -1067,21 +1057,5 @@ function DisplayScreenAccesRefuse(html) {
     });
     if(ContenuPgAccesRefuse != null) {
         $('body').empty().append(ContenuPgAccesRefuse); /// Remplacement du contenu de la page actuelle par celui reçu en Ajax, à savoir celui de la pg 'AccesRefuse'
-    }
-}
-
-
-///A FACTORISER (existe aussi ds 'ListeHistoriqueGroupe.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
-function DisplayError(jqXHRresponseText) {
-    WrapLoader.addClass('Hidden');
-
-    var Thehtml = $.parseHTML(jqXHRresponseText);
-    var html_PgErreur = $(Thehtml).find("#Encart");
-    if($('.ErreurRetourAjax').length > 0) {
-        $('.ErreurRetourAjax .Content').html(html_PgErreur);
-        $('.ErreurRetourAjax').removeClass('Hidden');
-    } else {
-        $("<div class='ErreurRetourAjax'><i class='fa fa-times ClosePopin'></i><div class='Content'></div></div>").appendTo("body");
-        $(".ErreurRetourAjax .Content").html(html_PgErreur);
     }
 }

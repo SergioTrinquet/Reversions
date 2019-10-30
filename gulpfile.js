@@ -42,13 +42,13 @@ gulp.task('css', ['minifyMainCSS', 'minifyErrorCSS', 'autresCSS']);
 ///--- Taches JS ---///
 /// Fichiers propres à page 'RechercheAccords.js'
 gulp.task('optimisationJS_RA', function(cb) {
-    var lstJS = ['datepicker-fr', 'sidenav', 'ParamsDatePickers', 'RechercheAccords', 'highlight'];
+    var lstJS = ['datepicker-fr', 'sidenav', 'ParamsDatePickers', 'DisplayError', 'RechercheAccords', 'highlight'];
     optimisationJS(lstJS, 'global_RechercheAccords', cb);
 });
 
 /// Fichiers propres à page 'CreationAccord.js'
 gulp.task('optimisationJS_CA', function(cb) {
-    var lstJS = ['datepicker-fr', 'sidenav', 'ParamsDatePickers', 'CreationAccord'];
+    var lstJS = ['datepicker-fr', 'sidenav', 'ParamsDatePickers', 'DisplayError', 'CreationAccord'];
     optimisationJS(lstJS, 'global_CreationAccord', cb);
 });
 
@@ -60,7 +60,7 @@ gulp.task('optimisationJS_LHG', function(cb) {
 
 /// Fichiers propres à page 'ListeAccords.js'
 gulp.task('optimisationJS_LA', function(cb) {
-    var lstJS = ['sidenav', 'highlight', 'ListeAccords'];
+    var lstJS = ['datepicker-fr', 'sidenav', 'highlight', 'DisplayError', 'ListeAccords'];
     optimisationJS(lstJS, 'global_ListeAccords', cb);
 });
 
