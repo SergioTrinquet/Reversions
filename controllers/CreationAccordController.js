@@ -75,7 +75,6 @@ module.exports = function(app) {
 
                 Record_MultiAccords(function(recordset) {
                     logger.log('info',  "Enregistrement de nouveaux accords (accords établ. d'un groupe)", {Login: req.app.get('userName'), Details: dataGoodFormat });
-                    //res.send({ redirect: '/RechercheAccords' });
                     res.send({ redirect: '/ListeAccords' });
                 }, dataGoodFormat, next);
                 
@@ -248,7 +247,7 @@ function getListeEtbsOfSelectedGroupement(callback, IdGroup, next) {
 function Record_SingleAccord(callback, data, next) {
     
     //-- TEST --//
-    console.log(colors.bgYellow.black('//////////////////// Début ////////////////////')); console.log(data); console.log(colors.bgYellow.black('/////////////////// Fin /////////////////////'));
+    //console.log(colors.bgYellow.black('//////////////////// Début ////////////////////')); console.log(data); console.log(colors.bgYellow.black('/////////////////// Fin /////////////////////'));
 
     var conn = new sql.Connection(config); 
     conn.connect().then(function() {
@@ -271,7 +270,7 @@ function Record_SingleAccord(callback, data, next) {
         .input('FinPeriode', sql.Date, data.FinPeriode)
         .execute('ReversionApp.Ps_CreationAccordReversion')
         .then(function(recordset) {
-            console.log(colors.bgGreen.white(JSON.stringify(recordset))); //TEST
+            //console.log(colors.bgGreen.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })
@@ -290,7 +289,7 @@ function Record_SingleAccord(callback, data, next) {
 function Record_MultiAccords(callback, data, next) {
 
     //-- TEST --//
-    console.log(colors.bgMagenta.white('//////////////////// Début ////////////////////')); console.log(data); console.log(colors.bgMagenta.white('/////////////////// Fin /////////////////////'));
+    //console.log(colors.bgMagenta.white('//////////////////// Début ////////////////////')); console.log(data); console.log(colors.bgMagenta.white('/////////////////// Fin /////////////////////'));
 
     var conn = new sql.Connection(config); 
     conn.connect().then(function() {
@@ -308,7 +307,7 @@ function Record_MultiAccords(callback, data, next) {
         .input('FinPeriode', sql.Date, data.FinPeriode)
         .execute('ReversionApp.Ps_CreationMultiAccordReversion')
         .then(function(recordset) {
-            console.log(colors.bgBlue.white(JSON.stringify(recordset))); //TEST
+            //console.log(colors.bgBlue.white(JSON.stringify(recordset))); //TEST
             callback(recordset);
             conn.close();
         })

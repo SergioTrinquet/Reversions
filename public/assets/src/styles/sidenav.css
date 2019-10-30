@@ -19,7 +19,6 @@
 /* The navigation menu links */
 .sidenav a,
 .sidenav div /*Pour les liens inactifs*/ {
-    /*padding: 11px 8px 11px 30px;*/
     padding: 11px 60px 11px 30px;
     text-decoration: none;
     font-size: 20px;
@@ -55,7 +54,6 @@
     top: 0;
     right: 5px;
     font-size: 21px;
-    /*margin-left: 50px;*/
     cursor: pointer;
 
     color:#ffffff;

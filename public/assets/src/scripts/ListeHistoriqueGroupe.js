@@ -208,7 +208,7 @@ console.log('saisiesChampsFiltre : ' + saisiesChampsFiltre); //TEST
 
 
 
-    /// A FACTORISER (existe aussi ds 'RechercheAccords.js' et 'CreationAccords.js') ==> Pour fermeture encart d'erreur s'il existe
+    /// A SUPPRIMER APRES REMPLACEMENT PAR 'DisplayError_NEW' dans 'DisplayError.js' ==> Pour fermeture encart d'erreur s'il existe
     $('body').on('click', '.ErreurRetourAjax .ClosePopin', function() {
         $('.ErreurRetourAjax').addClass('Hidden');
         $('.ErreurRetourAjax .Content').empty();
@@ -241,7 +241,7 @@ function Highlight() {
 
 
 
-/// A FACTORISER (existe aussi ds RechercheAccords.js') ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
+/// A REMPLACER PAR 'DisplayError_NEW' dans 'DisplayError.js' ==> Pour affichage de l'erreur dans un encart suite à requete AJAX
 function DisplayError(jqXHRresponseText) {
     var Thehtml = $.parseHTML(jqXHRresponseText);
     var html_PgErreur = $(Thehtml).find("#Encart");
