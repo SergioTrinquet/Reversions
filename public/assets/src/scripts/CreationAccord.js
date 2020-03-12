@@ -19,11 +19,11 @@ var Masque = null;
 
 var PrecedenteAnneeAccordSaisie = null;
 
-var PopinCreationAccord_Etp1, 
-    PopinCreationAccord_Etp2, 
+var PopinCreationAccord_Etp1 = null, 
+    PopinCreationAccord_Etp2 = null, 
     PopinCreationAccord_Etp3 = null;
 
-var DatePickerDebut,
+var DatePickerDebut = null,
     DatePickerFin = null;
 
 $(function () {
@@ -220,7 +220,7 @@ function Initialisation_Etape1() {
     });
     
     /// Gestion des datePicker
-    ParamsDatePickers(DatePickerDebut, DatePickerFin, "-24m", "+24m");
+    ParamsDatePickers(DatePickerDebut, DatePickerFin, "-48m", "+24m");
 
     /// Qd sélection avec liste déroulante du Taux de réversion
     $('#SaisieTypeTauxRev').on('change', function() {
