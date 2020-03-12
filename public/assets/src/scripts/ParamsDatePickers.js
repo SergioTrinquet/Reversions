@@ -21,8 +21,10 @@ function ParamsDatePickers(DatePickerDebut, DatePickerFin, minDateDebut, maxDate
         changeMonth: true,
         changeYear: true,
         onClose: function (selectedDate) {
-            /// Sur l'ev. OnClose de la 'Date de Fin', le maxDate du champ 'Date de Début' est égal à la date sélectionnée ds 'Date de Fin'
-            DatePickerDebut.datepicker("option", "maxDate", selectedDate);
+            if(selectedDate !== '') {
+                /// Sur l'ev. OnClose de la 'Date de Fin', le maxDate du champ 'Date de Début' est égal à la date sélectionnée ds 'Date de Fin'
+                DatePickerDebut.datepicker("option", "maxDate", selectedDate);
+            }
         }
     });
 
