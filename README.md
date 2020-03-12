@@ -15,7 +15,7 @@ Si cela n'est pas déjà fait, installez *'npm'*, puis *'gulp'* :
 - Pour installer *gulp*, tapez dans une invite de commande ou dans le terminal de VS Code 'npm install -g gulp' pour l'installer globalement afin qu'il soit executable de n'importe où sur votre PC, et installez gulp aussi localement (pour cela, placez-vous au niveau du répertoire du projet avec le terminal et tapez 'npm install --save-dev').
 
 Executez la tache *'prod'* avec la commande gulp dans le terminal (l'invite de commande) : *'gulp prod'*.  
-Cela va générer de nouveaux fichiers .js et .css optimisés (+ des .map) à partir de ceux existants afin d'obtenir des fichiers plus léger et moins nombreux (donc moins d'URLs appelées au chargement d'une page).  
+Cela va générer de nouveaux fichiers .js et .css optimisés (+ des .map) à partir de ceux existants afin d'obtenir des fichiers plus légers et moins nombreux (donc moins d'URLs appelées au chargement d'une page).  
 Les fichiers source se trouvent dans 'public/assets/src'. La commande gulp va créer un répertoire 'public/assets/dist' dans lequel se trouveront les nouveaux fichiers générés.
 
 ### Copie de fichiers sur le serveur
