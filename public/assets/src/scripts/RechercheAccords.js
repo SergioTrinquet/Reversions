@@ -540,7 +540,7 @@ function Mdf() {
             /// Gestion des datePicker
             var DatePickerDebut = $(SelectorPart + " .ChpSaisieDateDebut");
             var DatePickerFin = $(SelectorPart + " .ChpSaisieDateFin");
-            ParamsDatePickers(DatePickerDebut, DatePickerFin, "-24m", "+24m");
+            ParamsDatePickers(DatePickerDebut, DatePickerFin, "-48m", "+24m");
 
 
         } else if(Modif_LgnAccord_EtbSection) {
