@@ -25,7 +25,7 @@
     "mssql": "^3.3.0",
     "nodemailer": "^4.1.0",
     "numeral": "^2.0.4",
-    "underscore": "^1.8.3",
+    "underscore": "^1.12.1",
     "winston": "^2.3.1",
     "winston-request-logger": "^1.0.7"
   },
