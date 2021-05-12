@@ -23,7 +23,7 @@
     "helmet": "^3.6.1",
     "jsonschema": "^1.1.1",
     "mssql": "^3.3.0",
-    "nodemailer": "^4.1.0",
+    "nodemailer": "^6.4.16",
     "numeral": "^2.0.4",
     "underscore": "^1.8.3",
     "winston": "^2.3.1",
