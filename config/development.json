@@ -1,0 +1,23 @@
+{
+    "env": "development",
+    "dbConfig": {
+        "user": "bcl",
+        "password": "fwadmin",
+        "server": "SERVDEVSQL\\SERVSQL2012"
+    },
+    "dbConfig_CRM": {
+        "user": "bcl",
+        "password": "fwadmin",
+        "server": "SERVDEVSQL\\SERVSQL2012"
+    },
+    "infosMail": {
+        "mailTransporter": {
+            "user": "No_reply@cahpp.fr",
+            "pass": "@Nocahpp75009!"
+        },
+        "mailMessage": {
+            "to": "strinquet@cahpp.fr"
+        }
+    }
+}
+
